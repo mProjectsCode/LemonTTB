@@ -3,18 +3,38 @@
  */
 package LemonTTB;
 
+import java.io.File;
+
 import javax.security.auth.login.LoginException;
 
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
+import com.google.common.io.Resources;
+
 public class App {
+    private static final Logger LOGGER = Logger.getLogger(App.class);
+
     public static final String VERSION = "v0.0.1";
 
+    public static File configPath;
+    public static String resourcePath;
+    public static JDA jda;
+
     public static void main(String[] args) {
-        JDABuilder builder = JDABuilder.createDefault(args[0]);
+        resourcePath = Resources.getResource("").getPath() + "/resources";
+
+        Logger.logFilePath = new File(resourcePath, "/logs").getPath();
+        Logger.debug = true;
+
+        configPath = new File(resourcePath, "/config/botConfig.txt");
+        LOGGER.logDebug("Config Path: " + configPath.getPath());
+        Config.load(configPath);
+
+        JDABuilder builder = JDABuilder.createDefault(Config.options.token);
 
         // Disable parts of the cache
         builder.disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE);
@@ -23,12 +43,33 @@ public class App {
         // Disable compression (not recommended)
         builder.setCompression(Compression.NONE);
         // Set activity (like "playing Something")
-        builder.setActivity(Activity.watching("TV"));
+        builder.setActivity(Activity.watching(Config.options.prefix + "help"));
+
+        builder.addEventListeners(new CommandHandler());
 
         try {
-            builder.build();
+            jda = builder.build();
         } catch (LoginException e) {
-
+            exit("Could not log in.", e);
         }
+
+        try {
+            jda.awaitReady();
+        } catch (InterruptedException e) {
+            exit("Interruption while waiting for jda to ready.");
+        }
+    }
+
+    public static void exit(String message) {
+        LOGGER.logWarning("Programm is exiting with message: ");
+        LOGGER.logWarning(message);
+        System.exit(0);
+    }
+
+    public static void exit(String message, Exception e) {
+        LOGGER.logWarning("Programm is exiting with message: ");
+        LOGGER.logWarning(message);
+        LOGGER.logError(e);
+        System.exit(0);
     }
 }

@@ -1,7 +1,16 @@
 package LemonTTB;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import com.google.gson.Gson;
+
+import net.dv8tion.jda.api.entities.Message;
 
 /**
  * A class for printing fancy log messages into the console.
@@ -12,7 +21,7 @@ public class Logger {
     /**
      * An enum describing the level of the log outout.
      */
-    private enum LogLevel {
+    private enum Level {
         /**
          * Represents an info level log.
          */
@@ -28,8 +37,22 @@ public class Logger {
         /**
          * Represents a debug level log. Disabled if debug == false.
          */
-        DEBUG
+        DEBUG,
+        /**
+         * Represents a log for a discord command.
+         */
+        COMMAND
     }
+
+    /**
+     * Wether debug logs should be active.
+     */
+    public static boolean debug;
+
+    /**
+     * 
+     */
+    public static String logFilePath;
 
     /**
      * The class to log for.
@@ -43,9 +66,9 @@ public class Logger {
     private int longestLogLevelString;
 
     /**
-     * Wether debug logs should be active
+     * Instance of gson.
      */
-    public static boolean debug;
+    private Gson gson;
 
     /**
      * The constructor for Logger.
@@ -56,14 +79,15 @@ public class Logger {
      */
     public Logger(Class<?> obj) {
         // Calculate the longest (in terms of characters) LogLevel
-        LogLevel longestLogLevel = LogLevel.INFO;
-        for (LogLevel logLevel : LogLevel.values()) {
+        Level longestLogLevel = Level.INFO;
+        for (Level logLevel : Level.values()) {
             if (logLevel.toString().length() > longestLogLevel.toString().length()) {
                 longestLogLevel = logLevel;
             }
         }
         longestLogLevelString = longestLogLevel.toString().length();
         this.obj = obj;
+        this.gson = new Gson();
     }
 
     /**
@@ -82,7 +106,7 @@ public class Logger {
      * @param message
      */
     public void logInfo(String message) {
-        log(LogLevel.INFO, message);
+        log(Level.INFO, message);
     }
 
     /**
@@ -91,7 +115,7 @@ public class Logger {
      * @param message
      */
     public void logWarning(String message) {
-        log(LogLevel.WARNING, message);
+        log(Level.WARNING, message);
     }
 
     /**
@@ -100,7 +124,7 @@ public class Logger {
      * @param message
      */
     public void logError(String message) {
-        log(LogLevel.ERROR, message);
+        log(Level.ERROR, message);
     }
 
     /**
@@ -109,7 +133,7 @@ public class Logger {
      * @param e
      */
     public void logError(Exception e) {
-        log(LogLevel.ERROR, e.getMessage());
+        log(Level.ERROR, e.getMessage());
         e.printStackTrace();
     }
 
@@ -120,7 +144,59 @@ public class Logger {
      */
     public void logDebug(String message) {
         if (debug) {
-            log(LogLevel.DEBUG, message);
+            log(Level.DEBUG, message);
+        }
+    }
+
+    /**
+     * Logs a discord command.
+     * 
+     * @param message
+     */
+    public void logCommand(CommandObject commandObject, Message msg) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(gson.toJson(commandObject));
+        sb.append(" from ");
+        sb.append(msg.getAuthor().getAsMention());
+        sb.append(". origional message: \"");
+        sb.append(msg.getContentRaw());
+        sb.append("\"");
+
+        log(Level.COMMAND, sb.toString());
+    }
+
+    /**
+     * Logs a discord command.
+     * 
+     * @param message
+     */
+    public void logCommand(CommandObject commandObject, boolean success, String message) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(commandObject.id);
+        sb.append(success ? " SUCCESS " : " FAILED ");
+        sb.append(message);
+
+        log(Level.COMMAND, sb.toString());
+    }
+
+    /**
+     * Logs a discord command.
+     * 
+     * @param message
+     */
+    public void logCommand(CommandObject commandObject, boolean success, Exception e) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(commandObject.id);
+        sb.append(success ? " SUCCESS " : " FAILED ");
+        sb.append(e.getMessage());
+
+        log(Level.COMMAND, sb.toString());
+
+        if (debug) {
+            e.printStackTrace();
         }
     }
 
@@ -130,13 +206,30 @@ public class Logger {
      * @param logLevel
      * @param message
      */
-    public void log(LogLevel logLevel, String message) {
+    public void log(Level logLevel, String message) {
+        log(logLevel, message, true);
+    }
+
+    /**
+     * Print a fancy log message in the console
+     * 
+     * @param logLevel
+     * @param message
+     */
+    public void log(Level logLevel, String message, boolean writeToFile) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(constructHeadder(logLevel));
-        stringBuilder.append(calculateSpacing(logLevel));
+        stringBuilder.append(" ");
         stringBuilder.append(message);
 
         System.out.println(stringBuilder.toString());
+        if (writeToFile) {
+            try {
+                logToFile(stringBuilder.toString());
+            } catch (IOException e) {
+                log(Level.ERROR, "Could not write to log file. " + e.getMessage(), false);
+            }
+        }
     }
 
     /**
@@ -146,11 +239,13 @@ public class Logger {
      * @param logLevel
      * @return String
      */
-    private String constructHeadder(LogLevel logLevel) {
+    private String constructHeadder(Level logLevel) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("[");
         stringBuilder.append(logLevel.name());
         stringBuilder.append("]");
+
+        stringBuilder.append(calculateSpacing(logLevel));
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -171,11 +266,33 @@ public class Logger {
      * @param logLevel
      * @return String
      */
-    private String calculateSpacing(LogLevel logLevel) {
+    private String calculateSpacing(Level logLevel) {
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < longestLogLevelString - logLevel.toString().length() + 1; i++) {
+        for (int i = 0; i < longestLogLevelString - logLevel.toString().length(); i++) {
             stringBuilder.append(" ");
         }
         return stringBuilder.toString();
+    }
+
+    private void logToFile(String line) throws IOException {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+        LocalDateTime localDateTime = LocalDateTime.now();
+        File file = new File(logFilePath, "/logger/" + dateTimeFormatter.format(localDateTime) + ".txt");
+        File dir = file.getParentFile();
+
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) {
+                throw new IOException("Could not create parent directories");
+            }
+        } else if (!dir.isDirectory()) {
+            throw new IOException("The parent file is not a directory");
+        }
+
+        try (Writer writer = new BufferedWriter(new FileWriter(file, true))) {
+            writer.append(line + System.lineSeparator());
+            writer.close();
+        } catch (Exception e) {
+            throw new IOException("Could not open the log file");
+        }
     }
 }

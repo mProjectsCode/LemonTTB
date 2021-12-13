@@ -6,11 +6,11 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Objects;
 
 import com.google.gson.Gson;
 
 public class Config {
-
     private static final Logger LOGGER = Logger.getLogger(Config.class);
 
     private static Gson gson = new Gson();
@@ -46,15 +46,15 @@ public class Config {
 
         try {
             Options o = gson.fromJson(json, Options.class);
-            if (Objects.equals(o.ModVersion, StreamSniperMinecraft.modVersion)) {
+            if (Objects.equals(o.version, App.VERSION)) {
                 options = o;
             } else {
-                // TODO: For new mod version build config migration
+                // TODO: For new version build config migration
                 options = Options.getDefaultOptions();
             }
         } catch (Exception e) {
             try {
-                LOGGER.log(Level.WARNING, "Could not read config. Resetting to default...");
+                LOGGER.logWarning("Could not read config. Resetting to default...");
                 options = Options.getDefaultOptions();
                 write(file);
             } catch (IOException e1) {
@@ -85,11 +85,10 @@ public class Config {
     }
 
     public static class Options {
-        private static Options instance;
-
         public String version;
 
         public String token;
+        public String prefix;
         public String botOwner;
         public String statusChannel;
         public String voiceChannelMain;
@@ -103,6 +102,7 @@ public class Config {
         private void setDefaultValues() {
             this.version = App.VERSION;
             this.token = "";
+            this.prefix = ".";
             this.botOwner = "";
             this.statusChannel = "";
             this.voiceChannelMain = "";
