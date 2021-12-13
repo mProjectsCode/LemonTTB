@@ -1,3 +1,3 @@
 # LemonTTB
 
-Currently under heayv development.
+Currently under heavy development.
