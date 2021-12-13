@@ -10,7 +10,10 @@ import javax.security.auth.login.LoginException;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.Compression;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import com.google.common.io.Resources;
@@ -21,10 +24,15 @@ public class App {
     public static final String VERSION = "v0.0.1";
 
     public static File configPath;
+    public static File audioPath;
     public static String resourcePath;
     public static JDA jda;
+    public static LemonTTB_AudioManager audioManager;
 
     public static void main(String[] args) {
+        audioManager = new LemonTTB_AudioManager();
+        audioManager.createPlayer();
+
         resourcePath = Resources.getResource("").getPath() + "/resources";
 
         Logger.logFilePath = new File(resourcePath, "/logs").getPath();
@@ -34,10 +42,15 @@ public class App {
         LOGGER.logDebug("Config Path: " + configPath.getPath());
         Config.load(configPath);
 
+        audioPath = new File(resourcePath, "/music");
+
         JDABuilder builder = JDABuilder.createDefault(Config.options.token);
 
         // Disable parts of the cache
-        builder.disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE);
+        // builder.disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE);
+        builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
+        builder.setMemberCachePolicy(MemberCachePolicy.ALL);
+        builder.setChunkingFilter(ChunkingFilter.ALL);
         // Enable the bulk delete event
         builder.setBulkDeleteSplittingEnabled(false);
         // Disable compression (not recommended)

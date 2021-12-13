@@ -151,7 +151,8 @@ public class Logger {
     /**
      * Logs a discord command.
      * 
-     * @param message
+     * @param commandObject
+     * @param msg
      */
     public void logCommand(CommandObject commandObject, Message msg) {
         StringBuilder sb = new StringBuilder();
@@ -169,6 +170,8 @@ public class Logger {
     /**
      * Logs a discord command.
      * 
+     * @param commandObject
+     * @param success
      * @param message
      */
     public void logCommand(CommandObject commandObject, boolean success, String message) {
@@ -184,7 +187,9 @@ public class Logger {
     /**
      * Logs a discord command.
      * 
-     * @param message
+     * @param commandObject
+     * @param success
+     * @param e
      */
     public void logCommand(CommandObject commandObject, boolean success, Exception e) {
         StringBuilder sb = new StringBuilder();
@@ -274,6 +279,10 @@ public class Logger {
         return stringBuilder.toString();
     }
 
+    /**
+     * @param line
+     * @throws IOException
+     */
     private void logToFile(String line) throws IOException {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
         LocalDateTime localDateTime = LocalDateTime.now();

@@ -2,6 +2,8 @@ package LemonTTB;
 
 import java.util.Objects;
 
+import LemonTTB.commands.Command;
+import LemonTTB.commands.InfoCmd;
 import LemonTTB.commands.PongCmd;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
@@ -10,6 +12,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class CommandHandler extends ListenerAdapter {
     private static final Logger LOGGER = Logger.getLogger(CommandHandler.class);
+
+    private CommandRegistery commandRegistery = new CommandRegistery();
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
@@ -31,9 +35,7 @@ public class CommandHandler extends ListenerAdapter {
 
         LOGGER.logCommand(commandObject, msg);
 
-        if (Objects.equals(commandObject.command, "ping")) {
-            new PongCmd().run(commandObject, msg);
-        }
+        selectCommand(commandObject, msg);
     }
 
     private CommandObject parseCommand(Message msg) {
@@ -64,9 +66,11 @@ public class CommandHandler extends ListenerAdapter {
         return commandObject;
     }
 
-    private void selectCommand(CommandObject commandObject) {
-        if (Objects.equals(commandObject.command, "ping")) {
-
+    private void selectCommand(CommandObject commandObject, Message msg) {
+        Command command = commandRegistery.commands.get(commandObject.command);
+        if (command == null) {
+            return;
         }
+        command.run(commandObject, msg);
     }
 }

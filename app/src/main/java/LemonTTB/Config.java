@@ -78,7 +78,7 @@ public class Config {
             writer.write("# This is the configuration file for LemonTTB.\n");
             writer.write("#\n");
             writer.write("# You can find information on editing this file and all the available options here:\n");
-            writer.write("# https://github.com/freuwoert/streamsniper-mod-minecraft/wiki/Config-File\n");
+            writer.write("# https://github.com/mProjectsCode/LemonTTB/wiki/Config-File\n");
             writer.write("#\n");
             writer.write(gson.toJson(options));
         }
