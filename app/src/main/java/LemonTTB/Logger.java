@@ -308,7 +308,7 @@ public class Logger {
     private void logToFile(String line) throws IOException {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
         LocalDateTime localDateTime = LocalDateTime.now();
-        File file = new File(logFilePath, "/logger/" + dateTimeFormatter.format(localDateTime) + ".txt");
+        File file = new File(logFilePath, "/logger/" + dateTimeFormatter.format(localDateTime) + "-LemonTTB-log.txt");
         File dir = file.getParentFile();
 
         if (!dir.exists()) {

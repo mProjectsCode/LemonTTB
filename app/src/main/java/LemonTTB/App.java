@@ -43,6 +43,7 @@ public class App {
     private static final Logger LOGGER = Logger.getLogger(App.class);
 
     public static final String VERSION = "v0.0.1";
+    public static final boolean DEV = true;
 
     public static File configPath;
     public static File audioPath;
@@ -54,12 +55,13 @@ public class App {
         audioManager = new LemonTTB_AudioManager();
         audioManager.createPlayer();
 
-        resourcePath = Resources.getResource("").getPath() + "/resources";
+        // resourcePath = Resources.getResource("").getPath() + "/resources";
+        resourcePath = "./data";
 
         Logger.logFilePath = new File(resourcePath, "/logs").getPath();
         Logger.debug = true;
 
-        configPath = new File(resourcePath, "/config/botConfig.txt");
+        configPath = new File(resourcePath, DEV ? "/config/botConfig.txt.dev" : "/config/botConfig.txt");
         LOGGER.logDebug("Config Path: " + configPath.getPath());
         Config.load(configPath);
 
