@@ -18,6 +18,9 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import com.google.common.io.Resources;
 
+import LemonTTB.LemonTTB_Audio.LemonTTB_AudioManager;
+import LemonTTB.commands.CommandHandler;
+
 public class App {
     private static final Logger LOGGER = Logger.getLogger(App.class);
 

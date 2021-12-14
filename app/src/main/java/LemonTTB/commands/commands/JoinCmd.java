@@ -1,4 +1,4 @@
-package LemonTTB.commands;
+package LemonTTB.commands.commands;
 
 import java.io.Console;
 import java.util.List;
@@ -7,7 +7,8 @@ import java.util.Objects;
 import org.checkerframework.checker.units.qual.m;
 
 import LemonTTB.App;
-import LemonTTB.CommandObject;
+import LemonTTB.commands.Command;
+import LemonTTB.commands.CommandObject;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildChannel;

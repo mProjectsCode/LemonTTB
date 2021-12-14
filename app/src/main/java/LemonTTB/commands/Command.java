@@ -1,7 +1,5 @@
 package LemonTTB.commands;
 
-import LemonTTB.CommandObject;
-import LemonTTB.CommandRegistery;
 import LemonTTB.Logger;
 import net.dv8tion.jda.api.entities.Message;
 

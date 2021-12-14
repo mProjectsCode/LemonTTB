@@ -1,10 +1,11 @@
-package LemonTTB;
+package LemonTTB.commands;
 
 import java.util.Objects;
 
-import LemonTTB.commands.Command;
-import LemonTTB.commands.InfoCmd;
-import LemonTTB.commands.PongCmd;
+import LemonTTB.Config;
+import LemonTTB.Logger;
+import LemonTTB.commands.commands.InfoCmd;
+import LemonTTB.commands.commands.PongCmd;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;

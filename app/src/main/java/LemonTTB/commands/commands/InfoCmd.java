@@ -1,8 +1,9 @@
-package LemonTTB.commands;
+package LemonTTB.commands.commands;
 
 import java.awt.Color;
 
-import LemonTTB.CommandObject;
+import LemonTTB.commands.Command;
+import LemonTTB.commands.CommandObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 

@@ -1,9 +1,10 @@
-package LemonTTB.commands;
+package LemonTTB.commands.commands;
 
 import java.io.File;
 
 import LemonTTB.App;
-import LemonTTB.CommandObject;
+import LemonTTB.commands.Command;
+import LemonTTB.commands.CommandObject;
 import net.dv8tion.jda.api.entities.Message;
 
 public class PlayCmd extends Command {

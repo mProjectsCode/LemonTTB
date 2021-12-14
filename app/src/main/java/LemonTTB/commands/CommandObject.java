@@ -1,4 +1,4 @@
-package LemonTTB;
+package LemonTTB.commands;
 
 import java.util.UUID;
 

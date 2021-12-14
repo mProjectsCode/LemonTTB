@@ -1,14 +1,13 @@
-package LemonTTB;
+package LemonTTB.commands;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import LemonTTB.commands.Command;
-import LemonTTB.commands.InfoCmd;
-import LemonTTB.commands.JoinCmd;
-import LemonTTB.commands.PlayCmd;
-import LemonTTB.commands.PongCmd;
+import LemonTTB.commands.commands.InfoCmd;
+import LemonTTB.commands.commands.JoinCmd;
+import LemonTTB.commands.commands.PlayCmd;
+import LemonTTB.commands.commands.PongCmd;
 
 /**
  * CommandRegistery
