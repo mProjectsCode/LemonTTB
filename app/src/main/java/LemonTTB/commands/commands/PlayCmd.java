@@ -1,5 +1,4 @@
-/*******************************************************************************
- * 
+/*
  * This file is part of LemonTTB.
  * (C) Copyright 2021
  * Programmed by Moritz Jung
@@ -16,8 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
- * 
- ******************************************************************************/
+ */
 
 package LemonTTB.commands.commands;
 
@@ -37,7 +35,7 @@ public class PlayCmd extends Command {
 
         App.audioManager.loadAndPlayTrack(new File(App.audioPath, "/Into the Mists E.mp3").getPath());
 
-        super.LOGGER.logCommand(commandObject, true, "");
+        Command.LOGGER.logCommand(commandObject, true, "");
     }
 
 }

@@ -1,5 +1,4 @@
-/*******************************************************************************
- * 
+/*
  * This file is part of LemonTTB.
  * (C) Copyright 2021
  * Programmed by Moritz Jung
@@ -16,12 +15,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
- * 
- ******************************************************************************/
+ */
 
 package LemonTTB.commands;
 
-import LemonTTB.Logger;
+import LemonTTB.Logger.Logger;
 import net.dv8tion.jda.api.entities.Message;
 
 public abstract class Command {

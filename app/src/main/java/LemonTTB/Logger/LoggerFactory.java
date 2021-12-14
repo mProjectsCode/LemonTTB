@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of LemonTTB.
  * (C) Copyright 2021
  * Programmed by Moritz Jung
@@ -17,19 +17,15 @@
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package LemonTTB.commands.commands;
+package LemonTTB.Logger;
 
-import LemonTTB.commands.Command;
-import LemonTTB.commands.CommandObject;
-import net.dv8tion.jda.api.entities.Message;
+import org.slf4j.Logger;
 
-public class PongCmd extends Command {
+public class LoggerFactory implements org.slf4j.ILoggerFactory {
 
     @Override
-    public void run(CommandObject commandObject, Message msg) {
-        msg.getChannel().sendMessage("Pong!").queue();
-
-        Command.LOGGER.logCommand(commandObject, true, "");
+    public Logger getLogger(String name) {
+        return new LoggerAdapter(name);
     }
 
 }

@@ -1,5 +1,4 @@
-/*******************************************************************************
- * 
+/*
  * This file is part of LemonTTB.
  * (C) Copyright 2021
  * Programmed by Moritz Jung
@@ -16,8 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
- * 
- ******************************************************************************/
+ */
 
 package LemonTTB.LemonTTB_Audio;
 
@@ -30,7 +28,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
-import LemonTTB.Logger;
+import LemonTTB.Logger.Logger;
 
 public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
     private static final Logger LOGGER = Logger.getLogger(LemonTTB_AudioTrackScheduler.class);

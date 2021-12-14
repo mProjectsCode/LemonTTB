@@ -4,6 +4,7 @@
 # Ignore Gradle build output directory
 build
 
-music
+# ignore the log files
 *-LemonTTB-log.txt
+# ignore dev configs
 *Config.txt.dev

@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of LemonTTB.
  * (C) Copyright 2021
  * Programmed by Moritz Jung
@@ -17,19 +17,43 @@
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package LemonTTB.commands.commands;
+package LemonTTB.Logger;
 
-import LemonTTB.commands.Command;
-import LemonTTB.commands.CommandObject;
-import net.dv8tion.jda.api.entities.Message;
+import java.util.Map;
 
-public class PongCmd extends Command {
+import org.slf4j.spi.MDCAdapter;
+
+/**
+ * TODO: accually implement this stuff
+ */
+public class LemonTTB_MDCAdapter implements MDCAdapter {
 
     @Override
-    public void run(CommandObject commandObject, Message msg) {
-        msg.getChannel().sendMessage("Pong!").queue();
+    public void put(String key, String val) {
 
-        Command.LOGGER.logCommand(commandObject, true, "");
+    }
+
+    @Override
+    public String get(String key) {
+        return null;
+    }
+
+    @Override
+    public void remove(String key) {
+    }
+
+    @Override
+    public void clear() {
+    }
+
+    @Override
+    public Map<String, String> getCopyOfContextMap() {
+        return null;
+    }
+
+    @Override
+    public void setContextMap(Map<String, String> contextMap) {
+
     }
 
 }

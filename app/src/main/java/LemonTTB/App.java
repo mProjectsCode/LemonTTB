@@ -1,5 +1,4 @@
-/*******************************************************************************
- * 
+/* 
  * LemonTTB: A discord bot for helping the GM with running table top sessions using discord for comuniction.
  * (C) Copyright 2021
  * Programmed by Moritz Jung
@@ -16,8 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- * 
- ******************************************************************************/
+ */
 
 package LemonTTB;
 
@@ -32,11 +30,9 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import net.dv8tion.jda.api.utils.cache.CacheFlag;
-
-import com.google.common.io.Resources;
 
 import LemonTTB.LemonTTB_Audio.LemonTTB_AudioManager;
+import LemonTTB.Logger.Logger;
 import LemonTTB.commands.CommandHandler;
 
 public class App {
@@ -55,11 +51,11 @@ public class App {
         audioManager = new LemonTTB_AudioManager();
         audioManager.createPlayer();
 
-        // resourcePath = Resources.getResource("").getPath() + "/resources";
         resourcePath = "./data";
 
         Logger.logFilePath = new File(resourcePath, "/logs").getPath();
         Logger.debug = true;
+        Logger.jdaDebug = false;
 
         configPath = new File(resourcePath, DEV ? "/config/botConfig.txt.dev" : "/config/botConfig.txt");
         LOGGER.logDebug("Config Path: " + configPath.getPath());
@@ -69,11 +65,10 @@ public class App {
 
         JDABuilder builder = JDABuilder.createDefault(Config.options.token);
 
-        // Disable parts of the cache
-        // builder.disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE);
         builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
         builder.setMemberCachePolicy(MemberCachePolicy.ALL);
         builder.setChunkingFilter(ChunkingFilter.ALL);
+
         // Enable the bulk delete event
         builder.setBulkDeleteSplittingEnabled(false);
         // Disable compression (not recommended)

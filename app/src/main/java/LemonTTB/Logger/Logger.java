@@ -1,5 +1,4 @@
-/*******************************************************************************
- * 
+/*
  * This file is part of LemonTTB.
  * (C) Copyright 2021
  * Programmed by Moritz Jung
@@ -16,10 +15,9 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
- * 
- ******************************************************************************/
+ */
 
-package LemonTTB;
+package LemonTTB.Logger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -61,6 +59,10 @@ public class Logger {
          */
         DEBUG,
         /**
+         * Represents a trace level log. Disabled if trace == false.
+         */
+        TRACE,
+        /**
          * Represents a log for a discord command.
          */
         COMMAND
@@ -72,14 +74,24 @@ public class Logger {
     public static boolean debug;
 
     /**
-     * 
+     * Wether trace logs should be active.
+     */
+    public static boolean trace;
+
+    /**
+     * Wether jda debug logs should be active.
+     */
+    public static boolean jdaDebug;
+
+    /**
+     * Folder Path for the log files.
      */
     public static String logFilePath;
 
     /**
      * The class to log for.
      */
-    private Class<?> obj;
+    private String name;
 
     /**
      * Describes the length of the loglevel with the most characters. Used for
@@ -94,12 +106,19 @@ public class Logger {
 
     /**
      * The constructor for Logger.
-     * Also calcualtes longestLogLevelString.
      * 
-     * @param debug
      * @param obj
      */
     public Logger(Class<?> obj) {
+        this(obj.getName());
+    }
+
+    /**
+     * The constructor for Logger.
+     * 
+     * @param name
+     */
+    public Logger(String name) {
         // Calculate the longest (in terms of characters) LogLevel
         Level longestLogLevel = Level.INFO;
         for (Level logLevel : Level.values()) {
@@ -108,7 +127,7 @@ public class Logger {
             }
         }
         longestLogLevelString = longestLogLevel.toString().length();
-        this.obj = obj;
+        this.name = name;
         this.gson = new Gson();
     }
 
@@ -120,6 +139,20 @@ public class Logger {
      */
     public static Logger getLogger(Class<?> obj) {
         return new Logger(obj);
+    }
+
+    /**
+     * Returns a logger object.
+     * 
+     * @param name
+     * @return Logger
+     */
+    public static Logger getLogger(String name) {
+        return new Logger(name);
+    }
+
+    public String getName() {
+        return name;
     }
 
     /**
@@ -160,13 +193,40 @@ public class Logger {
     }
 
     /**
+     * Logs an error.
+     * 
+     * @param t
+     */
+    public void logError(Throwable t) {
+        log(Level.ERROR, t.getMessage());
+        t.printStackTrace();
+    }
+
+    /**
      * Logs debug messages. Disabled if debug == false.
      * 
      * @param message
      */
     public void logDebug(String message) {
         if (debug) {
-            log(Level.DEBUG, message);
+            if (name.contains(".jda.")) {
+                if (jdaDebug) {
+                    log(Level.DEBUG, message);
+                }
+            } else {
+                log(Level.DEBUG, message);
+            }
+        }
+    }
+
+    /**
+     * Logs treace messages. Disabled if trace == false.
+     * 
+     * @param message
+     */
+    public void logTrace(String message) {
+        if (trace) {
+            log(Level.TRACE, message);
         }
     }
 
@@ -281,7 +341,7 @@ public class Logger {
         stringBuilder.append("]");
 
         stringBuilder.append("[");
-        stringBuilder.append(obj.getName());
+        stringBuilder.append(name);
         stringBuilder.append("]");
 
         return stringBuilder.toString();
@@ -302,6 +362,8 @@ public class Logger {
     }
 
     /**
+     * 
+     * 
      * @param line
      * @throws IOException
      */

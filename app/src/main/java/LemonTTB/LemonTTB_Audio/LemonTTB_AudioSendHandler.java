@@ -1,5 +1,4 @@
-/*******************************************************************************
- * 
+/*
  * This file is part of LemonTTB.
  * (C) Copyright 2021
  * Programmed by Moritz Jung
@@ -16,8 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
- * 
- ******************************************************************************/
+ */
 
 package LemonTTB.LemonTTB_Audio;
 
@@ -26,7 +24,7 @@ import java.nio.ByteBuffer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame;
 
-import LemonTTB.Logger;
+import LemonTTB.Logger.Logger;
 import net.dv8tion.jda.api.audio.AudioSendHandler;
 
 public class LemonTTB_AudioSendHandler implements AudioSendHandler {

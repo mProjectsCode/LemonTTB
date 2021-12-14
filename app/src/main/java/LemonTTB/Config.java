@@ -1,5 +1,4 @@
-/*******************************************************************************
- * 
+/*
  * This file is part of LemonTTB.
  * (C) Copyright 2021
  * Programmed by Moritz Jung
@@ -16,8 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
- * 
- ******************************************************************************/
+ */
 
 package LemonTTB;
 
@@ -30,6 +28,8 @@ import java.io.Writer;
 import java.util.Objects;
 
 import com.google.gson.Gson;
+
+import LemonTTB.Logger.Logger;
 
 public class Config {
     private static final Logger LOGGER = Logger.getLogger(Config.class);
