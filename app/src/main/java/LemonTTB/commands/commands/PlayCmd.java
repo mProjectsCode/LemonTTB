@@ -20,6 +20,7 @@
 package LemonTTB.commands.commands;
 
 import java.io.File;
+import java.util.Objects;
 
 import LemonTTB.App;
 import LemonTTB.commands.Command;
@@ -32,6 +33,27 @@ public class PlayCmd extends Command {
     public void run(CommandObject commandObject, Message msg) {
         // LOGGER.logDebug(Boolean.toString((new File(App.audioPath, "/Into the Mists
         // E.mp3")).exists()));
+
+        // TODO: FIX THIS SHIT
+        CommandObject.Argument argument = commandObject.getArgument("-s");
+        if (!Objects.equals(argument, null)) {
+            if (!Objects.equals(argument.value, null)) {
+                String[] pathToTrack = argument.value.split("/");
+
+                for (int i = 0; i < pathToTrack.length; i++) {
+                    File folder = App.audioPath;
+                    File[] listOfFiles = folder.listFiles();
+
+                    for (int j = 0; j < listOfFiles.length; j++) {
+                        if (listOfFiles[j].isFile()) {
+
+                        } else if (listOfFiles[j].isDirectory()) {
+
+                        }
+                    }
+                }
+            }
+        }
 
         App.audioManager.loadAndPlayTrack(new File(App.audioPath, "/Into the Mists E.mp3").getPath());
 

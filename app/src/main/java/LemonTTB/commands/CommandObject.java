@@ -19,6 +19,7 @@
 
 package LemonTTB.commands;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class CommandObject {
@@ -36,8 +37,18 @@ public class CommandObject {
         this.arguments = arguments;
     }
 
+    public Argument getArgument(String argumentIdentifier) {
+        for (int i = 0; i < arguments.length; i++) {
+            if (Objects.equals(arguments[i].identifier, argumentIdentifier)) {
+                return arguments[i];
+            }
+        }
+
+        return null;
+    }
+
     public static class Argument {
-        public String name;
+        public String identifier;
         public String value;
     }
 }
