@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.Objects;
 
 import LemonTTB.App;
+import LemonTTB.IOHelper;
 import LemonTTB.commands.Command;
 import LemonTTB.commands.CommandObject;
 import net.dv8tion.jda.api.entities.Message;
@@ -31,33 +32,33 @@ public class PlayCmd extends Command {
 
     @Override
     public void run(CommandObject commandObject, Message msg) {
-        // LOGGER.logDebug(Boolean.toString((new File(App.audioPath, "/Into the Mists
-        // E.mp3")).exists()));
+        boolean sucess = true;
 
-        // TODO: FIX THIS SHIT
         CommandObject.Argument argument = commandObject.getArgument("-s");
         if (!Objects.equals(argument, null)) {
             if (!Objects.equals(argument.value, null)) {
-                String[] pathToTrack = argument.value.split("/");
-
-                for (int i = 0; i < pathToTrack.length; i++) {
-                    File folder = App.audioPath;
-                    File[] listOfFiles = folder.listFiles();
-
-                    for (int j = 0; j < listOfFiles.length; j++) {
-                        if (listOfFiles[j].isFile()) {
-
-                        } else if (listOfFiles[j].isDirectory()) {
-
-                        }
-                    }
+                File[] paths = IOHelper.findPathsByFileName(argument.value, App.audioPath);
+                for (int i = 0; i < paths.length; i++) {
+                    Command.LOGGER
+                            .logTrace("Result " + i + " for search: " + argument.value + " is: " + paths[i].getPath());
+                }
+                if (paths.length > 0) {
+                    Command.LOGGER.logCommand(commandObject,
+                            "Result for search: " + argument.value + " is: " + paths[0].getPath());
+                    App.audioManager.loadAndPlayTrack(paths[0].getPath());
                 }
             }
         }
 
-        App.audioManager.loadAndPlayTrack(new File(App.audioPath, "/Into the Mists E.mp3").getPath());
+        argument = commandObject.getArgument("-l");
+        App.audioManager.setLooping(!Objects.equals(argument, null));
 
-        Command.LOGGER.logCommand(commandObject, true, "");
+        if (sucess) {
+            Command.LOGGER.logCommand(commandObject, sucess, "");
+        } else {
+            Command.LOGGER.logWarning("AudioPath for command " + commandObject.id + " is null");
+            Command.LOGGER.logCommand(commandObject, sucess, "No file found");
+        }
     }
 
 }

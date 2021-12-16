@@ -24,7 +24,6 @@ import org.slf4j.spi.MDCAdapter;
 import LemonTTB.Logger.LemonTTB_MDCAdapter;
 
 public final class StaticMDCBinder {
-
     /**
      * The unique instance of this class.
      */

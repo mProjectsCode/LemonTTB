@@ -20,13 +20,18 @@
 package LemonTTB.commands;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import LemonTTB.Logger.Logger;
+import LemonTTB.commands.commands.HelpCmd;
 import LemonTTB.commands.commands.InfoCmd;
 import LemonTTB.commands.commands.JoinCmd;
+import LemonTTB.commands.commands.LoopCmd;
+import LemonTTB.commands.commands.PauseCmd;
 import LemonTTB.commands.commands.PlayCmd;
 import LemonTTB.commands.commands.PongCmd;
+import LemonTTB.commands.commands.SkipCmd;
+import LemonTTB.commands.commands.VolumeCmd;
 
 /**
  * CommandRegistery
@@ -44,6 +49,11 @@ public class CommandRegistery {
         registerCommand(new PongCmd(), "ping");
         registerCommand(new JoinCmd(), "join");
         registerCommand(new PlayCmd(), "play");
+        registerCommand(new SkipCmd(), "skip");
+        registerCommand(new HelpCmd(), "help");
+        registerCommand(new VolumeCmd(), "volume");
+        registerCommand(new LoopCmd(), "loop");
+        registerCommand(new PauseCmd(), "pause");
     }
 
     public void registerCommand(Command command, String[] keywords) {

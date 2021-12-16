@@ -39,8 +39,10 @@ public class CommandObject {
 
     public Argument getArgument(String argumentIdentifier) {
         for (int i = 0; i < arguments.length; i++) {
-            if (Objects.equals(arguments[i].identifier, argumentIdentifier)) {
-                return arguments[i];
+            if (!Objects.equals(arguments[i], null)) {
+                if (Objects.equals(arguments[i].identifier, argumentIdentifier)) {
+                    return arguments[i];
+                }
             }
         }
 

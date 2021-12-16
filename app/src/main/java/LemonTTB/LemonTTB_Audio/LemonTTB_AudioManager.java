@@ -31,6 +31,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
+import LemonTTB.Config;
 import LemonTTB.Logger.Logger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildChannel;
@@ -66,6 +67,8 @@ public class LemonTTB_AudioManager {
         audioManager.setSendingHandler(new LemonTTB_AudioSendHandler(audioPlayer));
         // open an autioconnection to the voicechannel
         audioManager.openAudioConnection((VoiceChannel) channel);
+
+        this.channel = channel;
     }
 
     /**
@@ -76,6 +79,16 @@ public class LemonTTB_AudioManager {
         audioManager.closeAudioConnection();
         // unset the audioManager
         audioManager = null;
+    }
+
+    /**
+     * Returns the channel the audio manager is connected to.
+     * Returns null if not connected.
+     * 
+     * @return the channel
+     */
+    public GuildChannel getCannel() {
+        return channel;
     }
 
     /**
@@ -93,6 +106,9 @@ public class LemonTTB_AudioManager {
         audioTrackScheduler = new LemonTTB_AudioTrackScheduler(audioPlayer);
         // add our track sheduler to the audioPlayer
         audioPlayer.addListener(audioTrackScheduler);
+
+        audioPlayer.setVolume(Config.options.defaultVolume);
+        LOGGER.logDebug("Set volume to the config default of " + Config.options.defaultVolume);
     }
 
     /**
@@ -154,6 +170,60 @@ public class LemonTTB_AudioManager {
      */
     public void skipTrack() {
         audioTrackScheduler.nextTrack();
+    }
+
+    /**
+     * Set the player volume.
+     * 
+     * @param volume
+     */
+    public void setVolume(int volume) {
+        audioPlayer.setVolume(volume);
+    }
+
+    /**
+     * Get the player volume.
+     * 
+     * @return volume
+     */
+    public int getVolume() {
+        return audioPlayer.getVolume();
+    }
+
+    /**
+     * Set the player to loop.
+     * 
+     * @param looping
+     */
+    public void setLooping(boolean looping) {
+        audioTrackScheduler.setLooping(looping);
+    }
+
+    /**
+     * Is the player looping.
+     * 
+     * @return looping
+     */
+    public boolean isLooping() {
+        return audioTrackScheduler.isLooping();
+    }
+
+    /**
+     * Set the pause state of the player.
+     * 
+     * @param paused
+     */
+    public void setPaused(boolean paused) {
+        audioPlayer.setPaused(paused);
+    }
+
+    /**
+     * Is the player paused.
+     * 
+     * @return paused
+     */
+    public boolean isPaused() {
+        return audioPlayer.isPaused();
     }
 
     /**

@@ -75,7 +75,7 @@ public class CommandHandler extends ListenerAdapter {
             if (msgParts[i].startsWith("-")) {
                 commandObject.arguments[i - 1] = new CommandObject.Argument();
                 commandObject.arguments[i - 1].identifier = msgParts[i];
-                if (!msgParts[i + 1].startsWith("-")) {
+                if (i < msgParts.length - 1 && !msgParts[i + 1].startsWith("-")) {
                     commandObject.arguments[i - 1].value = msgParts[i + 1];
                 } else {
                     commandObject.arguments[i - 1].value = null;

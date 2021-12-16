@@ -54,6 +54,8 @@ public class JoinCmd extends Command {
 
                         if (Objects.equals(members.get(k).getId(), msg.getAuthor().getId())) {
                             App.audioManager.connect(channels.get(j), guilds.get(i));
+                            Command.LOGGER.logCommand(commandObject,
+                                    "Successfuly connected to " + channels.get(j).getName());
                         }
                     }
                 }

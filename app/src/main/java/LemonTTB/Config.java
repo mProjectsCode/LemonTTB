@@ -38,6 +38,8 @@ public class Config {
 
     public static Options options;
 
+    public static File configFile;
+
     public static void load(File file) {
         if (!file.exists()) {
             try {
@@ -103,6 +105,19 @@ public class Config {
             writer.write("#\n");
             writer.write(gson.toJson(options));
         }
+    }
+
+    public static void save() {
+        try {
+            write(configFile);
+        } catch (IOException e) {
+            LOGGER.logError("Error while trying to save config.");
+            LOGGER.logError(e);
+        }
+    }
+
+    public static void load() {
+        load(configFile);
     }
 
     public static class Options {

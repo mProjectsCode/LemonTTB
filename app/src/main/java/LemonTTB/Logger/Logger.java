@@ -79,9 +79,9 @@ public class Logger {
     public static boolean trace;
 
     /**
-     * Wether jda debug logs should be active.
+     * Debug and trace log blacklists;
      */
-    public static boolean jdaDebug;
+    public static String[] debugBlacklist;
 
     /**
      * Folder Path for the log files.
@@ -209,11 +209,14 @@ public class Logger {
      */
     public void logDebug(String message) {
         if (debug) {
-            if (name.contains(".jda.")) {
-                if (jdaDebug) {
-                    log(Level.DEBUG, message);
+            boolean filterMessage = false;
+            for (int i = 0; i < debugBlacklist.length; i++) {
+                if (name.contains(debugBlacklist[i])) {
+                    filterMessage = true;
                 }
-            } else {
+            }
+
+            if (!filterMessage) {
                 log(Level.DEBUG, message);
             }
         }
@@ -226,7 +229,16 @@ public class Logger {
      */
     public void logTrace(String message) {
         if (trace) {
-            log(Level.TRACE, message);
+            boolean filterMessage = false;
+            for (int i = 0; i < debugBlacklist.length; i++) {
+                if (name.contains(debugBlacklist[i])) {
+                    filterMessage = true;
+                }
+            }
+
+            if (!filterMessage) {
+                log(Level.TRACE, message);
+            }
         }
     }
 
@@ -245,6 +257,22 @@ public class Logger {
         sb.append(". origional message: \"");
         sb.append(msg.getContentRaw());
         sb.append("\"");
+
+        log(Level.COMMAND, sb.toString());
+    }
+
+    /**
+     * Logs a discord command.
+     * 
+     * @param commandObject
+     * @param msg
+     */
+    public void logCommand(CommandObject commandObject, String message) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(commandObject.id);
+        sb.append(" ");
+        sb.append(message);
 
         log(Level.COMMAND, sb.toString());
     }
