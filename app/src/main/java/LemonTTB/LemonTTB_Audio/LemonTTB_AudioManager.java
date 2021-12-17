@@ -68,6 +68,8 @@ public class LemonTTB_AudioManager {
         // open an autioconnection to the voicechannel
         audioManager.openAudioConnection((VoiceChannel) channel);
 
+        audioManager.setSelfDeafened(true);
+
         this.channel = channel;
     }
 

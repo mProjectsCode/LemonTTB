@@ -3,7 +3,6 @@ package LemonTTB.commands.commands;
 import java.util.Objects;
 
 import LemonTTB.App;
-import LemonTTB.Config;
 import LemonTTB.commands.Command;
 import LemonTTB.commands.CommandObject;
 import net.dv8tion.jda.api.entities.Message;

@@ -26,8 +26,11 @@ import java.io.IOException;
 import java.io.Writer;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 import com.google.gson.Gson;
+
+import org.slf4j.helpers.MessageFormatter;
 
 import LemonTTB.commands.CommandObject;
 import net.dv8tion.jda.api.entities.Message;
@@ -38,6 +41,26 @@ import net.dv8tion.jda.api.entities.Message;
  * @author Moritz Jung
  */
 public class Logger {
+    /**
+     * Wether debug logs should be active.
+     */
+    private static boolean debug = false;
+
+    /**
+     * Wether trace logs should be active.
+     */
+    private static boolean trace = false;
+
+    /**
+     * Debug and trace log blacklists;
+     */
+    private static String[] debugBlacklist = new String[0];
+
+    /**
+     * Folder Path for the log files.
+     */
+    private static String logFilePath = "";
+
     /**
      * An enum describing the level of the log outout.
      */
@@ -67,26 +90,6 @@ public class Logger {
          */
         COMMAND
     }
-
-    /**
-     * Wether debug logs should be active.
-     */
-    public static boolean debug;
-
-    /**
-     * Wether trace logs should be active.
-     */
-    public static boolean trace;
-
-    /**
-     * Debug and trace log blacklists;
-     */
-    public static String[] debugBlacklist;
-
-    /**
-     * Folder Path for the log files.
-     */
-    public static String logFilePath;
 
     /**
      * The class to log for.
@@ -153,6 +156,64 @@ public class Logger {
 
     public String getName() {
         return name;
+    }
+
+    /**
+     * Wether to enable debug logs. Default: false
+     * 
+     * @param enableDebug
+     */
+    public static void enableDebug(boolean enableDebug) {
+        debug = enableDebug;
+        System.out.println("[LOGGER] Enabled debug loging.");
+    }
+
+    /**
+     * Getter for debug.
+     * 
+     * @return debug
+     */
+    public static boolean getDebug() {
+        return debug;
+    }
+
+    /**
+     * Wether to enable trace logs. Default: false
+     * 
+     * @param enableTrace
+     */
+    public static void enableTrace(boolean enableTrace) {
+        trace = enableTrace;
+        System.out.println("[LOGGER] Enabled debug loging.");
+    }
+
+    /**
+     * Getter for trace.
+     * 
+     * @return trace
+     */
+    public static boolean getTrace() {
+        return trace;
+    }
+
+    /**
+     * Set a blacklist for certain classes to not log debug level logs from them.
+     * 
+     * @param blacklist String[] of snippets that occur in the class name
+     */
+    public static void setDebugBlacklist(String[] blacklist) {
+        debugBlacklist = blacklist;
+        System.out.println(MessageFormatter.format("[LOGGER] Debug blacklist set to: {}", blacklist).getMessage());
+    }
+
+    /**
+     * Set the fielpath for the logfiles.
+     * 
+     * @param filePath
+     */
+    public static void setLogFilePath(String filePath) {
+        logFilePath = filePath;
+        System.out.println(MessageFormatter.format("[LOGGER] Log file path set to: {}", filePath).getMessage());
     }
 
     /**
@@ -265,7 +326,7 @@ public class Logger {
      * Logs a discord command.
      * 
      * @param commandObject
-     * @param msg
+     * @param message
      */
     public void logCommand(CommandObject commandObject, String message) {
         StringBuilder sb = new StringBuilder();
@@ -330,6 +391,7 @@ public class Logger {
      * 
      * @param logLevel
      * @param message
+     * @param writeToFile
      */
     public void log(Level logLevel, String message, boolean writeToFile) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -337,7 +399,9 @@ public class Logger {
         stringBuilder.append(" ");
         stringBuilder.append(message);
 
-        System.out.println(stringBuilder.toString());
+        System.out.print(getColorCode(logLevel));
+        System.out.print(stringBuilder.toString());
+        System.out.println(ConsoleColors.RESET);
         if (writeToFile) {
             try {
                 logToFile(stringBuilder.toString());
@@ -390,7 +454,24 @@ public class Logger {
     }
 
     /**
+     * Gets a ansi color code based on the logLevel.
      * 
+     * @param logLevel
+     * @return ansi color code
+     */
+    private String getColorCode(Level logLevel) {
+        if (Objects.equals(logLevel, Level.ERROR)) {
+            return ConsoleColors.RED;
+        } else if (Objects.equals(logLevel, Level.WARNING)) {
+            return ConsoleColors.YELLOW;
+        } else if (Objects.equals(logLevel, Level.INFO)) {
+            return ConsoleColors.WHITE_BRIGHT;
+        }
+        return "";
+    }
+
+    /**
+     * Wites a log to the log file.
      * 
      * @param line
      * @throws IOException
@@ -398,6 +479,12 @@ public class Logger {
     private void logToFile(String line) throws IOException {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
         LocalDateTime localDateTime = LocalDateTime.now();
+
+        if (Objects.equals(logFilePath, "")) {
+            log(Level.WARNING, "logFilePath is not set!", false);
+            return;
+        }
+
         File file = new File(logFilePath, "/logger/" + dateTimeFormatter.format(localDateTime) + "-LemonTTB-log.txt");
         File dir = file.getParentFile();
 
@@ -412,7 +499,7 @@ public class Logger {
         try (Writer writer = new BufferedWriter(new FileWriter(file, true))) {
             writer.append(line + System.lineSeparator());
             writer.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new IOException("Could not open the log file");
         }
     }

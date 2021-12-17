@@ -296,22 +296,22 @@ public class LoggerAdapter implements org.slf4j.Logger {
 
     @Override
     public boolean isTraceEnabled() {
-        return Logger.trace;
+        return Logger.getTrace();
     }
 
     @Override
     public boolean isTraceEnabled(Marker marker) {
-        return Logger.trace;
+        return Logger.getTrace();
     }
 
     @Override
     public boolean isDebugEnabled() {
-        return Logger.debug;
+        return Logger.getDebug();
     }
 
     @Override
     public boolean isDebugEnabled(Marker marker) {
-        return Logger.debug;
+        return Logger.getDebug();
     }
 
     @Override

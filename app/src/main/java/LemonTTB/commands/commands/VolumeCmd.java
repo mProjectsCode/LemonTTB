@@ -2,8 +2,6 @@ package LemonTTB.commands.commands;
 
 import java.util.Objects;
 
-import com.fasterxml.jackson.databind.introspect.ConcreteBeanPropertyBase;
-
 import LemonTTB.App;
 import LemonTTB.Config;
 import LemonTTB.commands.Command;

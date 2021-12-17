@@ -29,7 +29,10 @@ import javax.security.auth.login.LoginException;
 
 import com.google.common.io.Resources;
 
+import org.slf4j.helpers.MessageFormatter;
+
 import LemonTTB.LemonTTB_Audio.LemonTTB_AudioManager;
+import LemonTTB.Logger.ConsoleColors;
 import LemonTTB.Logger.Logger;
 import LemonTTB.commands.CommandHandler;
 import net.dv8tion.jda.api.JDA;
@@ -64,31 +67,10 @@ public class App {
 
     public static void main(String[] args) {
         // INIT: Startup
-        File logo = new File(Resources.getResource("Logo.txt").getPath());
-        try (BufferedReader br = new BufferedReader(new FileReader(logo, StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        File startup = new File(Resources.getResource("Startup.txt").getPath());
-        try (BufferedReader br = new BufferedReader(new FileReader(startup))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                System.out.println(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        initStatup();
 
         // INIT: Logger
-        Logger.logFilePath = new File(RESOURCE_PATH, "/logs").getPath();
-        Logger.debug = true;
-        Logger.trace = true;
-        Logger.debugBlacklist = new String[] { ".jda.", ".lava.", ".lavaplayer." };
+        initLogger();
 
         // INIT: Config
         configPath = new File(RESOURCE_PATH, DEV ? "/config/botConfig.txt.dev" : "/config/botConfig.txt");
@@ -102,6 +84,46 @@ public class App {
 
         // INIT: JDA
         buildJDA();
+
+        LOGGER.logWarning("test");
+        LOGGER.logError("test");
+    }
+
+    private static void initStatup() {
+        File logo = new File(Resources.getResource("Logo.txt").getPath());
+        try (BufferedReader br = new BufferedReader(new FileReader(logo, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("LemonTTB is a Discord Bot designed to assist the GM "
+                + "during tabletop sessions using Discord as communication.");
+        System.out.println();
+        System.out.println(ConsoleColors.WHITE_BRIGHT + "The source files can be found here: " + ConsoleColors.RESET);
+        System.out.println("https://github.com/mProjectsCode/LemonTTB");
+        System.out.println();
+        System.out.println(ConsoleColors.WHITE_BRIGHT + "License:" + ConsoleColors.RESET);
+        System.out.println("LemonTTB is distributed under the GPL-3.0 License.");
+        System.out.println();
+    }
+
+    private static void initLogger() {
+        System.out.println(ConsoleColors.WHITE_BRIGHT + "Initializing Logger..." + ConsoleColors.RESET);
+
+        File logFolderPath = new File(RESOURCE_PATH, "/logs");
+        try {
+            System.out.println("Logfiles can be found here: " + logFolderPath.getCanonicalPath());
+        } catch (IOException e) {
+            exit("Failed to set filepath for logger!", e);
+        }
+        Logger.setLogFilePath(logFolderPath.getPath());
+        Logger.enableDebug(true);
+        Logger.enableTrace(true);
+        Logger.setDebugBlacklist(new String[] { ".jda.", ".lava.", ".lavaplayer." });
     }
 
     private static void buildJDA() {
