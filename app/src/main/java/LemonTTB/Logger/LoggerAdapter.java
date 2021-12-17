@@ -22,14 +22,27 @@ package LemonTTB.Logger;
 import org.slf4j.Marker;
 import org.slf4j.helpers.MessageFormatter;
 
+/**
+ * The type Logger adapter.
+ */
 public class LoggerAdapter implements org.slf4j.Logger {
 
     private final Logger logger;
 
+    /**
+     * Instantiates a new Logger adapter.
+     *
+     * @param logger the logger
+     */
     public LoggerAdapter(Logger logger) {
         this.logger = logger;
     }
 
+    /**
+     * Instantiates a new Logger adapter.
+     *
+     * @param name the name
+     */
     public LoggerAdapter(String name) {
         this.logger = new Logger(name);
     }
@@ -56,7 +69,7 @@ public class LoggerAdapter implements org.slf4j.Logger {
 
     @Override
     public void trace(String format, Object... arguments) {
-        logger.logTrace(MessageFormatter.arrayFormat(format, (Object[]) arguments).getMessage());
+        logger.logTrace(MessageFormatter.arrayFormat(format, arguments).getMessage());
     }
 
     @Override
@@ -107,7 +120,7 @@ public class LoggerAdapter implements org.slf4j.Logger {
 
     @Override
     public void debug(String format, Object... arguments) {
-        logger.logDebug(MessageFormatter.arrayFormat(format, (Object[]) arguments).getMessage());
+        logger.logDebug(MessageFormatter.arrayFormat(format, arguments).getMessage());
     }
 
     @Override
@@ -158,7 +171,7 @@ public class LoggerAdapter implements org.slf4j.Logger {
 
     @Override
     public void error(String format, Object... arguments) {
-        logger.logError(MessageFormatter.arrayFormat(format, (Object[]) arguments).getMessage());
+        logger.logError(MessageFormatter.arrayFormat(format, arguments).getMessage());
     }
 
     @Override
@@ -209,7 +222,7 @@ public class LoggerAdapter implements org.slf4j.Logger {
 
     @Override
     public void warn(String format, Object... arguments) {
-        logger.logWarning(MessageFormatter.arrayFormat(format, (Object[]) arguments).getMessage());
+        logger.logWarning(MessageFormatter.arrayFormat(format, arguments).getMessage());
     }
 
     @Override
@@ -260,7 +273,7 @@ public class LoggerAdapter implements org.slf4j.Logger {
 
     @Override
     public void info(String format, Object... arguments) {
-        logger.logInfo(MessageFormatter.arrayFormat(format, (Object[]) arguments).getMessage());
+        logger.logInfo(MessageFormatter.arrayFormat(format, arguments).getMessage());
     }
 
     @Override

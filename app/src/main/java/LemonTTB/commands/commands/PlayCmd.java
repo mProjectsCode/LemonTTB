@@ -25,14 +25,26 @@ import java.util.Objects;
 import LemonTTB.App;
 import LemonTTB.IOHelper;
 import LemonTTB.commands.Command;
+import LemonTTB.commands.CommandDescription;
 import LemonTTB.commands.CommandObject;
 import net.dv8tion.jda.api.entities.Message;
+import org.jetbrains.annotations.NotNull;
 
 public class PlayCmd extends Command {
 
     @Override
+    public @NotNull CommandDescription getCommandDescription() {
+        return new CommandDescription(
+                "Pings the bot.",
+                new CommandDescription.ArgumentDescription[]{
+
+                }
+        );
+    }
+
+    @Override
     public void run(CommandObject commandObject, Message msg) {
-        boolean sucess = true;
+        boolean success = true;
 
         CommandObject.Argument argument = commandObject.getArgument("-s");
         if (!Objects.equals(argument, null)) {
@@ -50,14 +62,21 @@ public class PlayCmd extends Command {
             }
         }
 
+        argument = commandObject.getArgument("-y");
+        if (!Objects.equals(argument, null)) {
+            if (!Objects.equals(argument.value, null)) {
+                App.audioManager.loadAndPlayTrack(argument.value);
+            }
+        }
+
         argument = commandObject.getArgument("-l");
         App.audioManager.setLooping(!Objects.equals(argument, null));
 
-        if (sucess) {
-            Command.LOGGER.logCommand(commandObject, sucess, "");
+        if (success) {
+            Command.LOGGER.logCommand(commandObject, true, "");
         } else {
             Command.LOGGER.logWarning("AudioPath for command " + commandObject.id + " is null");
-            Command.LOGGER.logCommand(commandObject, sucess, "No file found");
+            Command.LOGGER.logCommand(commandObject, success, "No file found");
         }
     }
 

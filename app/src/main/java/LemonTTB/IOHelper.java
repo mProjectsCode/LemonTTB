@@ -27,7 +27,7 @@ import java.util.Objects;
 public class IOHelper {
     /**
      * Returns the filepath to the first file with the same name as fileName.
-     * Searches all subfolders recursevly.
+     * Searches all sub folders recursively.
      * 
      * @param fileName the name to match
      * @param folder   the folder to search
@@ -37,7 +37,7 @@ public class IOHelper {
         fileName = fileName.toLowerCase();
         File[] listOfFiles = folder.listFiles();
 
-        for (int j = 0; j < listOfFiles.length; j++) {
+        for (int j = 0; j < (listOfFiles != null ? listOfFiles.length : 0); j++) {
             if (listOfFiles[j].isFile()) {
                 if (Objects.equals(listOfFiles[j].getName().toLowerCase(), fileName)) {
                     return listOfFiles[j];
@@ -51,20 +51,20 @@ public class IOHelper {
     }
 
     /**
-     * Returns a list of filepaths containing all the files conatining fileName in
+     * Returns a list of file paths containing all the files containing fileName in
      * its file name.
-     * Searches all subfolders recursevly.
+     * Searches all sub folders recursively.
      * 
      * @param fileName the name a file needs to contain
      * @param folder   the folder to search
-     * @return the list of fielpaths
+     * @return the list of file paths
      */
     public static File[] findPathsByFileName(String fileName, File folder) {
         fileName = fileName.toLowerCase();
         List<File> paths = new ArrayList<File>();
         File[] listOfFiles = folder.listFiles();
 
-        for (int j = 0; j < listOfFiles.length; j++) {
+        for (int j = 0; j < (listOfFiles != null ? listOfFiles.length : 0); j++) {
             if (listOfFiles[j].isFile()) {
                 if (listOfFiles[j].getName().toLowerCase().contains(fileName)) {
                     paths.add(listOfFiles[j]);
@@ -89,7 +89,7 @@ public class IOHelper {
         fileName = fileName.toLowerCase();
         File[] listOfFiles = folder.listFiles();
 
-        for (int j = 0; j < listOfFiles.length; j++) {
+        for (int j = 0; j < (listOfFiles != null ? listOfFiles.length : 0); j++) {
             if (listOfFiles[j].isFile()) {
                 if (Objects.equals(listOfFiles[j].getName().toLowerCase(), fileName)) {
                     return listOfFiles[j];
@@ -101,20 +101,20 @@ public class IOHelper {
     }
 
     /**
-     * Returns a list of filepaths containing all the files conatining fileName in
+     * Returns a list of file paths containing all the files containing fileName in
      * its file name.
      * Searches only the given folder.
      * 
      * @param fileName the name a file needs to contain
      * @param folder   the folder to search
-     * @return the list of fielpaths
+     * @return the list of file paths
      */
     public static File[] findPathsByFileNameInFolder(String fileName, File folder) {
         fileName = fileName.toLowerCase();
         List<File> paths = new ArrayList<File>();
         File[] listOfFiles = folder.listFiles();
 
-        for (int j = 0; j < listOfFiles.length; j++) {
+        for (int j = 0; j < (listOfFiles != null ? listOfFiles.length : 0); j++) {
             if (listOfFiles[j].isFile()) {
                 if (listOfFiles[j].getName().toLowerCase().contains(fileName)) {
                     paths.add(listOfFiles[j]);

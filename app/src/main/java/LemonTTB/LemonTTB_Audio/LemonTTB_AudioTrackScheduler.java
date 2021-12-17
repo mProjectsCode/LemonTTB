@@ -31,6 +31,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import LemonTTB.App;
 import LemonTTB.Logger.Logger;
 
+/**
+ * The type Lemon ttb audio track scheduler.
+ */
 public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
     private static final Logger LOGGER = Logger.getLogger(LemonTTB_AudioTrackScheduler.class);
 
@@ -41,18 +44,28 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
 
     /**
      * Constructor for LemonTTB_AudioTrackScheduler
-     * 
-     * @param audioPlayer
+     *
+     * @param audioPlayer the audio player
      */
     public LemonTTB_AudioTrackScheduler(AudioPlayer audioPlayer) {
         this.audioPlayer = audioPlayer;
         this.queue = new LinkedBlockingQueue<>();
     }
 
+    /**
+     * Is looping boolean.
+     *
+     * @return the boolean
+     */
     public boolean isLooping() {
         return looping;
     }
 
+    /**
+     * Sets looping.
+     *
+     * @param looping the looping
+     */
     public void setLooping(boolean looping) {
         this.looping = looping;
     }
@@ -79,7 +92,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
         // Start the next track, regardless of if something is already playing or not.
         // In case queue was empty, we are giving null to startTrack, which is a valid
         // argument and will simply stop the player.
-        // If the scheduler is looping start the current track angain intead.
+        // If the scheduler is looping start the current track again instead.
         if (looping) {
             App.audioManager.loadAndPlayTrack(audioPlayer.getPlayingTrack().getIdentifier());
         }
@@ -88,12 +101,14 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
 
     /**
      * Start the next track, stopping the current one if it is playing.
+     *
+     * @param finishedTrack the finished track
      */
     public void nextTrack(AudioTrack finishedTrack) {
         // Start the next track, regardless of if something is already playing or not.
         // In case queue was empty, we are giving null to startTrack, which is a valid
         // argument and will simply stop the player.
-        // If the scheduler is looping start the current track angain intead.
+        // If the scheduler is looping start the current track again instead.
         if (looping) {
             App.audioManager.loadAndPlayTrack(finishedTrack.getIdentifier());
         }
@@ -107,7 +122,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
      */
     @Override
     public void onPlayerPause(AudioPlayer player) {
-        LOGGER.logDebug("Paused audio player on track: " + queue.peek().getInfo().identifier);
+        LOGGER.logDebug("Paused audio player on track: " + (queue.peek() != null ? queue.peek().getIdentifier() : ""));
     }
 
     /**
@@ -117,7 +132,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
      */
     @Override
     public void onPlayerResume(AudioPlayer player) {
-        LOGGER.logDebug("Resumed audio player on track: " + queue.peek().getInfo().identifier);
+        LOGGER.logDebug("Resumed audio player on track: " + (queue.peek() != null ? queue.peek().getIdentifier() : ""));
     }
 
     /**

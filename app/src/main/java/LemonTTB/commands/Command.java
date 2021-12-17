@@ -21,9 +21,13 @@ package LemonTTB.commands;
 
 import LemonTTB.Logger.Logger;
 import net.dv8tion.jda.api.entities.Message;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class Command {
     protected static final Logger LOGGER = Logger.getLogger(Command.class);
+
+    @NotNull
+    public abstract CommandDescription getCommandDescription();
 
     public abstract void run(CommandObject commandObject, Message msg);
 }

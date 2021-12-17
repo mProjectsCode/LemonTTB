@@ -31,15 +31,29 @@ import com.google.gson.Gson;
 
 import LemonTTB.Logger.Logger;
 
+/**
+ * The type Config.
+ */
 public class Config {
     private static final Logger LOGGER = Logger.getLogger(Config.class);
 
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
+    /**
+     * The constant options.
+     */
     public static Options options;
 
+    /**
+     * The constant configFile.
+     */
     public static File configFile;
 
+    /**
+     * Load.
+     *
+     * @param file the file
+     */
     public static void load(File file) {
         if (!file.exists()) {
             try {
@@ -86,6 +100,12 @@ public class Config {
         }
     }
 
+    /**
+     * Write.
+     *
+     * @param file the file
+     * @throws IOException the io exception
+     */
     public static void write(File file) throws IOException {
         File dir = file.getParentFile();
 
@@ -107,6 +127,9 @@ public class Config {
         }
     }
 
+    /**
+     * Save.
+     */
     public static void save() {
         try {
             write(configFile);
@@ -116,21 +139,54 @@ public class Config {
         }
     }
 
+    /**
+     * Load.
+     */
     public static void load() {
         load(configFile);
     }
 
+    /**
+     * The type Options.
+     */
     public static class Options {
+        /**
+         * The Version.
+         */
         public String version;
 
+        /**
+         * The Token.
+         */
         public String token;
+        /**
+         * The Prefix.
+         */
         public String prefix;
+        /**
+         * The Bot owner.
+         */
         public String botOwner;
+        /**
+         * The Status channel.
+         */
         public String statusChannel;
+        /**
+         * The Voice channel main.
+         */
         public String voiceChannelMain;
+        /**
+         * The Voice channel secondary.
+         */
         public String voiceChannelSecondary;
+        /**
+         * The Default volume.
+         */
         public int defaultVolume;
 
+        /**
+         * Instantiates a new Options.
+         */
         public Options() {
             this.setDefaultValues();
         }
@@ -146,6 +202,11 @@ public class Config {
             this.defaultVolume = 10;
         }
 
+        /**
+         * Gets default options.
+         *
+         * @return the default options
+         */
         public static Options getDefaultOptions() {
             return new Options();
         }

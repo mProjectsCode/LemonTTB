@@ -43,8 +43,11 @@ import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
+/**
+ * The type App.
+ */
 /*
- *   _                              _______ _______ ____  
+ *  _                              _______ _______ ____
  * | |                     ___/)  |__   __|__   __|  _ \ 
  * | |     _ __ ___   ___ /   \ _ __ | |     | |  | |_) |
  * | |    | '_ ` _ \ / _ \     | '_ \| |     | |  |  _ < 
@@ -56,18 +59,44 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 public class App {
     private static final Logger LOGGER = Logger.getLogger(App.class);
 
+    /**
+     * The constant VERSION.
+     */
     public static final String VERSION = "v0.0.1";
+    /**
+     * The constant DEV.
+     */
     public static final boolean DEV = true;
+    /**
+     * The constant RESOURCE_PATH.
+     */
     public static final String RESOURCE_PATH = "./data";
 
+    /**
+     * The constant configPath.
+     */
     public static File configPath;
+    /**
+     * The constant audioPath.
+     */
     public static File audioPath;
+    /**
+     * The constant jda.
+     */
     public static JDA jda;
+    /**
+     * The constant audioManager.
+     */
     public static LemonTTB_AudioManager audioManager;
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         // INIT: Startup
-        initStatup();
+        initStartup();
 
         // INIT: Logger
         initLogger();
@@ -89,7 +118,7 @@ public class App {
         LOGGER.logError("test");
     }
 
-    private static void initStatup() {
+    private static void initStartup() {
         File logo = new File(Resources.getResource("Logo.txt").getPath());
         try (BufferedReader br = new BufferedReader(new FileReader(logo, StandardCharsets.UTF_8))) {
             String line;
@@ -155,14 +184,25 @@ public class App {
         }
     }
 
+    /**
+     * Exit.
+     *
+     * @param message the message
+     */
     public static void exit(String message) {
-        LOGGER.logWarning("Programm is exiting with message: ");
+        LOGGER.logWarning("Program is exiting with message: ");
         LOGGER.logWarning(message);
         System.exit(0);
     }
 
+    /**
+     * Exit.
+     *
+     * @param message the message
+     * @param e       the exception
+     */
     public static void exit(String message, Exception e) {
-        LOGGER.logWarning("Programm is exiting with message: ");
+        LOGGER.logWarning("Program is exiting with message: ");
         LOGGER.logWarning(message);
         LOGGER.logError(e);
         System.exit(0);

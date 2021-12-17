@@ -27,6 +27,9 @@ import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame;
 import LemonTTB.Logger.Logger;
 import net.dv8tion.jda.api.audio.AudioSendHandler;
 
+/**
+ * The type Lemon ttb audio send handler.
+ */
 public class LemonTTB_AudioSendHandler implements AudioSendHandler {
     private static final Logger LOGGER = Logger.getLogger(LemonTTB_AudioSendHandler.class);
 
@@ -34,6 +37,11 @@ public class LemonTTB_AudioSendHandler implements AudioSendHandler {
     private final ByteBuffer buffer;
     private final MutableAudioFrame frame;
 
+    /**
+     * Instantiates a new audio send handler.
+     *
+     * @param audioPlayer the audio player
+     */
     public LemonTTB_AudioSendHandler(AudioPlayer audioPlayer) {
         this.audioPlayer = audioPlayer;
         this.buffer = ByteBuffer.allocate(1024);

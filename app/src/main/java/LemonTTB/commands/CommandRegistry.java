@@ -22,31 +22,40 @@ package LemonTTB.commands;
 import java.util.HashMap;
 import java.util.Map;
 
-import LemonTTB.Logger.Logger;
 import LemonTTB.commands.commands.HelpCmd;
 import LemonTTB.commands.commands.InfoCmd;
 import LemonTTB.commands.commands.JoinCmd;
 import LemonTTB.commands.commands.LoopCmd;
+import LemonTTB.commands.commands.MoveCmd;
 import LemonTTB.commands.commands.PauseCmd;
 import LemonTTB.commands.commands.PlayCmd;
-import LemonTTB.commands.commands.PongCmd;
+import LemonTTB.commands.commands.PingCmd;
 import LemonTTB.commands.commands.SkipCmd;
 import LemonTTB.commands.commands.VolumeCmd;
 
 /**
- * CommandRegistery
+ * CommandRegistry
  */
-public class CommandRegistery {
+public class CommandRegistry {
+    /**
+     * The Commands.
+     */
     public Map<String, Command> commands;
 
-    public CommandRegistery() {
+    /**
+     * Instantiates a new Command registry.
+     */
+    public CommandRegistry() {
         commands = new HashMap<String, Command>();
         registerCommands();
     }
 
+    /**
+     * Register commands.
+     */
     public void registerCommands() {
         registerCommand(new InfoCmd(), new String[] { "info", "about" });
-        registerCommand(new PongCmd(), "ping");
+        registerCommand(new PingCmd(), "ping");
         registerCommand(new JoinCmd(), "join");
         registerCommand(new PlayCmd(), "play");
         registerCommand(new SkipCmd(), "skip");
@@ -54,14 +63,27 @@ public class CommandRegistery {
         registerCommand(new VolumeCmd(), "volume");
         registerCommand(new LoopCmd(), "loop");
         registerCommand(new PauseCmd(), "pause");
+        registerCommand(new MoveCmd(), "move");
     }
 
+    /**
+     * Register command.
+     *
+     * @param command  the command
+     * @param keywords the keywords
+     */
     public void registerCommand(Command command, String[] keywords) {
         for (int i = 0; i < keywords.length; i++) {
             registerCommand(command, keywords[i]);
         }
     }
 
+    /**
+     * Register command.
+     *
+     * @param command the command
+     * @param keyword the keyword
+     */
     public void registerCommand(Command command, String keyword) {
         commands.put(keyword, command);
     }

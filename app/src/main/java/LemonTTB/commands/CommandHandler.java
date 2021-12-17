@@ -28,10 +28,13 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+/**
+ * The type Command handler.
+ */
 public class CommandHandler extends ListenerAdapter {
     private static final Logger LOGGER = Logger.getLogger(CommandHandler.class);
 
-    private CommandRegistery commandRegistery = new CommandRegistery();
+    private final CommandRegistry commandRegistry = new CommandRegistry();
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
@@ -87,7 +90,7 @@ public class CommandHandler extends ListenerAdapter {
     }
 
     private void selectCommand(CommandObject commandObject, Message msg) {
-        Command command = commandRegistery.commands.get(commandObject.command);
+        Command command = commandRegistry.commands.get(commandObject.command);
         if (command == null) {
             return;
         }

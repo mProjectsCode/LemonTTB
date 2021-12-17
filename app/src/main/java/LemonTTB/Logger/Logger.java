@@ -37,17 +37,17 @@ import net.dv8tion.jda.api.entities.Message;
 
 /**
  * A class for printing fancy log messages into the console.
- * 
+ *
  * @author Moritz Jung
  */
 public class Logger {
     /**
-     * Wether debug logs should be active.
+     * Whether debug logs should be active.
      */
     private static boolean debug = false;
 
     /**
-     * Wether trace logs should be active.
+     * Whether trace logs should be active.
      */
     private static boolean trace = false;
 
@@ -60,9 +60,421 @@ public class Logger {
      * Folder Path for the log files.
      */
     private static String logFilePath = "";
+    /**
+     * The class to log for.
+     */
+    private final String name;
+    /**
+     * Describes the length of the loglevel with the most characters. Used for
+     * aligning the timestamps.
+     */
+    private final int longestLogLevelString;
+    /**
+     * Instance of gson.
+     */
+    private final Gson gson;
 
     /**
-     * An enum describing the level of the log outout.
+     * The constructor for Logger.
+     *
+     * @param obj the obj
+     */
+    public Logger(Class<?> obj) {
+        this(obj.getName());
+    }
+
+    /**
+     * The constructor for Logger.
+     *
+     * @param name the name
+     */
+    public Logger(String name) {
+        // Calculate the longest (in terms of characters) LogLevel
+        Level longestLogLevel = Level.INFO;
+        for (Level logLevel : Level.values()) {
+            if (logLevel.toString().length() > longestLogLevel.toString().length()) {
+                longestLogLevel = logLevel;
+            }
+        }
+        longestLogLevelString = longestLogLevel.toString().length();
+        this.name = name;
+        this.gson = new Gson();
+    }
+
+    /**
+     * Returns a logger object.
+     *
+     * @param obj the obj
+     * @return Logger logger
+     */
+    public static Logger getLogger(Class<?> obj) {
+        return new Logger(obj);
+    }
+
+    /**
+     * Returns a logger object.
+     *
+     * @param name the name
+     * @return Logger logger
+     */
+    public static Logger getLogger(String name) {
+        return new Logger(name);
+    }
+
+    /**
+     * Whether to enable debug logs. Default: false
+     *
+     * @param enableDebug the enable debug
+     */
+    public static void enableDebug(boolean enableDebug) {
+        debug = enableDebug;
+        System.out.println("[LOGGER] Enabled debug logging.");
+    }
+
+    /**
+     * Getter for debug.
+     *
+     * @return debug debug
+     */
+    public static boolean getDebug() {
+        return debug;
+    }
+
+    /**
+     * Whether to enable trace logs. Default: false
+     *
+     * @param enableTrace to enable trace
+     */
+    public static void enableTrace(boolean enableTrace) {
+        trace = enableTrace;
+        System.out.println("[LOGGER] Enabled debug logging.");
+    }
+
+    /**
+     * Getter for trace.
+     *
+     * @return trace trace
+     */
+    public static boolean getTrace() {
+        return trace;
+    }
+
+    /**
+     * Set a blacklist for certain classes to not log debug level logs from them.
+     *
+     * @param blacklist String[] of snippets that occur in the class name
+     */
+    public static void setDebugBlacklist(String[] blacklist) {
+        debugBlacklist = blacklist;
+        System.out.println(MessageFormatter.format("[LOGGER] Debug blacklist set to: {}", blacklist).getMessage());
+    }
+
+    /**
+     * Set the filepath for the logfiles.
+     *
+     * @param filePath the file path
+     */
+    public static void setLogFilePath(String filePath) {
+        logFilePath = filePath;
+        System.out.println(MessageFormatter.format("[LOGGER] Log file path set to: {}", filePath).getMessage());
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Logs an info.
+     *
+     * @param message the message
+     */
+    public void logInfo(String message) {
+        log(Level.INFO, message);
+    }
+
+    /**
+     * Logs a warning.
+     *
+     * @param message the message
+     */
+    public void logWarning(String message) {
+        log(Level.WARNING, message);
+    }
+
+    /**
+     * Logs an error message.
+     *
+     * @param message the message
+     */
+    public void logError(String message) {
+        log(Level.ERROR, message);
+    }
+
+    /**
+     * Logs an error.
+     *
+     * @param e the e
+     */
+    public void logError(Exception e) {
+        log(Level.ERROR, e.getMessage());
+        e.printStackTrace();
+    }
+
+    /**
+     * Logs an error.
+     *
+     * @param t the t
+     */
+    public void logError(Throwable t) {
+        log(Level.ERROR, t.getMessage());
+        t.printStackTrace();
+    }
+
+    /**
+     * Logs debug messages. Disabled if debug == false.
+     *
+     * @param message the message
+     */
+    public void logDebug(String message) {
+        if (debug) {
+            boolean filterMessage = false;
+            for (int i = 0; i < debugBlacklist.length; i++) {
+                if (name.contains(debugBlacklist[i])) {
+                    filterMessage = true;
+                    break;
+                }
+            }
+
+            if (!filterMessage) {
+                log(Level.DEBUG, message);
+            }
+        }
+    }
+
+    /**
+     * Logs trace messages. Disabled if trace == false.
+     *
+     * @param message the message
+     */
+    public void logTrace(String message) {
+        if (trace) {
+            boolean filterMessage = false;
+            for (int i = 0; i < debugBlacklist.length; i++) {
+                if (name.contains(debugBlacklist[i])) {
+                    filterMessage = true;
+                    break;
+                }
+            }
+
+            if (!filterMessage) {
+                log(Level.TRACE, message);
+            }
+        }
+    }
+
+    /**
+     * Logs a discord command.
+     *
+     * @param commandObject the command object
+     * @param msg           the msg
+     */
+    public void logCommand(CommandObject commandObject, Message msg) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(gson.toJson(commandObject));
+        sb.append(" from ");
+        sb.append(msg.getAuthor().getAsMention());
+        sb.append(". original message: \"");
+        sb.append(msg.getContentRaw());
+        sb.append("\"");
+
+        log(Level.COMMAND, sb.toString());
+    }
+
+    /**
+     * Logs a discord command.
+     *
+     * @param commandObject the command object
+     * @param message       the message
+     */
+    public void logCommand(CommandObject commandObject, String message) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(commandObject.id);
+        sb.append(" ");
+        sb.append(message);
+
+        log(Level.COMMAND, sb.toString());
+    }
+
+    /**
+     * Logs a discord command.
+     *
+     * @param commandObject the command object
+     * @param success       the success
+     * @param message       the message
+     */
+    public void logCommand(CommandObject commandObject, boolean success, String message) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(commandObject.id);
+        sb.append(success ? " SUCCESS " : " FAILED ");
+        sb.append(message);
+
+        log(Level.COMMAND, sb.toString());
+    }
+
+    /**
+     * Logs a discord command.
+     *
+     * @param commandObject the command object
+     * @param success       the success
+     * @param e             the e
+     */
+    public void logCommand(CommandObject commandObject, boolean success, Exception e) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(commandObject.id);
+        sb.append(success ? " SUCCESS " : " FAILED ");
+        sb.append(e.getMessage());
+
+        log(Level.COMMAND, sb.toString());
+
+        if (debug) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Print a fancy log message in the console
+     *
+     * @param logLevel the log level
+     * @param message  the message
+     */
+    public void log(Level logLevel, String message) {
+        log(logLevel, message, true);
+    }
+
+    /**
+     * Print a fancy log message in the console
+     *
+     * @param logLevel    the log level
+     * @param message     the message
+     * @param writeToFile whether to write to file
+     */
+    public void log(Level logLevel, String message, boolean writeToFile) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(constructHeader(logLevel));
+        stringBuilder.append(" ");
+        stringBuilder.append(message);
+
+        System.out.print(getColorCode(logLevel));
+        System.out.print(stringBuilder);
+        System.out.println(ConsoleColors.RESET);
+        if (writeToFile) {
+            try {
+                logToFile(stringBuilder.toString());
+            } catch (IOException e) {
+                log(Level.ERROR, "Could not write to log file. " + e.getMessage(), false);
+            }
+        }
+    }
+
+    /**
+     * Construct a header with the LogLevel and the time like this:
+     * [LogLevel][HH:mm:ss]
+     *
+     * @param logLevel the log level
+     * @return String
+     */
+    private String constructHeader(Level logLevel) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[");
+        stringBuilder.append(logLevel.name());
+        stringBuilder.append("]");
+
+        stringBuilder.append(calculateSpacing(logLevel));
+
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDateTime localDateTime = LocalDateTime.now();
+        stringBuilder.append("[");
+        stringBuilder.append(dateTimeFormatter.format(localDateTime));
+        stringBuilder.append("]");
+
+        stringBuilder.append("[");
+        stringBuilder.append(name);
+        stringBuilder.append("]");
+
+        return stringBuilder.toString();
+    }
+
+    /**
+     * Calculate spacing after the log header based on the longest LogLevel
+     *
+     * @param logLevel the log level
+     * @return String
+     */
+    private String calculateSpacing(Level logLevel) {
+        return " ".repeat(Math.max(0, longestLogLevelString - logLevel.toString().length()));
+    }
+
+    /**
+     * Gets an ansi color code based on the logLevel.
+     *
+     * @param logLevel the log level
+     * @return ansi color code
+     */
+    private String getColorCode(Level logLevel) {
+        if (Objects.equals(logLevel, Level.ERROR)) {
+            return ConsoleColors.RED;
+        } else if (Objects.equals(logLevel, Level.WARNING)) {
+            return ConsoleColors.YELLOW;
+        } else if (Objects.equals(logLevel, Level.INFO)) {
+            return ConsoleColors.WHITE_BRIGHT;
+        }
+        return "";
+    }
+
+    /**
+     * Writes a log to the log file.
+     *
+     * @param line the line to write to the file
+     * @throws IOException on error while creating directories
+     */
+    private void logToFile(String line) throws IOException {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        if (Objects.equals(logFilePath, "")) {
+            log(Level.WARNING, "logFilePath is not set!", false);
+            return;
+        }
+
+        File file = new File(logFilePath, "/logger/" + dateTimeFormatter.format(localDateTime) + "-LemonTTB-log.txt");
+        File dir = file.getParentFile();
+
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) {
+                throw new IOException("Could not create parent directories");
+            }
+        } else if (!dir.isDirectory()) {
+            throw new IOException("The parent file is not a directory");
+        }
+
+        try (Writer writer = new BufferedWriter(new FileWriter(file, true))) {
+            writer.append(line).append(System.lineSeparator());
+        } catch (IOException e) {
+            throw new IOException("Could not open the log file");
+        }
+    }
+
+    /**
+     * An enum describing the level of the log output.
      */
     private enum Level {
         /**
@@ -89,418 +501,5 @@ public class Logger {
          * Represents a log for a discord command.
          */
         COMMAND
-    }
-
-    /**
-     * The class to log for.
-     */
-    private String name;
-
-    /**
-     * Describes the length of the loglevel with the most characters. Used for
-     * aligning the timestamps.
-     */
-    private int longestLogLevelString;
-
-    /**
-     * Instance of gson.
-     */
-    private Gson gson;
-
-    /**
-     * The constructor for Logger.
-     * 
-     * @param obj
-     */
-    public Logger(Class<?> obj) {
-        this(obj.getName());
-    }
-
-    /**
-     * The constructor for Logger.
-     * 
-     * @param name
-     */
-    public Logger(String name) {
-        // Calculate the longest (in terms of characters) LogLevel
-        Level longestLogLevel = Level.INFO;
-        for (Level logLevel : Level.values()) {
-            if (logLevel.toString().length() > longestLogLevel.toString().length()) {
-                longestLogLevel = logLevel;
-            }
-        }
-        longestLogLevelString = longestLogLevel.toString().length();
-        this.name = name;
-        this.gson = new Gson();
-    }
-
-    /**
-     * Returns a logger object.
-     * 
-     * @param obj
-     * @return Logger
-     */
-    public static Logger getLogger(Class<?> obj) {
-        return new Logger(obj);
-    }
-
-    /**
-     * Returns a logger object.
-     * 
-     * @param name
-     * @return Logger
-     */
-    public static Logger getLogger(String name) {
-        return new Logger(name);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Wether to enable debug logs. Default: false
-     * 
-     * @param enableDebug
-     */
-    public static void enableDebug(boolean enableDebug) {
-        debug = enableDebug;
-        System.out.println("[LOGGER] Enabled debug loging.");
-    }
-
-    /**
-     * Getter for debug.
-     * 
-     * @return debug
-     */
-    public static boolean getDebug() {
-        return debug;
-    }
-
-    /**
-     * Wether to enable trace logs. Default: false
-     * 
-     * @param enableTrace
-     */
-    public static void enableTrace(boolean enableTrace) {
-        trace = enableTrace;
-        System.out.println("[LOGGER] Enabled debug loging.");
-    }
-
-    /**
-     * Getter for trace.
-     * 
-     * @return trace
-     */
-    public static boolean getTrace() {
-        return trace;
-    }
-
-    /**
-     * Set a blacklist for certain classes to not log debug level logs from them.
-     * 
-     * @param blacklist String[] of snippets that occur in the class name
-     */
-    public static void setDebugBlacklist(String[] blacklist) {
-        debugBlacklist = blacklist;
-        System.out.println(MessageFormatter.format("[LOGGER] Debug blacklist set to: {}", blacklist).getMessage());
-    }
-
-    /**
-     * Set the fielpath for the logfiles.
-     * 
-     * @param filePath
-     */
-    public static void setLogFilePath(String filePath) {
-        logFilePath = filePath;
-        System.out.println(MessageFormatter.format("[LOGGER] Log file path set to: {}", filePath).getMessage());
-    }
-
-    /**
-     * Logs an info.
-     * 
-     * @param message
-     */
-    public void logInfo(String message) {
-        log(Level.INFO, message);
-    }
-
-    /**
-     * Logs a warning.
-     * 
-     * @param message
-     */
-    public void logWarning(String message) {
-        log(Level.WARNING, message);
-    }
-
-    /**
-     * Logs an error message.
-     * 
-     * @param message
-     */
-    public void logError(String message) {
-        log(Level.ERROR, message);
-    }
-
-    /**
-     * Logs an error.
-     * 
-     * @param e
-     */
-    public void logError(Exception e) {
-        log(Level.ERROR, e.getMessage());
-        e.printStackTrace();
-    }
-
-    /**
-     * Logs an error.
-     * 
-     * @param t
-     */
-    public void logError(Throwable t) {
-        log(Level.ERROR, t.getMessage());
-        t.printStackTrace();
-    }
-
-    /**
-     * Logs debug messages. Disabled if debug == false.
-     * 
-     * @param message
-     */
-    public void logDebug(String message) {
-        if (debug) {
-            boolean filterMessage = false;
-            for (int i = 0; i < debugBlacklist.length; i++) {
-                if (name.contains(debugBlacklist[i])) {
-                    filterMessage = true;
-                }
-            }
-
-            if (!filterMessage) {
-                log(Level.DEBUG, message);
-            }
-        }
-    }
-
-    /**
-     * Logs treace messages. Disabled if trace == false.
-     * 
-     * @param message
-     */
-    public void logTrace(String message) {
-        if (trace) {
-            boolean filterMessage = false;
-            for (int i = 0; i < debugBlacklist.length; i++) {
-                if (name.contains(debugBlacklist[i])) {
-                    filterMessage = true;
-                }
-            }
-
-            if (!filterMessage) {
-                log(Level.TRACE, message);
-            }
-        }
-    }
-
-    /**
-     * Logs a discord command.
-     * 
-     * @param commandObject
-     * @param msg
-     */
-    public void logCommand(CommandObject commandObject, Message msg) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(gson.toJson(commandObject));
-        sb.append(" from ");
-        sb.append(msg.getAuthor().getAsMention());
-        sb.append(". origional message: \"");
-        sb.append(msg.getContentRaw());
-        sb.append("\"");
-
-        log(Level.COMMAND, sb.toString());
-    }
-
-    /**
-     * Logs a discord command.
-     * 
-     * @param commandObject
-     * @param message
-     */
-    public void logCommand(CommandObject commandObject, String message) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(commandObject.id);
-        sb.append(" ");
-        sb.append(message);
-
-        log(Level.COMMAND, sb.toString());
-    }
-
-    /**
-     * Logs a discord command.
-     * 
-     * @param commandObject
-     * @param success
-     * @param message
-     */
-    public void logCommand(CommandObject commandObject, boolean success, String message) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(commandObject.id);
-        sb.append(success ? " SUCCESS " : " FAILED ");
-        sb.append(message);
-
-        log(Level.COMMAND, sb.toString());
-    }
-
-    /**
-     * Logs a discord command.
-     * 
-     * @param commandObject
-     * @param success
-     * @param e
-     */
-    public void logCommand(CommandObject commandObject, boolean success, Exception e) {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(commandObject.id);
-        sb.append(success ? " SUCCESS " : " FAILED ");
-        sb.append(e.getMessage());
-
-        log(Level.COMMAND, sb.toString());
-
-        if (debug) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Print a fancy log message in the console
-     * 
-     * @param logLevel
-     * @param message
-     */
-    public void log(Level logLevel, String message) {
-        log(logLevel, message, true);
-    }
-
-    /**
-     * Print a fancy log message in the console
-     * 
-     * @param logLevel
-     * @param message
-     * @param writeToFile
-     */
-    public void log(Level logLevel, String message, boolean writeToFile) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(constructHeadder(logLevel));
-        stringBuilder.append(" ");
-        stringBuilder.append(message);
-
-        System.out.print(getColorCode(logLevel));
-        System.out.print(stringBuilder.toString());
-        System.out.println(ConsoleColors.RESET);
-        if (writeToFile) {
-            try {
-                logToFile(stringBuilder.toString());
-            } catch (IOException e) {
-                log(Level.ERROR, "Could not write to log file. " + e.getMessage(), false);
-            }
-        }
-    }
-
-    /**
-     * Construct a header with the LogLevel and the time like this:
-     * [LogLevel][HH:mm:ss]
-     * 
-     * @param logLevel
-     * @return String
-     */
-    private String constructHeadder(Level logLevel) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("[");
-        stringBuilder.append(logLevel.name());
-        stringBuilder.append("]");
-
-        stringBuilder.append(calculateSpacing(logLevel));
-
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        LocalDateTime localDateTime = LocalDateTime.now();
-        stringBuilder.append("[");
-        stringBuilder.append(dateTimeFormatter.format(localDateTime));
-        stringBuilder.append("]");
-
-        stringBuilder.append("[");
-        stringBuilder.append(name);
-        stringBuilder.append("]");
-
-        return stringBuilder.toString();
-    }
-
-    /**
-     * Calculate spacing after the log header based on the longest LogLevel
-     * 
-     * @param logLevel
-     * @return String
-     */
-    private String calculateSpacing(Level logLevel) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < longestLogLevelString - logLevel.toString().length(); i++) {
-            stringBuilder.append(" ");
-        }
-        return stringBuilder.toString();
-    }
-
-    /**
-     * Gets a ansi color code based on the logLevel.
-     * 
-     * @param logLevel
-     * @return ansi color code
-     */
-    private String getColorCode(Level logLevel) {
-        if (Objects.equals(logLevel, Level.ERROR)) {
-            return ConsoleColors.RED;
-        } else if (Objects.equals(logLevel, Level.WARNING)) {
-            return ConsoleColors.YELLOW;
-        } else if (Objects.equals(logLevel, Level.INFO)) {
-            return ConsoleColors.WHITE_BRIGHT;
-        }
-        return "";
-    }
-
-    /**
-     * Wites a log to the log file.
-     * 
-     * @param line
-     * @throws IOException
-     */
-    private void logToFile(String line) throws IOException {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE;
-        LocalDateTime localDateTime = LocalDateTime.now();
-
-        if (Objects.equals(logFilePath, "")) {
-            log(Level.WARNING, "logFilePath is not set!", false);
-            return;
-        }
-
-        File file = new File(logFilePath, "/logger/" + dateTimeFormatter.format(localDateTime) + "-LemonTTB-log.txt");
-        File dir = file.getParentFile();
-
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) {
-                throw new IOException("Could not create parent directories");
-            }
-        } else if (!dir.isDirectory()) {
-            throw new IOException("The parent file is not a directory");
-        }
-
-        try (Writer writer = new BufferedWriter(new FileWriter(file, true))) {
-            writer.append(line + System.lineSeparator());
-            writer.close();
-        } catch (IOException e) {
-            throw new IOException("Could not open the log file");
-        }
     }
 }

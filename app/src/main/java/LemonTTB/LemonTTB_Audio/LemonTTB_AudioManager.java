@@ -19,7 +19,6 @@
 
 package LemonTTB.LemonTTB_Audio;
 
-import java.io.File;
 import java.util.Objects;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
@@ -61,11 +60,11 @@ public class LemonTTB_AudioManager {
             return;
         }
 
-        // get the audiomanager from the guild
+        // get the audio manager from the guild
         audioManager = guild.getAudioManager();
-        // set the sendinghandler to our sendinghandler
+        // set the sending handler to our sending handler
         audioManager.setSendingHandler(new LemonTTB_AudioSendHandler(audioPlayer));
-        // open an autioconnection to the voicechannel
+        // open an audio connection to the voice channel
         audioManager.openAudioConnection((VoiceChannel) channel);
 
         audioManager.setSelfDeafened(true);
@@ -102,6 +101,7 @@ public class LemonTTB_AudioManager {
         audioPlayerManager = new DefaultAudioPlayerManager();
         // register the audioPlayerManager as a local source
         AudioSourceManagers.registerLocalSource(audioPlayerManager);
+        AudioSourceManagers.registerRemoteSources(audioPlayerManager);
         // create a new audioPlayer
         audioPlayer = audioPlayerManager.createPlayer();
         // create instance of our track scheduler
@@ -114,16 +114,12 @@ public class LemonTTB_AudioManager {
     }
 
     /**
-     * Load and play a audioTrack based on a path to the track. Throws a runtrime
+     * Load and play a audioTrack based on a path to the track. Throws a runtime
      * exception when the path is not pointing to a file or is invalid.
      * 
      * @param trackPath the path to the track
      */
     public void loadAndPlayTrack(final String trackPath) {
-        if (!new File(trackPath).exists()) {
-            throw new RuntimeException("Invalid trackpath supplied to loadAndPlayTrack of " + this.toString());
-        }
-
         // load track
         audioPlayerManager.loadItemOrdered(this, trackPath, new AudioLoadResultHandler() {
             @Override
@@ -144,7 +140,7 @@ public class LemonTTB_AudioManager {
             @Override
             public void noMatches() {
                 // audioPlayerManager found no matches
-                // this should not happen since we schould only pass a valid path to this
+                // this should not happen since we should only pass a valid path to this
                 LOGGER.logWarning("Audio Manager found no matches for: " + trackPath);
             }
 
@@ -160,7 +156,7 @@ public class LemonTTB_AudioManager {
     /**
      * Add a audioTrack to the queue of the audioTrackScheduler.
      * 
-     * @param audioTrack
+     * @param audioTrack the audio track to queue
      */
     private void queueToTrackScheduler(AudioTrack audioTrack) {
         // play a loaded audio track
@@ -177,7 +173,7 @@ public class LemonTTB_AudioManager {
     /**
      * Set the player volume.
      * 
-     * @param volume
+     * @param volume volume
      */
     public void setVolume(int volume) {
         audioPlayer.setVolume(volume);
@@ -195,7 +191,7 @@ public class LemonTTB_AudioManager {
     /**
      * Set the player to loop.
      * 
-     * @param looping
+     * @param looping looping
      */
     public void setLooping(boolean looping) {
         audioTrackScheduler.setLooping(looping);
@@ -213,7 +209,7 @@ public class LemonTTB_AudioManager {
     /**
      * Set the pause state of the player.
      * 
-     * @param paused
+     * @param paused paused
      */
     public void setPaused(boolean paused) {
         audioPlayer.setPaused(paused);

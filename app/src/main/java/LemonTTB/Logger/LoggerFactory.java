@@ -21,6 +21,9 @@ package LemonTTB.Logger;
 
 import org.slf4j.Logger;
 
+/**
+ * The type Logger factory.
+ */
 public class LoggerFactory implements org.slf4j.ILoggerFactory {
 
     @Override

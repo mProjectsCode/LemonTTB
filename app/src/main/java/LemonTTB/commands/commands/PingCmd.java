@@ -20,10 +20,17 @@
 package LemonTTB.commands.commands;
 
 import LemonTTB.commands.Command;
+import LemonTTB.commands.CommandDescription;
 import LemonTTB.commands.CommandObject;
 import net.dv8tion.jda.api.entities.Message;
+import org.jetbrains.annotations.NotNull;
 
-public class PongCmd extends Command {
+public class PingCmd extends Command {
+
+    @Override
+    public @NotNull CommandDescription getCommandDescription() {
+        return null;
+    }
 
     @Override
     public void run(CommandObject commandObject, Message msg) {

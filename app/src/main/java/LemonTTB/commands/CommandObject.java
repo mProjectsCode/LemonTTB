@@ -22,21 +22,48 @@ package LemonTTB.commands;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * The type Command object.
+ */
 public class CommandObject {
+    /**
+     * The ID.
+     */
     public UUID id;
+    /**
+     * The Command.
+     */
     public String command;
+    /**
+     * The Arguments.
+     */
     public Argument[] arguments;
 
+    /**
+     * Instantiates a new Command object.
+     */
     public CommandObject() {
         id = UUID.randomUUID();
     }
 
+    /**
+     * Instantiates a new Command object.
+     *
+     * @param command   the command
+     * @param arguments the arguments
+     */
     public CommandObject(String command, Argument[] arguments) {
         this();
         this.command = command;
         this.arguments = arguments;
     }
 
+    /**
+     * Gets an argument based on the identifier.
+     *
+     * @param argumentIdentifier the argument identifier
+     * @return the argument
+     */
     public Argument getArgument(String argumentIdentifier) {
         for (int i = 0; i < arguments.length; i++) {
             if (!Objects.equals(arguments[i], null)) {
@@ -49,8 +76,17 @@ public class CommandObject {
         return null;
     }
 
+    /**
+     * The type Argument.
+     */
     public static class Argument {
+        /**
+         * The Identifier.
+         */
         public String identifier;
+        /**
+         * The Value.
+         */
         public String value;
     }
 }
