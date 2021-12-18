@@ -33,6 +33,11 @@ public class PingCmd extends Command {
     }
 
     @Override
+    public @NotNull String[] getCommandIdentifiers() {
+        return new String[] {"ping"};
+    }
+
+    @Override
     public void run(CommandObject commandObject, Message msg) {
         msg.getChannel().sendMessage("Pong!").queue();
 

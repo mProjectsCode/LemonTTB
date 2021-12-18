@@ -29,5 +29,8 @@ public abstract class Command {
     @NotNull
     public abstract CommandDescription getCommandDescription();
 
+    @NotNull
+    public abstract String[] getCommandIdentifiers();
+
     public abstract void run(CommandObject commandObject, Message msg);
 }

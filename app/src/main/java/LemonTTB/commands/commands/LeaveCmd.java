@@ -23,6 +23,11 @@ public class LeaveCmd extends Command {
     }
 
     @Override
+    public @NotNull String[] getCommandIdentifiers() {
+        return new String[] {"leave"};
+    }
+
+    @Override
     public void run(CommandObject commandObject, Message msg) {
         GuildChannel channel = App.audioManager.getCannel();
         if (!Objects.equals(channel, null)) {

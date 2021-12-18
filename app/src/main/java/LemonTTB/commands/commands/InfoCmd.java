@@ -41,6 +41,11 @@ public class InfoCmd extends Command {
     }
 
     @Override
+    public @NotNull String[] getCommandIdentifiers() {
+        return new String[] {"info", "about"};
+    }
+
+    @Override
     public void run(CommandObject commandObject, Message msg) {
 
         EmbedBuilder embed = new EmbedBuilder();

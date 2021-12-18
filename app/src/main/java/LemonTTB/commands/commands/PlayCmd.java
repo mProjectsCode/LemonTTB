@@ -43,6 +43,11 @@ public class PlayCmd extends Command {
     }
 
     @Override
+    public @NotNull String[] getCommandIdentifiers() {
+        return new String[] {"play"};
+    }
+
+    @Override
     public void run(CommandObject commandObject, Message msg) {
         boolean success = true;
 

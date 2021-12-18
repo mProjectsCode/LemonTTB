@@ -26,6 +26,11 @@ public class LoopCmd extends Command {
     }
 
     @Override
+    public @NotNull String[] getCommandIdentifiers() {
+        return new String[] {"loop"};
+    }
+
+    @Override
     public void run(CommandObject commandObject, Message msg) {
 
         CommandObject.Argument argument = commandObject.getArgument("-v");

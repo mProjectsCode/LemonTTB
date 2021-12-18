@@ -22,6 +22,11 @@ public class PauseCmd extends Command {
     }
 
     @Override
+    public @NotNull String[] getCommandIdentifiers() {
+        return new String[] {"pause", "unpause", "isPaused"};
+    }
+
+    @Override
     public void run(CommandObject commandObject, Message msg) {
 
         if (Objects.equals(commandObject.command, "pause")) {

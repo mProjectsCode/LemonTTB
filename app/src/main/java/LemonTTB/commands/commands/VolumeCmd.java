@@ -32,6 +32,11 @@ public class VolumeCmd extends Command {
     }
 
     @Override
+    public @NotNull String[] getCommandIdentifiers() {
+        return new String[] {"volume"};
+    }
+
+    @Override
     public void run(CommandObject commandObject, Message msg) {
 
         CommandObject.Argument argument = commandObject.getArgument("-v");

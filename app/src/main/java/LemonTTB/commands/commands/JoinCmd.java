@@ -46,6 +46,11 @@ public class JoinCmd extends Command {
     }
 
     @Override
+    public @NotNull String[] getCommandIdentifiers() {
+        return new String[] {"join"};
+    }
+
+    @Override
     public void run(CommandObject commandObject, Message msg) {
         List<Guild> guilds = App.jda.getGuilds();
 

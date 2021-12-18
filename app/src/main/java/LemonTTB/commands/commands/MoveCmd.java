@@ -40,6 +40,11 @@ public class MoveCmd extends Command {
     }
 
     @Override
+    public @NotNull String[] getCommandIdentifiers() {
+        return new String[] {"move"};
+    }
+
+    @Override
     public void run(CommandObject commandObject, Message msg) {
 
         // TODO: actually implement those into the config

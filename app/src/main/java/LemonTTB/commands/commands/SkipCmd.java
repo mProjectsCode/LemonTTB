@@ -20,6 +20,11 @@ public class SkipCmd extends Command {
     }
 
     @Override
+    public @NotNull String[] getCommandIdentifiers() {
+        return new String[] {"skip"};
+    }
+
+    @Override
     public void run(CommandObject commandObject, Message msg) {
         App.audioManager.skipTrack();
 
