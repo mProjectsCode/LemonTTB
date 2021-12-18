@@ -29,7 +29,12 @@ public class PingCmd extends Command {
 
     @Override
     public @NotNull CommandDescription getCommandDescription() {
-        return null;
+        return new CommandDescription(
+                "Pings the bot.",
+                new CommandDescription.ArgumentDescription[]{
+
+                }
+        );
     }
 
     @Override

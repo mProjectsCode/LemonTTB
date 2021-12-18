@@ -35,7 +35,7 @@ public class PlayCmd extends Command {
     @Override
     public @NotNull CommandDescription getCommandDescription() {
         return new CommandDescription(
-                "Pings the bot.",
+                "Plays a song.",
                 new CommandDescription.ArgumentDescription[]{
 
                 }

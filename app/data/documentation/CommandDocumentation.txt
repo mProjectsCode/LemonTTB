@@ -1,0 +1,83 @@
+# This is the command documentation for LemonTTB.
+# This file is computer generated.
+#
+# You can find the source code for the commands here:
+# https://github.com/mProjectsCode/LemonTTB/tree/master/app/src/main/java/LemonTTB/commands
+#
+
+
+Name: play
+Description: Plays a song.
+Arguments:
+
+Name: isPaused
+Description: Pauses, unpauses or returns the pause status of the audio player.
+Arguments:
+
+Name: move
+Description: Moves a people fom one channel to another.
+Arguments:
+    Argument: -b
+        Type: boolean
+        Required: false
+        Description: Whether to set looping to ture or false.
+    Argument: -a
+        Type: 
+        Required: false
+        Description: Whether to move everyone. If -u is also present, -u will act as a blacklist.
+    Argument: -u
+        Type: string
+        Required: false
+        Description: Specifies a specific user to be moved.
+
+Name: ping
+Description: Pings the bot.
+Arguments:
+
+Name: about
+Description: Gives information about the bot.
+Arguments:
+
+Name: skip
+Description: Skips the song, the audio player is currently playing.
+Arguments:
+
+Name: pause
+Description: Pauses, unpauses or returns the pause status of the audio player.
+Arguments:
+
+Name: volume
+Description: Sets the volume of the audio player.
+Arguments:
+    Argument: -v
+        Type: integer
+        Required: false
+        Description: The volume to set the bot to.
+    Argument: -s
+        Type: boolean
+        Required: false
+        Description: Whether to save the value as the default to the config.
+
+Name: help
+Description: Gives information about the bot and all its commands.
+Arguments:
+
+Name: loop
+Description: Activates ot deactivates the looping functionality of the audio player. If no argument is present it will return whether looping is enabled.
+Arguments:
+    Argument: -v
+        Type: boolean
+        Required: false
+        Description: Whether to set looping to ture or false.
+
+Name: join
+Description: Joins the voice channel the message author is in.
+Arguments:
+
+Name: unpause
+Description: Pauses, unpauses or returns the pause status of the audio player.
+Arguments:
+
+Name: info
+Description: Gives information about the bot.
+Arguments:

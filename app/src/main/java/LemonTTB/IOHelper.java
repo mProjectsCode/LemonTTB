@@ -19,7 +19,7 @@
 
 package LemonTTB;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -123,5 +123,53 @@ public class IOHelper {
         }
 
         return paths.toArray(new File[0]);
+    }
+
+    /**
+     * Write.
+     *
+     * @param file the file
+     * @throws IOException the io exception
+     */
+    public static void write(File file, String content) throws IOException {
+        File dir = file.getParentFile();
+
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) {
+                throw new IOException("Could not create parent directories");
+            }
+        } else if (!dir.isDirectory()) {
+            throw new IOException("The parent file is not a directory");
+        }
+
+        try (Writer writer = new FileWriter(file)) {
+            writer.write(content);
+        }
+    }
+
+    /**
+     * Load.
+     *
+     * @param file the file
+     */
+    public static String load(File file) {
+        if (!file.exists()) {
+            throw new RuntimeException("File dose not exist.");
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            StringBuilder sb = new StringBuilder();
+
+            String line;
+            while ((line = br.readLine()) != null) {
+
+                sb.append(line);
+                sb.append(System.lineSeparator());
+            }
+
+            return sb.toString();
+        } catch (IOException e) {
+            throw new RuntimeException("Could not load config file.", e);
+        }
     }
 }

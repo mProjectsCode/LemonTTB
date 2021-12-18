@@ -79,6 +79,10 @@ public class App {
     /**
      * The constant audioPath.
      */
+    public static File documentationPath;
+    /**
+     * The constant audioPath.
+     */
     public static File audioPath;
     /**
      * The constant jda.
@@ -105,6 +109,9 @@ public class App {
         configPath = new File(RESOURCE_PATH, DEV ? "/config/botConfig.txt.dev" : "/config/botConfig.txt");
         Config.configFile = configPath;
         Config.load();
+
+        // INIT: Documentation
+        documentationPath = new File(RESOURCE_PATH, "/documentation");
 
         // INIT: Audio
         audioManager = new LemonTTB_AudioManager();

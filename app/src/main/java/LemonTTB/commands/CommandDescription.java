@@ -78,16 +78,18 @@ public class CommandDescription {
         CommandDescription commandDescription = command.getCommandDescription();
 
         StringBuilder sb = new StringBuilder();
+        sb.append("\n");
         sb.append("Name: ").append(title).append("\n");
         sb.append("Description: ").append(commandDescription.getDescription()).append("\n");
         sb.append("Arguments:").append("\n");
         for (int i = 0; i < commandDescription.getArgumentDescriptions().length; i++) {
+            sb.append("    ");
             sb.append("Argument: ").append(commandDescription.getArgumentDescriptions()[i].identifier);
-            sb.append("\n").append("    ");
+            sb.append("\n").append("    ").append("    ");
             sb.append("Type: ").append(commandDescription.getArgumentDescriptions()[i].getType());
-            sb.append("\n").append("    ");
+            sb.append("\n").append("    ").append("    ");
             sb.append("Required: ").append(commandDescription.getArgumentDescriptions()[i].isRequired());
-            sb.append("\n").append("    ");
+            sb.append("\n").append("    ").append("    ");
             sb.append("Description: ").append(commandDescription.getArgumentDescriptions()[i].getDescription());
             sb.append("\n");
         }
