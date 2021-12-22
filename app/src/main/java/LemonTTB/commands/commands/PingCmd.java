@@ -22,6 +22,7 @@ package LemonTTB.commands.commands;
 import LemonTTB.commands.Command;
 import LemonTTB.commands.CommandDescription;
 import LemonTTB.commands.CommandObject;
+import LemonTTB.permissions.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,6 +41,11 @@ public class PingCmd extends Command {
     @Override
     public @NotNull String[] getCommandIdentifiers() {
         return new String[] {"ping"};
+    }
+
+    @Override
+    public @NotNull Permission[] getCommandPermissions() {
+        return new Permission[] {Permission.COMMAND};
     }
 
     @Override

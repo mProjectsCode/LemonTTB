@@ -20,6 +20,8 @@ gradle-app.setting
 ### LemonTTB
 # ignore the log files
 *-LemonTTB-log.txt
+# ignore user files
+*-LemonTTB-user.txt
 # ignore dev configs
 *Config.txt.dev
 

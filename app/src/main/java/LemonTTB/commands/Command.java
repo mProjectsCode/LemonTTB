@@ -20,6 +20,7 @@
 package LemonTTB.commands;
 
 import LemonTTB.Logger.Logger;
+import LemonTTB.permissions.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,6 +32,9 @@ public abstract class Command {
 
     @NotNull
     public abstract String[] getCommandIdentifiers();
+
+    @NotNull
+    public abstract Permission[] getCommandPermissions();
 
     public abstract void run(CommandObject commandObject, Message msg);
 }

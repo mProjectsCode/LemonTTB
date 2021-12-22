@@ -28,9 +28,9 @@ import java.nio.charset.StandardCharsets;
 import javax.security.auth.login.LoginException;
 
 import LemonTTB.nameMappings.NameMappingsHandler;
+import LemonTTB.permissions.PermissionHandler;
+import LemonTTB.users.UserHandler;
 import com.google.common.io.Resources;
-
-import org.slf4j.helpers.MessageFormatter;
 
 import LemonTTB.LemonTTB_Audio.LemonTTB_AudioManager;
 import LemonTTB.Logger.ConsoleColors;
@@ -78,13 +78,17 @@ public class App {
      */
     public static File configPath;
     /**
-     * The constant audioPath.
+     * The constant documentationPath.
      */
     public static File documentationPath;
     /**
      * The constant audioPath.
      */
     public static File audioPath;
+    /**
+     * The constant userPath.
+     */
+    public static File userPath;
     /**
      * The constant jda.
      */
@@ -97,6 +101,15 @@ public class App {
      * The constant nameMappingHandler.
      */
     public static NameMappingsHandler nameMappingsHandler;
+    /**
+     * The constant permissionHandler.
+     */
+    public static PermissionHandler permissionHandler;
+    /**
+     * The constant userHandler.
+     */
+    public static UserHandler userHandler;
+
 
     /**
      * The entry point of application.
@@ -119,9 +132,14 @@ public class App {
         documentationPath = new File(RESOURCE_PATH, "/documentation");
 
         // INIT: Audio
+        audioPath = new File(RESOURCE_PATH, "/music");
         audioManager = new LemonTTB_AudioManager();
         audioManager.createPlayer();
-        audioPath = new File(RESOURCE_PATH, "/music");
+
+        // INIT: Users/Permissions
+        userPath = new File(RESOURCE_PATH, "/users");
+        userHandler = new UserHandler();
+        permissionHandler = new PermissionHandler();
 
         // INIT: Other
         nameMappingsHandler = new NameMappingsHandler();
@@ -129,6 +147,9 @@ public class App {
         // INIT: JDA
         buildJDA();
 
+        LOGGER.logTrace("test");
+        LOGGER.logDebug("test");
+        LOGGER.logInfo("test");
         LOGGER.logWarning("test");
         LOGGER.logError("test");
     }

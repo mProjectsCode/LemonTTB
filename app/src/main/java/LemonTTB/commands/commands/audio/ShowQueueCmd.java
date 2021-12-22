@@ -5,6 +5,7 @@ import LemonTTB.LemonTTB_Audio.LemonTTB_AudioManager;
 import LemonTTB.commands.Command;
 import LemonTTB.commands.CommandDescription;
 import LemonTTB.commands.CommandObject;
+import LemonTTB.permissions.Permission;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -28,6 +29,11 @@ public class ShowQueueCmd extends Command {
     @Override
     public @NotNull String[] getCommandIdentifiers() {
         return new String[] {"showQueue"};
+    }
+
+    @Override
+    public @NotNull Permission[] getCommandPermissions() {
+        return new Permission[] {Permission.AUDIO};
     }
 
     @Override

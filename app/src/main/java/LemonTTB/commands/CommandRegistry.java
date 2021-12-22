@@ -25,6 +25,9 @@ import java.util.Map;
 import LemonTTB.commands.commands.*;
 import LemonTTB.commands.commands.audio.*;
 import LemonTTB.commands.commands.nameMappings.*;
+import LemonTTB.commands.commands.permissions.AddPermissionCmd;
+import LemonTTB.commands.commands.permissions.ResetPermissionsCmd;
+import LemonTTB.commands.commands.permissions.ShowPermissionsCmd;
 
 /**
  * CommandRegistry
@@ -47,21 +50,31 @@ public class CommandRegistry {
      * Register commands.
      */
     public void registerCommands() {
+        // General
         registerCommand(new InfoCmd());
-        registerCommand(new PingCmd());
-        registerCommand(new JoinCmd());
-        registerCommand(new PlayCmd());
-        registerCommand(new SkipCmd());
         registerCommand(new HelpCmd());
-        registerCommand(new VolumeCmd());
-        registerCommand(new LoopCmd());
-        registerCommand(new PauseCmd());
+        registerCommand(new PingCmd());
+        // Moderator
         registerCommand(new MoveCmd());
+        // Vc
+        registerCommand(new JoinCmd());
+        registerCommand(new LeaveCmd());
+        // Audio
+        registerCommand(new PlayCmd());
+        registerCommand(new PauseCmd());
+        registerCommand(new SkipCmd());
+        registerCommand(new LoopCmd());
+        registerCommand(new VolumeCmd());
         registerCommand(new ClearQueueCmd());
         registerCommand(new ShowQueueCmd());
+        // Name Mappings
         registerCommand(new CreateNameMappingCmd());
         registerCommand(new DeleteNameMappingCmd());
         registerCommand(new ShowNameMappingsCmd());
+        // Permissions
+        registerCommand(new AddPermissionCmd());
+        registerCommand(new ResetPermissionsCmd());
+        registerCommand(new ShowPermissionsCmd());
     }
 
     /**

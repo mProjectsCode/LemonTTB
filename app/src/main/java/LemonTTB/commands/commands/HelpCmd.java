@@ -5,6 +5,7 @@ import java.awt.Color;
 import LemonTTB.commands.Command;
 import LemonTTB.commands.CommandDescription;
 import LemonTTB.commands.CommandObject;
+import LemonTTB.permissions.Permission;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +25,11 @@ public class HelpCmd extends Command {
     @Override
     public @NotNull String[] getCommandIdentifiers() {
         return new String[] {"help"};
+    }
+
+    @Override
+    public @NotNull Permission[] getCommandPermissions() {
+        return new Permission[] {Permission.COMMAND};
     }
 
     @Override

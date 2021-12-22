@@ -19,14 +19,16 @@
 
 package LemonTTB.commands;
 
-import java.util.Objects;
-
+import LemonTTB.App;
 import LemonTTB.Config;
 import LemonTTB.Logger.Logger;
+import LemonTTB.users.User;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+
+import java.util.Objects;
 
 /**
  * The type Command handler.
@@ -38,7 +40,7 @@ public class CommandHandler extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        if (event.getAuthor().isBot()) {
+        if (Objects.equals(event.getAuthor().getId(), App.jda.getSelfUser().getId())) {
             return;
         }
 
@@ -56,7 +58,7 @@ public class CommandHandler extends ListenerAdapter {
 
         LOGGER.logCommand(commandObject, msg);
 
-        selectCommand(commandObject, msg);
+        executeCommand(commandObject, msg);
     }
 
     private CommandObject parseCommand(Message msg) {
@@ -94,11 +96,20 @@ public class CommandHandler extends ListenerAdapter {
         return commandObject;
     }
 
-    private void selectCommand(CommandObject commandObject, Message msg) {
+    private void executeCommand(CommandObject commandObject, Message msg) {
         Command command = commandRegistry.commands.get(commandObject.command);
         if (command == null) {
             return;
         }
-        command.run(commandObject, msg);
+
+        String authorId = msg.getAuthor().getId();
+        User user = App.userHandler.getUserFromID(authorId);
+
+        if (user.hasPermissions(command.getCommandPermissions())) {
+            command.run(commandObject, msg);
+        } else {
+            msg.reply("You do not have the permissions to run this command. If you think this is an error please contact " + App.jda.getUserById(Config.options.botOwner).getName() + ".").queue();
+            LOGGER.logWarning(msg.getAuthor().getName() + " tried to execute the command \"" + command.getCommandIdentifiers()[0] + "\", which they do not have the permission to do.");
+        }
     }
 }

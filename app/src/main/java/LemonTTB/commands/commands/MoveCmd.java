@@ -10,6 +10,7 @@ import LemonTTB.Config;
 import LemonTTB.commands.Command;
 import LemonTTB.commands.CommandDescription;
 import LemonTTB.commands.CommandObject;
+import LemonTTB.permissions.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -45,6 +46,11 @@ public class MoveCmd extends Command {
     @Override
     public @NotNull String[] getCommandIdentifiers() {
         return new String[] {"move"};
+    }
+
+    @Override
+    public @NotNull Permission[] getCommandPermissions() {
+        return new Permission[] {Permission.MODERATION};
     }
 
     @Override

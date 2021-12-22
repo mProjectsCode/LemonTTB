@@ -26,6 +26,7 @@ import LemonTTB.App;
 import LemonTTB.commands.Command;
 import LemonTTB.commands.CommandDescription;
 import LemonTTB.commands.CommandObject;
+import LemonTTB.permissions.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildChannel;
@@ -48,6 +49,11 @@ public class JoinCmd extends Command {
     @Override
     public @NotNull String[] getCommandIdentifiers() {
         return new String[] {"join"};
+    }
+
+    @Override
+    public @NotNull Permission[] getCommandPermissions() {
+        return new Permission[] {Permission.AUDIO};
     }
 
     @Override
