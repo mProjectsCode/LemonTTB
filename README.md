@@ -10,15 +10,17 @@
 
 At some point this is going to be a discord bot that aims to assist the GM during table top sessions.
 
-Finished Features:
+Finished Features (still need some good polish):
 - some internal foundations like a logger and the foundation for playing audio
-
-Features in development:
 - Playing local and external audio
+- A permission system
+- A name mapping feature (map ids of players to "nicknames" for faster reference in commands)
 - Moving people to a secondary "tips" voice channel
 
+Features in development:
+- Polishing stuff
+
 Scheduled for development:
-- Permission system
 - Deaf-muteing people
 
 Planed Features:
