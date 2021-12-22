@@ -19,15 +19,17 @@
 
 package LemonTTB.commands;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import LemonTTB.commands.commands.*;
 import LemonTTB.commands.commands.audio.*;
-import LemonTTB.commands.commands.nameMappings.*;
+import LemonTTB.commands.commands.nameMappings.CreateNameMappingCmd;
+import LemonTTB.commands.commands.nameMappings.DeleteNameMappingCmd;
+import LemonTTB.commands.commands.nameMappings.ShowNameMappingsCmd;
 import LemonTTB.commands.commands.permissions.AddPermissionCmd;
 import LemonTTB.commands.commands.permissions.ResetPermissionsCmd;
 import LemonTTB.commands.commands.permissions.ShowPermissionsCmd;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * CommandRegistry

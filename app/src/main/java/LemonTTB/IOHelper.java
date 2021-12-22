@@ -24,11 +24,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The type Io helper.
+ */
 public class IOHelper {
     /**
      * Returns the filepath to the first file with the same name as fileName.
      * Searches all sub folders recursively.
-     * 
+     *
      * @param fileName the name to match
      * @param folder   the folder to search
      * @return the filepath
@@ -54,7 +57,7 @@ public class IOHelper {
      * Returns a list of file paths containing all the files containing fileName in
      * its file name.
      * Searches all sub folders recursively.
-     * 
+     *
      * @param fileName the name a file needs to contain
      * @param folder   the folder to search
      * @return the list of file paths
@@ -80,7 +83,7 @@ public class IOHelper {
     /**
      * Returns the filepath to the first file with the same name as fileName.
      * Searches only the given folder.
-     * 
+     *
      * @param fileName the name to match
      * @param folder   the folder to search
      * @return the filepath
@@ -104,7 +107,7 @@ public class IOHelper {
      * Returns a list of file paths containing all the files containing fileName in
      * its file name.
      * Searches only the given folder.
-     * 
+     *
      * @param fileName the name a file needs to contain
      * @param folder   the folder to search
      * @return the list of file paths
@@ -128,7 +131,8 @@ public class IOHelper {
     /**
      * Write.
      *
-     * @param file the file
+     * @param file    the file
+     * @param content the content
      * @throws IOException the io exception
      */
     public static void write(File file, String content) throws IOException {
@@ -151,6 +155,7 @@ public class IOHelper {
      * Load.
      *
      * @param file the file
+     * @return the string
      */
     public static String load(File file) {
         if (!file.exists()) {

@@ -19,9 +19,9 @@
 
 package LemonTTB.Logger;
 
-import java.util.Map;
-
 import org.slf4j.spi.MDCAdapter;
+
+import java.util.Map;
 
 /**
  * TODO: accually implement this stuff

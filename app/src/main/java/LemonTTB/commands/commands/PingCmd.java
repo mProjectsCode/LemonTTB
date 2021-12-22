@@ -1,4 +1,4 @@
-/* 
+/*
  * This file is part of LemonTTB.
  * (C) Copyright 2021
  * Programmed by Moritz Jung
@@ -26,6 +26,9 @@ import LemonTTB.permissions.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The type Ping cmd.
+ */
 public class PingCmd extends Command {
 
     @Override
@@ -40,12 +43,12 @@ public class PingCmd extends Command {
 
     @Override
     public @NotNull String[] getCommandIdentifiers() {
-        return new String[] {"ping"};
+        return new String[]{"ping"};
     }
 
     @Override
     public @NotNull Permission[] getCommandPermissions() {
-        return new Permission[] {Permission.COMMAND};
+        return new Permission[]{Permission.COMMAND};
     }
 
     @Override

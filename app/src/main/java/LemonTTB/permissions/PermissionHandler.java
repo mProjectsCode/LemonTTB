@@ -1,3 +1,22 @@
+/*
+ * This file is part of LemonTTB.
+ * (C) Copyright 2021
+ * Programmed by Moritz Jung
+ *
+ * LemonTTB is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LemonTTB is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package LemonTTB.permissions;
 
 import LemonTTB.App;
@@ -9,11 +28,23 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+/**
+ * The type Permission handler.
+ */
 public class PermissionHandler {
+    /**
+     * The constant LOGGER.
+     */
     public final static Logger LOGGER = Logger.getLogger(PermissionHandler.class);
 
+    /**
+     * The Gson.
+     */
     public Gson gson;
 
+    /**
+     * Instantiates a new Permission handler.
+     */
     public PermissionHandler() {
         gson = new Gson();
         // on startup make sure the bot owner always has the owner permission
@@ -26,11 +57,24 @@ public class PermissionHandler {
         }
     }
 
-    public boolean hasPermissions (@NotNull String id, Permission[] permissions) {
+    /**
+     * Has permissions boolean.
+     *
+     * @param id          the id
+     * @param permissions the permissions
+     * @return the boolean
+     */
+    public boolean hasPermissions(@NotNull String id, Permission[] permissions) {
         return App.userHandler.getUserFromID(id).hasPermissions(permissions);
     }
 
-    public void addPermissions (@NotNull User user, Permission[] permissions) {
+    /**
+     * Add permissions.
+     *
+     * @param user        the user
+     * @param permissions the permissions
+     */
+    public void addPermissions(@NotNull User user, Permission[] permissions) {
         Permission[] userPermissions = user.getPermissions();
         Permission[] newUserPermissions = new Permission[userPermissions.length + permissions.length];
 
@@ -42,27 +86,55 @@ public class PermissionHandler {
         App.userHandler.saveUser(user);
     }
 
-    public void addPermissions (@NotNull String id, Permission[] permissions) {
+    /**
+     * Add permissions.
+     *
+     * @param id          the id
+     * @param permissions the permissions
+     */
+    public void addPermissions(@NotNull String id, Permission[] permissions) {
         User user = App.userHandler.getUserFromID(id);
         addPermissions(user, permissions);
     }
 
-    public void addPermissions (@NotNull User user, Permission permission) {
-        addPermissions(user, new Permission[] {permission});
+    /**
+     * Add permissions.
+     *
+     * @param user       the user
+     * @param permission the permission
+     */
+    public void addPermissions(@NotNull User user, Permission permission) {
+        addPermissions(user, new Permission[]{permission});
     }
 
-    public void addPermissions (@NotNull String id, Permission permission) {
+    /**
+     * Add permissions.
+     *
+     * @param id         the id
+     * @param permission the permission
+     */
+    public void addPermissions(@NotNull String id, Permission permission) {
         User user = App.userHandler.getUserFromID(id);
-        addPermissions(user, new Permission[] {permission});
+        addPermissions(user, new Permission[]{permission});
     }
 
-    public void resetPermissions (@NotNull User user) {
+    /**
+     * Reset permissions.
+     *
+     * @param user the user
+     */
+    public void resetPermissions(@NotNull User user) {
         user.setPermissions(new Permission[0]);
 
         App.userHandler.saveUser(user);
     }
 
-    public void resetPermissions (@NotNull String id) {
+    /**
+     * Reset permissions.
+     *
+     * @param id the id
+     */
+    public void resetPermissions(@NotNull String id) {
         User user = App.userHandler.getUserFromID(id);
         resetPermissions(user);
     }

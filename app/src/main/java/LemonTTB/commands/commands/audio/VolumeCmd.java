@@ -1,6 +1,23 @@
-package LemonTTB.commands.commands.audio;
+/*
+ * This file is part of LemonTTB.
+ * (C) Copyright 2021
+ * Programmed by Moritz Jung
+ *
+ * LemonTTB is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LemonTTB is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
-import java.util.Objects;
+package LemonTTB.commands.commands.audio;
 
 import LemonTTB.App;
 import LemonTTB.Config;
@@ -11,6 +28,11 @@ import LemonTTB.permissions.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
+/**
+ * The type Volume cmd.
+ */
 public class VolumeCmd extends Command {
 
     @Override
@@ -34,12 +56,12 @@ public class VolumeCmd extends Command {
 
     @Override
     public @NotNull String[] getCommandIdentifiers() {
-        return new String[] {"volume"};
+        return new String[]{"volume"};
     }
 
     @Override
     public @NotNull Permission[] getCommandPermissions() {
-        return new Permission[] {Permission.AUDIO};
+        return new Permission[]{Permission.AUDIO};
     }
 
     @Override

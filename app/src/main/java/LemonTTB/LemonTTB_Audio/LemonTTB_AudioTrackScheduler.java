@@ -19,17 +19,16 @@
 
 package LemonTTB.LemonTTB_Audio;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-
+import LemonTTB.App;
+import LemonTTB.Logger.Logger;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
-import LemonTTB.App;
-import LemonTTB.Logger.Logger;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * The type Lemon ttb audio track scheduler.
@@ -108,6 +107,9 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
         audioPlayer.startTrack(queue.poll(), false);
     }
 
+    /**
+     * Clear queue.
+     */
     public void clearQueue() {
         queue.clear();
     }
@@ -130,7 +132,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
 
     /**
      * Player was paused
-     * 
+     *
      * @param player instance of the audioPlayer
      */
     @Override
@@ -140,7 +142,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
 
     /**
      * Player was resumed
-     * 
+     *
      * @param player instance of the audioPlayer
      */
     @Override
@@ -150,7 +152,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
 
     /**
      * A track started playing
-     * 
+     *
      * @param player instance of the audioPlayer
      * @param track  the track that started playing
      */
@@ -161,7 +163,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
 
     /**
      * The current track ended
-     * 
+     *
      * @param player    instance of the audioPlayer
      * @param track     the track that ended
      * @param endReason The reason why it ended

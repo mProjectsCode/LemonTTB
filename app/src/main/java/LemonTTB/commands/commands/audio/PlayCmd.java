@@ -19,9 +19,6 @@
 
 package LemonTTB.commands.commands.audio;
 
-import java.io.File;
-import java.util.Objects;
-
 import LemonTTB.App;
 import LemonTTB.IOHelper;
 import LemonTTB.commands.Command;
@@ -31,6 +28,12 @@ import LemonTTB.permissions.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.util.Objects;
+
+/**
+ * The type Play cmd.
+ */
 public class PlayCmd extends Command {
 
     @Override
@@ -45,12 +48,12 @@ public class PlayCmd extends Command {
 
     @Override
     public @NotNull String[] getCommandIdentifiers() {
-        return new String[] {"play"};
+        return new String[]{"play"};
     }
 
     @Override
     public @NotNull Permission[] getCommandPermissions() {
-        return new Permission[] {Permission.AUDIO};
+        return new Permission[]{Permission.AUDIO};
     }
 
     @Override

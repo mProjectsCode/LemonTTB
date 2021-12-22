@@ -1,9 +1,23 @@
-package LemonTTB.commands.commands;
+/*
+ * This file is part of LemonTTB.
+ * (C) Copyright 2021
+ * Programmed by Moritz Jung
+ *
+ * LemonTTB is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LemonTTB is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+package LemonTTB.commands.commands;
 
 import LemonTTB.App;
 import LemonTTB.Config;
@@ -17,6 +31,12 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.Objects;
+
+/**
+ * The type Move cmd.
+ */
 public class MoveCmd extends Command {
 
     @Override
@@ -45,12 +65,12 @@ public class MoveCmd extends Command {
 
     @Override
     public @NotNull String[] getCommandIdentifiers() {
-        return new String[] {"move"};
+        return new String[]{"move"};
     }
 
     @Override
     public @NotNull Permission[] getCommandPermissions() {
-        return new Permission[] {Permission.MODERATION};
+        return new Permission[]{Permission.MODERATION};
     }
 
     @Override

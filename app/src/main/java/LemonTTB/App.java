@@ -1,4 +1,4 @@
-/* 
+/*
  * LemonTTB: A discord bot for helping the GM with running table top sessions using discord for comuniction.
  * (C) Copyright 2021
  * Programmed by Moritz Jung
@@ -19,23 +19,14 @@
 
 package LemonTTB;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
-import javax.security.auth.login.LoginException;
-
-import LemonTTB.nameMappings.NameMappingsHandler;
-import LemonTTB.permissions.PermissionHandler;
-import LemonTTB.users.UserHandler;
-import com.google.common.io.Resources;
-
 import LemonTTB.LemonTTB_Audio.LemonTTB_AudioManager;
 import LemonTTB.Logger.ConsoleColors;
 import LemonTTB.Logger.Logger;
 import LemonTTB.commands.CommandHandler;
+import LemonTTB.nameMappings.NameMappingsHandler;
+import LemonTTB.permissions.PermissionHandler;
+import LemonTTB.users.UserHandler;
+import com.google.common.io.Resources;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -43,6 +34,13 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+
+import javax.security.auth.login.LoginException;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * The type App.
@@ -54,12 +52,10 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
  *  | |    / _ \ '_ ` _ \|     | '_ \| |     | |  |  _ <
  *  | |___|  __/ | | | | |     | | | | |     | |  | |_) |
  *  |______\___|_| |_| |_|\___/|_| |_|_|     |_|  |____/
- * 
+ *
  * LemonTTB is a Discord Bot designed to assist the GM during tabletop sessions, that use Discord for communication.
  */
 public class App {
-    private static final Logger LOGGER = Logger.getLogger(App.class);
-
     /**
      * The constant VERSION.
      */
@@ -72,7 +68,7 @@ public class App {
      * The constant RESOURCE_PATH.
      */
     public static final String RESOURCE_PATH = "./data";
-
+    private static final Logger LOGGER = Logger.getLogger(App.class);
     /**
      * The constant configPath.
      */
@@ -188,7 +184,7 @@ public class App {
         Logger.setLogFilePath(logFolderPath.getPath());
         Logger.enableDebug(true);
         Logger.enableTrace(true);
-        Logger.setDebugBlacklist(new String[] { ".jda.", ".lava.", ".lavaplayer." });
+        Logger.setDebugBlacklist(new String[]{".jda.", ".lava.", ".lavaplayer."});
     }
 
     private static void buildJDA() {

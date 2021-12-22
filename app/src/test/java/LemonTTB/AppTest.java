@@ -20,9 +20,14 @@
 package LemonTTB;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The type App test.
+ */
 class AppTest {
+    /**
+     * App has a greeting.
+     */
     @Test
     void appHasAGreeting() {
         App classUnderTest = new App();

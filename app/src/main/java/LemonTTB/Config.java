@@ -19,19 +19,13 @@
 
 package LemonTTB;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import LemonTTB.Logger.Logger;
+import com.google.gson.Gson;
+
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
-import com.google.gson.Gson;
-
-import LemonTTB.Logger.Logger;
 
 /**
  * The type Config.
@@ -197,6 +191,15 @@ public class Config {
             this.setDefaultValues();
         }
 
+        /**
+         * Gets default options.
+         *
+         * @return the default options
+         */
+        public static Options getDefaultOptions() {
+            return new Options();
+        }
+
         private void setDefaultValues() {
             this.version = App.VERSION;
             this.token = "";
@@ -207,15 +210,6 @@ public class Config {
             this.voiceChannelSecondary = "";
             this.nameMappings = new HashMap<String, String>();
             this.defaultVolume = 10;
-        }
-
-        /**
-         * Gets default options.
-         *
-         * @return the default options
-         */
-        public static Options getDefaultOptions() {
-            return new Options();
         }
     }
 }

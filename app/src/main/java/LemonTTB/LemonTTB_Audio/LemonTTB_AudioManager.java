@@ -37,14 +37,38 @@ import net.dv8tion.jda.api.managers.AudioManager;
 import java.io.File;
 import java.util.Objects;
 
+/**
+ * The type Lemon ttb audio manager.
+ */
 public class LemonTTB_AudioManager {
     private static final Logger LOGGER = Logger.getLogger(LemonTTB_AudioManager.class);
 
+    /**
+     * The constant audioPlayerManager.
+     */
     public static AudioPlayerManager audioPlayerManager;
     private GuildChannel channel;
     private AudioManager audioManager;
     private AudioPlayer audioPlayer;
     private LemonTTB_AudioTrackScheduler audioTrackScheduler;
+
+    /**
+     * Gets title from audio track.
+     *
+     * @param track the track
+     * @return the title from audio track
+     */
+    public static String getTitleFromAudioTrack(AudioTrack track) {
+        if (Objects.equals(track, null)) {
+            return "Currently not a track.";
+        }
+
+        String title = track.getInfo().title;
+        if (Objects.equals(title, "Unknown title")) {
+            title = new File(track.getIdentifier()).getName();
+        }
+        return title;
+    }
 
     /**
      * Connects to a voice channel.
@@ -177,10 +201,20 @@ public class LemonTTB_AudioManager {
         audioTrackScheduler.clearQueue();
     }
 
+    /**
+     * Get tracks in queue audio track [ ].
+     *
+     * @return the audio track [ ]
+     */
     public AudioTrack[] getTracksInQueue() {
         return audioTrackScheduler.getQueue().toArray(new AudioTrack[0]);
     }
 
+    /**
+     * Gets audio player.
+     *
+     * @return the audio player
+     */
     public AudioPlayer getAudioPlayer() {
         return audioPlayer;
     }
@@ -188,7 +222,7 @@ public class LemonTTB_AudioManager {
     /**
      * Get the player volume.
      *
-     * @return volume
+     * @return volume volume
      */
     public int getVolume() {
         return audioPlayer.getVolume();
@@ -206,7 +240,7 @@ public class LemonTTB_AudioManager {
     /**
      * Is the player looping.
      *
-     * @return looping
+     * @return looping boolean
      */
     public boolean isLooping() {
         return audioTrackScheduler.isLooping();
@@ -224,7 +258,7 @@ public class LemonTTB_AudioManager {
     /**
      * Is the player paused.
      *
-     * @return paused
+     * @return paused boolean
      */
     public boolean isPaused() {
         return audioPlayer.isPaused();
@@ -242,21 +276,9 @@ public class LemonTTB_AudioManager {
     /**
      * Wrapper around AudioPlayer to use it as an AudioSendHandler.
      *
-     * @return LemonTTB_AudioSendHandler
+     * @return LemonTTB_AudioSendHandler send handler
      */
     public LemonTTB_AudioSendHandler getSendHandler() {
         return new LemonTTB_AudioSendHandler(audioPlayer);
-    }
-
-    public static String getTitleFromAudioTrack(AudioTrack track) {
-        if (Objects.equals(track, null)) {
-            return "Currently not a track.";
-        }
-
-        String title = track.getInfo().title;
-        if (Objects.equals(title, "Unknown title")) {
-            title = new File(track.getIdentifier()).getName();
-        }
-        return title;
     }
 }

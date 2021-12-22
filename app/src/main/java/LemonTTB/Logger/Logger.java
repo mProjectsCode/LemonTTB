@@ -19,21 +19,15 @@
 
 package LemonTTB.Logger;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
+import LemonTTB.commands.CommandObject;
+import com.google.gson.Gson;
+import net.dv8tion.jda.api.entities.Message;
+import org.slf4j.helpers.MessageFormatter;
+
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-
-import com.google.gson.Gson;
-
-import org.slf4j.helpers.MessageFormatter;
-
-import LemonTTB.commands.CommandObject;
-import net.dv8tion.jda.api.entities.Message;
 
 /**
  * A class for printing fancy log messages into the console.

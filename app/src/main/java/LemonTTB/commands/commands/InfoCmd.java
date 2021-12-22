@@ -19,8 +19,6 @@
 
 package LemonTTB.commands.commands;
 
-import java.awt.Color;
-
 import LemonTTB.commands.Command;
 import LemonTTB.commands.CommandDescription;
 import LemonTTB.commands.CommandObject;
@@ -29,6 +27,11 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
+
+/**
+ * The type Info cmd.
+ */
 public class InfoCmd extends Command {
 
     @Override
@@ -43,12 +46,12 @@ public class InfoCmd extends Command {
 
     @Override
     public @NotNull String[] getCommandIdentifiers() {
-        return new String[] {"info", "about"};
+        return new String[]{"info", "about"};
     }
 
     @Override
     public @NotNull Permission[] getCommandPermissions() {
-        return new Permission[] {Permission.COMMAND};
+        return new Permission[]{Permission.COMMAND};
     }
 
     @Override

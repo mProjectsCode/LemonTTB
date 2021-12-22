@@ -19,10 +19,12 @@
 
 package org.slf4j.impl;
 
+import LemonTTB.Logger.LemonTTB_MDCAdapter;
 import org.slf4j.spi.MDCAdapter;
 
-import LemonTTB.Logger.LemonTTB_MDCAdapter;
-
+/**
+ * The type Static mdc binder.
+ */
 public final class StaticMDCBinder {
     /**
      * The unique instance of this class.
@@ -38,7 +40,7 @@ public final class StaticMDCBinder {
 
     /**
      * Returns the singleton.
-     * 
+     *
      * @return the singleton instance
      */
     public static StaticMDCBinder getSingleton() {
@@ -47,7 +49,7 @@ public final class StaticMDCBinder {
 
     /**
      * Currently this method always returns an instance of {@link StaticMDCBinder}.
-     * 
+     *
      * @return an MDC adapter
      */
     public MDCAdapter getMDCA() {
@@ -56,7 +58,7 @@ public final class StaticMDCBinder {
 
     /**
      * Retrieve the adapter class name.
-     * 
+     *
      * @return The adapter class name.
      */
     public String getMDCAdapterClassStr() {
