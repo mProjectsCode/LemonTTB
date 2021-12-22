@@ -1,4 +1,4 @@
-package LemonTTB.commands.commands;
+package LemonTTB.commands.commands.audio;
 
 import java.util.Objects;
 

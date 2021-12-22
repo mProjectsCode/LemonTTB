@@ -22,16 +22,9 @@ package LemonTTB.commands;
 import java.util.HashMap;
 import java.util.Map;
 
-import LemonTTB.commands.commands.HelpCmd;
-import LemonTTB.commands.commands.InfoCmd;
-import LemonTTB.commands.commands.JoinCmd;
-import LemonTTB.commands.commands.LoopCmd;
-import LemonTTB.commands.commands.MoveCmd;
-import LemonTTB.commands.commands.PauseCmd;
-import LemonTTB.commands.commands.PlayCmd;
-import LemonTTB.commands.commands.PingCmd;
-import LemonTTB.commands.commands.SkipCmd;
-import LemonTTB.commands.commands.VolumeCmd;
+import LemonTTB.commands.commands.*;
+import LemonTTB.commands.commands.audio.*;
+import LemonTTB.commands.commands.nameMappings.*;
 
 /**
  * CommandRegistry
@@ -64,6 +57,11 @@ public class CommandRegistry {
         registerCommand(new LoopCmd());
         registerCommand(new PauseCmd());
         registerCommand(new MoveCmd());
+        registerCommand(new ClearQueueCmd());
+        registerCommand(new ShowQueueCmd());
+        registerCommand(new CreateNameMappingCmd());
+        registerCommand(new DeleteNameMappingCmd());
+        registerCommand(new ShowNameMappingsCmd());
     }
 
     /**

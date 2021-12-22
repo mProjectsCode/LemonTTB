@@ -19,8 +19,8 @@
 
 package LemonTTB.LemonTTB_Audio;
 
-import java.util.Objects;
-
+import LemonTTB.Config;
+import LemonTTB.Logger.Logger;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -29,13 +29,13 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-
-import LemonTTB.Config;
-import LemonTTB.Logger.Logger;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
+
+import java.io.File;
+import java.util.Objects;
 
 public class LemonTTB_AudioManager {
     private static final Logger LOGGER = Logger.getLogger(LemonTTB_AudioManager.class);
@@ -48,7 +48,7 @@ public class LemonTTB_AudioManager {
 
     /**
      * Connects to a voice channel.
-     * 
+     *
      * @param channel the channel to connect to
      * @param guild   the guild of the channel
      */
@@ -85,10 +85,10 @@ public class LemonTTB_AudioManager {
     /**
      * Returns the channel the audio manager is connected to.
      * Returns null if not connected.
-     * 
+     *
      * @return the channel
      */
-    public GuildChannel getCannel() {
+    public GuildChannel getChannel() {
         return channel;
     }
 
@@ -106,7 +106,7 @@ public class LemonTTB_AudioManager {
         audioPlayer = audioPlayerManager.createPlayer();
         // create instance of our track scheduler
         audioTrackScheduler = new LemonTTB_AudioTrackScheduler(audioPlayer);
-        // add our track sheduler to the audioPlayer
+        // add our track scheduler to the audioPlayer
         audioPlayer.addListener(audioTrackScheduler);
 
         audioPlayer.setVolume(Config.options.defaultVolume);
@@ -116,7 +116,7 @@ public class LemonTTB_AudioManager {
     /**
      * Load and play a audioTrack based on a path to the track. Throws a runtime
      * exception when the path is not pointing to a file or is invalid.
-     * 
+     *
      * @param trackPath the path to the track
      */
     public void loadAndPlayTrack(final String trackPath) {
@@ -155,7 +155,7 @@ public class LemonTTB_AudioManager {
 
     /**
      * Add a audioTrack to the queue of the audioTrackScheduler.
-     * 
+     *
      * @param audioTrack the audio track to queue
      */
     private void queueToTrackScheduler(AudioTrack audioTrack) {
@@ -171,17 +171,23 @@ public class LemonTTB_AudioManager {
     }
 
     /**
-     * Set the player volume.
-     * 
-     * @param volume volume
+     * Clears the queue of the audioTrackScheduler.
      */
-    public void setVolume(int volume) {
-        audioPlayer.setVolume(volume);
+    public void clearQueue() {
+        audioTrackScheduler.clearQueue();
+    }
+
+    public AudioTrack[] getTracksInQueue() {
+        return audioTrackScheduler.getQueue().toArray(new AudioTrack[0]);
+    }
+
+    public AudioPlayer getAudioPlayer() {
+        return audioPlayer;
     }
 
     /**
      * Get the player volume.
-     * 
+     *
      * @return volume
      */
     public int getVolume() {
@@ -189,17 +195,17 @@ public class LemonTTB_AudioManager {
     }
 
     /**
-     * Set the player to loop.
-     * 
-     * @param looping looping
+     * Set the player volume.
+     *
+     * @param volume volume
      */
-    public void setLooping(boolean looping) {
-        audioTrackScheduler.setLooping(looping);
+    public void setVolume(int volume) {
+        audioPlayer.setVolume(volume);
     }
 
     /**
      * Is the player looping.
-     * 
+     *
      * @return looping
      */
     public boolean isLooping() {
@@ -207,17 +213,17 @@ public class LemonTTB_AudioManager {
     }
 
     /**
-     * Set the pause state of the player.
-     * 
-     * @param paused paused
+     * Set the player to loop.
+     *
+     * @param looping looping
      */
-    public void setPaused(boolean paused) {
-        audioPlayer.setPaused(paused);
+    public void setLooping(boolean looping) {
+        audioTrackScheduler.setLooping(looping);
     }
 
     /**
      * Is the player paused.
-     * 
+     *
      * @return paused
      */
     public boolean isPaused() {
@@ -225,11 +231,32 @@ public class LemonTTB_AudioManager {
     }
 
     /**
+     * Set the pause state of the player.
+     *
+     * @param paused paused
+     */
+    public void setPaused(boolean paused) {
+        audioPlayer.setPaused(paused);
+    }
+
+    /**
      * Wrapper around AudioPlayer to use it as an AudioSendHandler.
-     * 
+     *
      * @return LemonTTB_AudioSendHandler
      */
     public LemonTTB_AudioSendHandler getSendHandler() {
         return new LemonTTB_AudioSendHandler(audioPlayer);
+    }
+
+    public static String getTitleFromAudioTrack(AudioTrack track) {
+        if (Objects.equals(track, null)) {
+            return "Currently not a track.";
+        }
+
+        String title = track.getInfo().title;
+        if (Objects.equals(title, "Unknown title")) {
+            title = new File(track.getIdentifier()).getName();
+        }
+        return title;
     }
 }

@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 
 import javax.security.auth.login.LoginException;
 
+import LemonTTB.nameMappings.NameMappingsHandler;
 import com.google.common.io.Resources;
 
 import org.slf4j.helpers.MessageFormatter;
@@ -54,7 +55,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
  *  | |___|  __/ | | | | |     | | | | |     | |  | |_) |
  *  |______\___|_| |_| |_|\___/|_| |_|_|     |_|  |____/
  * 
- * LemonTTB is a Discord Bot designed to assist the GM during tabletop sessions using Discord as communication.
+ * LemonTTB is a Discord Bot designed to assist the GM during tabletop sessions, that use Discord for communication.
  */
 public class App {
     private static final Logger LOGGER = Logger.getLogger(App.class);
@@ -92,6 +93,10 @@ public class App {
      * The constant audioManager.
      */
     public static LemonTTB_AudioManager audioManager;
+    /**
+     * The constant nameMappingHandler.
+     */
+    public static NameMappingsHandler nameMappingsHandler;
 
     /**
      * The entry point of application.
@@ -117,6 +122,9 @@ public class App {
         audioManager = new LemonTTB_AudioManager();
         audioManager.createPlayer();
         audioPath = new File(RESOURCE_PATH, "/music");
+
+        // INIT: Other
+        nameMappingsHandler = new NameMappingsHandler();
 
         // INIT: JDA
         buildJDA();

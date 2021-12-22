@@ -17,7 +17,7 @@
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package LemonTTB.commands.commands;
+package LemonTTB.commands.commands.audio;
 
 import java.io.File;
 import java.util.Objects;

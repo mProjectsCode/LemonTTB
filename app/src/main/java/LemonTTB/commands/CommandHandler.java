@@ -78,10 +78,15 @@ public class CommandHandler extends ListenerAdapter {
             if (msgParts[i].startsWith("-")) {
                 commandObject.arguments[i - 1] = new CommandObject.Argument();
                 commandObject.arguments[i - 1].identifier = msgParts[i];
-                if (i < msgParts.length - 1 && !msgParts[i + 1].startsWith("-")) {
-                    commandObject.arguments[i - 1].value = msgParts[i + 1];
-                } else {
-                    commandObject.arguments[i - 1].value = null;
+                commandObject.arguments[i - 1].value = null;
+                for (int j = i + 1; j < msgParts.length && !msgParts[j].startsWith("-"); j++) {
+                    if (Objects.equals(commandObject.arguments[i - 1].value, null)) {
+                        commandObject.arguments[i - 1].value = msgParts[j];
+                        LOGGER.logTrace("init " + msgParts[j]);
+                    } else {
+                        commandObject.arguments[i - 1].value += " " + msgParts[j];
+                        LOGGER.logTrace("added " + msgParts[j]);
+                    }
                 }
             }
         }

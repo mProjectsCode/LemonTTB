@@ -71,6 +71,15 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
     }
 
     /**
+     * Getter for the queue.
+     *
+     * @return the queue
+     */
+    public BlockingQueue<AudioTrack> getQueue() {
+        return queue;
+    }
+
+    /**
      * Add the next track to queue or play right away if nothing is in the queue.
      *
      * @param track The track to play or add to queue.
@@ -97,6 +106,10 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
             App.audioManager.loadAndPlayTrack(audioPlayer.getPlayingTrack().getIdentifier());
         }
         audioPlayer.startTrack(queue.poll(), false);
+    }
+
+    public void clearQueue() {
+        queue.clear();
     }
 
     /**

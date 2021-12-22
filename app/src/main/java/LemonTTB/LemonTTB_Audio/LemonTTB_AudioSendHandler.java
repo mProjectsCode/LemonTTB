@@ -19,13 +19,12 @@
 
 package LemonTTB.LemonTTB_Audio;
 
-import java.nio.ByteBuffer;
-
+import LemonTTB.Logger.Logger;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame;
-
-import LemonTTB.Logger.Logger;
 import net.dv8tion.jda.api.audio.AudioSendHandler;
+
+import java.nio.ByteBuffer;
 
 /**
  * The type Lemon ttb audio send handler.

@@ -29,13 +29,15 @@ public class LeaveCmd extends Command {
 
     @Override
     public void run(CommandObject commandObject, Message msg) {
-        GuildChannel channel = App.audioManager.getCannel();
+        GuildChannel channel = App.audioManager.getChannel();
         if (!Objects.equals(channel, null)) {
             App.audioManager.leave();
-            Command.LOGGER.logCommand(commandObject, "Successfuly left " + channel.getName());
+            Command.LOGGER.logCommand(commandObject, "Successfully left " + channel.getName());
+            Command.LOGGER.logCommand(commandObject, true, "");
+            return;
         }
 
-        Command.LOGGER.logCommand(commandObject, true, "");
+        Command.LOGGER.logCommand(commandObject, false, "Audio manager was not connected to a voice channel");
     }
 
 }
