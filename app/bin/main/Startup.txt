@@ -1,7 +1,0 @@
-LemonTTB is a Discord Bot designed to assist the GM during tabletop sessions using Discord as communication.
-
-The source files can be found here: 
-https://github.com/mProjectsCode/LemonTTB
-
-License:
-LemonTTB is distributed under the GPL-3.0 License.
