@@ -23,6 +23,7 @@ import LemonTTB.LemonTTB_Audio.LemonTTB_AudioManager;
 import LemonTTB.Logger.ConsoleColors;
 import LemonTTB.Logger.Logger;
 import LemonTTB.commands.CommandHandler;
+import LemonTTB.commands.commands.gui.Gui;
 import LemonTTB.nameMappings.NameMappingsHandler;
 import LemonTTB.permissions.PermissionHandler;
 import LemonTTB.users.UserHandler;
@@ -148,6 +149,9 @@ public class App {
 
         // Validate the config file
         Config.options.validateConfig();
+
+        // Gui
+        new Gui();
 
         LOGGER.logTrace("test");
         LOGGER.logDebug("test");
