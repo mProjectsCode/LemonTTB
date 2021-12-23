@@ -25,7 +25,6 @@ import LemonTTB.commands.Command;
 import LemonTTB.commands.CommandDescription;
 import LemonTTB.commands.CommandObject;
 import LemonTTB.permissions.Permission;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -80,20 +79,14 @@ public class MoveCmd extends Command {
 
     @Override
     public void run(CommandObject commandObject, Message msg) {
-        String primaryChannelId = Config.options.voiceChannelMain;
-        String secondaryChannelId = Config.options.voiceChannelSecondary;
+        String primaryChannelId = Config.options.primaryVoiceChannel;
+        String secondaryChannelId = Config.options.secondaryVoiceChannel;
 
         VoiceChannel primaryChannel = null;
         VoiceChannel secondaryChannel = null;
 
-        List<Guild> guilds = App.jda.getGuilds();
-        for (int i = 0; i < guilds.size(); i++) {
-            VoiceChannel channel = guilds.get(i).getVoiceChannelById(primaryChannelId);
-            primaryChannel = Objects.equals(channel, null) ? primaryChannel : channel;
-
-            VoiceChannel channel2 = guilds.get(i).getVoiceChannelById(secondaryChannelId);
-            secondaryChannel = Objects.equals(channel2, null) ? secondaryChannel : channel2;
-        }
+        primaryChannel = (VoiceChannel) App.jda.getGuildChannelById(primaryChannelId);
+        secondaryChannel = (VoiceChannel) App.jda.getGuildChannelById(secondaryChannelId);
 
         if (Objects.equals(primaryChannel, null)) {
             Command.LOGGER.logWarning("Primary channel not found.");

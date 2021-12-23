@@ -21,6 +21,9 @@ package LemonTTB;
 
 import LemonTTB.Logger.Logger;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.entities.User;
 
 import java.io.*;
 import java.util.HashMap;
@@ -33,7 +36,7 @@ import java.util.Objects;
 public class Config {
     private static final Logger LOGGER = Logger.getLogger(Config.class);
 
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     /**
      * The constant options.
@@ -170,11 +173,11 @@ public class Config {
         /**
          * The Voice channel main.
          */
-        public String voiceChannelMain;
+        public String primaryVoiceChannel;
         /**
          * The Voice channel secondary.
          */
-        public String voiceChannelSecondary;
+        public String secondaryVoiceChannel;
         /**
          * The Name Mappings.
          */
@@ -206,10 +209,60 @@ public class Config {
             this.prefix = ".";
             this.botOwner = "";
             this.statusChannel = "";
-            this.voiceChannelMain = "";
-            this.voiceChannelSecondary = "";
+            this.primaryVoiceChannel = "";
+            this.secondaryVoiceChannel = "";
             this.nameMappings = new HashMap<String, String>();
             this.defaultVolume = 10;
+        }
+
+        public boolean isConfigFilled() {
+            if (Objects.equals(token, "")) {
+                LOGGER.logWarning("token empty");
+                return false;
+            }
+            if (Objects.equals(prefix, "")) {
+                LOGGER.logWarning("prefix empty");
+                return false;
+            }
+            if (Objects.equals(botOwner, "")) {
+                LOGGER.logWarning("bot owner empty");
+                return false;
+            }
+            if (Objects.equals(statusChannel, "")) {
+                LOGGER.logWarning("status channel empty");
+                return false;
+            }
+            if (Objects.equals(primaryVoiceChannel, "")) {
+                LOGGER.logWarning("primary channel empty");
+                return false;
+            }
+            if (Objects.equals(secondaryVoiceChannel, "")) {
+                LOGGER.logWarning("secondary channel empty");
+                return false;
+            }
+            return true;
+        }
+
+        public void validateConfig() {
+            User botOwner = App.jda.getUserById(this.botOwner);
+            if (Objects.equals(botOwner, null)) {
+                App.exit("Bot owner not found. Check the config file.");
+            }
+
+            GuildChannel statusChannel = App.jda.getGuildChannelById(this.statusChannel);
+            if (Objects.equals(statusChannel, null)) {
+                App.exit("Status channel not found. Check the config file.");
+            }
+
+            GuildChannel primaryVoiceChannel = App.jda.getGuildChannelById(this.primaryVoiceChannel);
+            if (Objects.equals(primaryVoiceChannel, null)) {
+                App.exit("Primary Voice Channel not found. Check the config file.");
+            }
+
+            GuildChannel secondaryVoiceChannel = App.jda.getGuildChannelById(this.secondaryVoiceChannel);
+            if (Objects.equals(secondaryVoiceChannel, null)) {
+                App.exit("Secondary Voice Channel not found. Check the config file.");
+            }
         }
     }
 }

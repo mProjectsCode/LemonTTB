@@ -123,6 +123,9 @@ public class App {
         configPath = new File(RESOURCE_PATH, DEV ? "/config/botConfig.txt.dev" : "/config/botConfig.txt");
         Config.configFile = configPath;
         Config.load();
+        if (!Config.options.isConfigFilled()) {
+            App.exit("Some fields in the config are empty.");
+        }
 
         // INIT: Documentation
         documentationPath = new File(RESOURCE_PATH, "/documentation");
@@ -143,6 +146,9 @@ public class App {
         // INIT: JDA
         buildJDA();
 
+        // Validate the config file
+        Config.options.validateConfig();
+
         LOGGER.logTrace("test");
         LOGGER.logDebug("test");
         LOGGER.logInfo("test");
@@ -161,8 +167,7 @@ public class App {
             e.printStackTrace();
         }
 
-        System.out.println("LemonTTB is a Discord Bot designed to assist the GM "
-                + "during tabletop sessions using Discord as communication.");
+        System.out.println("LemonTTB is a Discord Bot designed to assist the GM during tabletop sessions, that use Discord for communication.");
         System.out.println();
         System.out.println(ConsoleColors.WHITE_BRIGHT + "The source files can be found here: " + ConsoleColors.RESET);
         System.out.println("https://github.com/mProjectsCode/LemonTTB");
@@ -222,8 +227,8 @@ public class App {
      * @param message the message
      */
     public static void exit(String message) {
-        LOGGER.logWarning("Program is exiting with message: ");
-        LOGGER.logWarning(message);
+        LOGGER.logError("Program is exiting with message: ");
+        LOGGER.logError(message);
         System.exit(0);
     }
 
@@ -234,8 +239,8 @@ public class App {
      * @param e       the exception
      */
     public static void exit(String message, Exception e) {
-        LOGGER.logWarning("Program is exiting with message: ");
-        LOGGER.logWarning(message);
+        LOGGER.logError("Program is exiting with message: ");
+        LOGGER.logError(message);
         LOGGER.logError(e);
         System.exit(0);
     }
