@@ -39,8 +39,9 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'LemonTTB.App'
-    mainClassName = 'LemonTTB.App'
+    mainClass = 'io.github.mProjectsCode.LemonTTB.App'
+    mainClassName = 'io.github.mProjectsCode.LemonTTB.App'
+    version '0.0.1'
 }
 
 tasks.named('test') {
