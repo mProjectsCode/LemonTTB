@@ -25,7 +25,6 @@ import LemonTTB.commands.Command;
 import LemonTTB.commands.CommandDescription;
 import LemonTTB.commands.CommandObject;
 import LemonTTB.permissions.Permission;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -48,7 +47,7 @@ public class MoveCmd extends Command {
                                 "-b",
                                 "boolean",
                                 false,
-                                "Whether to set looping to ture or false."),
+                                "Whether to move them back to the primary channel."),
                         new CommandDescription.ArgumentDescription(
                                 "-a",
                                 "",
@@ -58,7 +57,12 @@ public class MoveCmd extends Command {
                                 "-u",
                                 "string",
                                 false,
-                                "Specifies a specific user to be moved.")
+                                "Specifies a specific user to be moved."),
+                        new CommandDescription.ArgumentDescription(
+                                "-me",
+                                "boolean",
+                                false,
+                                "Whether to also move the message sender.")
                 }
         );
     }
@@ -75,20 +79,14 @@ public class MoveCmd extends Command {
 
     @Override
     public void run(CommandObject commandObject, Message msg) {
-        String primaryChannelId = Config.options.voiceChannelMain;
-        String secondaryChannelId = Config.options.voiceChannelSecondary;
+        String primaryChannelId = Config.options.primaryVoiceChannel;
+        String secondaryChannelId = Config.options.secondaryVoiceChannel;
 
         VoiceChannel primaryChannel = null;
         VoiceChannel secondaryChannel = null;
 
-        List<Guild> guilds = App.jda.getGuilds();
-        for (int i = 0; i < guilds.size(); i++) {
-            VoiceChannel channel = guilds.get(i).getVoiceChannelById(primaryChannelId);
-            primaryChannel = Objects.equals(channel, null) ? primaryChannel : channel;
-
-            VoiceChannel channel2 = guilds.get(i).getVoiceChannelById(secondaryChannelId);
-            secondaryChannel = Objects.equals(channel2, null) ? secondaryChannel : channel2;
-        }
+        primaryChannel = (VoiceChannel) App.jda.getGuildChannelById(primaryChannelId);
+        secondaryChannel = (VoiceChannel) App.jda.getGuildChannelById(secondaryChannelId);
 
         if (Objects.equals(primaryChannel, null)) {
             Command.LOGGER.logWarning("Primary channel not found.");
@@ -105,6 +103,7 @@ public class MoveCmd extends Command {
         CommandObject.Argument userArgument = commandObject.getArgument("-u");
         CommandObject.Argument allArgument = commandObject.getArgument("-a");
         CommandObject.Argument backArgument = commandObject.getArgument("-b");
+        CommandObject.Argument meArgument = commandObject.getArgument("-me");
 
         if (!Objects.equals(backArgument, null)) {
             moveToChannel = Boolean.parseBoolean(backArgument.value) ? secondaryChannel : primaryChannel;
@@ -115,6 +114,12 @@ public class MoveCmd extends Command {
 
         boolean allArgumentActive = !Objects.equals(allArgument, null);
         boolean userArgumentActive = !Objects.equals(userArgument, null) && !Objects.equals(userArgument.value, null);
+        boolean meArgumentActive = false;
+        if (!Objects.equals(meArgument, null)) {
+            if (!Objects.equals(meArgument.value, null)) {
+                meArgumentActive = Boolean.parseBoolean(meArgument.value);
+            }
+        }
 
         if (allArgumentActive) {
             List<Member> members = moveFromChannel.getMembers();
@@ -122,6 +127,12 @@ public class MoveCmd extends Command {
                 // if the user is the bot don't move it
                 if (Objects.equals(members.get(i).getId(), App.jda.getSelfUser().getId())) {
                     continue;
+                }
+                // if we exclude the message author
+                if (meArgumentActive) {
+                    if (Objects.equals(members.get(i).getId(), msg.getAuthor().getId())) {
+                        continue;
+                    }
                 }
                 // if we exclude a specific user
                 if (userArgumentActive) {
@@ -138,6 +149,12 @@ public class MoveCmd extends Command {
                 // if the username matches the argument move him
                 if (Objects.equals(members.get(i).getUser().getName(), Config.options.nameMappings.get(userArgument.value))) {
                     moveFromChannel.getGuild().moveVoiceMember(members.get(i), moveToChannel).queue();
+                }
+                // if we also move the message author
+                if (meArgumentActive) {
+                    if (Objects.equals(members.get(i).getId(), msg.getAuthor().getId())) {
+                        moveFromChannel.getGuild().moveVoiceMember(members.get(i), moveToChannel).queue();
+                    }
                 }
             }
         }

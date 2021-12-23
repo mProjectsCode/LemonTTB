@@ -23,6 +23,7 @@ import LemonTTB.App;
 import LemonTTB.IOHelper;
 import LemonTTB.Logger.Logger;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class UserHandler {
      * Instantiates a new User handler.
      */
     public UserHandler() {
-        gson = new Gson();
+        gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
     /**

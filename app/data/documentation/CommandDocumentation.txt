@@ -8,19 +8,110 @@
 
 Name: play
 Description: Plays a song.
+Permissions: ["AUDIO"]
+Arguments:
+
+Name: ping
+Description: Pings the bot.
+Permissions: ["COMMAND"]
+Arguments:
+
+Name: addPermission
+Description: Adds a permission to an user.
+Permissions: ["OWNER"]
+Arguments:
+
+Name: about
+Description: Gives information about the bot.
+Permissions: ["COMMAND"]
+Arguments:
+
+Name: clearQueue
+Description: Resets the queue of the audio player and disables looping
+Permissions: ["AUDIO"]
+Arguments:
+
+Name: skip
+Description: Skips the song, the audio player is currently playing.
+Permissions: ["AUDIO"]
+Arguments:
+
+Name: resetQueue
+Description: Resets the queue of the audio player and disables looping
+Permissions: ["AUDIO"]
+Arguments:
+
+Name: showPermissions
+Description: Shows all the permission a user has.
+Permissions: ["OWNER"]
+Arguments:
+
+Name: leave
+Description: Leaves the current voice channel.
+Permissions: ["AUDIO"]
+Arguments:
+
+Name: loop
+Description: Activates ot deactivates the looping functionality of the audio player. If no argument is present it will return whether looping is enabled.
+Permissions: ["AUDIO"]
+Arguments:
+    Argument: -v
+        Type: boolean
+        Required: false
+        Description: Whether to set looping to ture or false.
+
+Name: deleteNameMapping
+Description: Deletes a name mapping.
+Permissions: ["MODERATION"]
+Arguments:
+    Argument: -u
+        Type: String
+        Required: true
+        Description: The username for who you want to delete the mapping.
+
+Name: showNameMappings
+Description: Shows a list of all the name mappings.
+Permissions: ["MODERATION"]
+Arguments:
+
+Name: join
+Description: Joins the voice channel the message author is in.
+Permissions: ["AUDIO"]
+Arguments:
+
+Name: showQueue
+Description: Shows a list of all the tracks that are in the queue of the audio player.
+Permissions: ["AUDIO"]
+Arguments:
+
+Name: info
+Description: Gives information about the bot.
+Permissions: ["COMMAND"]
+Arguments:
+
+Name: removePermissions
+Description: Removes all the permission a user has.
+Permissions: ["OWNER"]
 Arguments:
 
 Name: isPaused
 Description: Pauses, unpauses or returns the pause status of the audio player.
+Permissions: ["AUDIO"]
+Arguments:
+
+Name: resetPermissions
+Description: Removes all the permission a user has.
+Permissions: ["OWNER"]
 Arguments:
 
 Name: move
 Description: Moves a people fom one channel to another.
+Permissions: ["MODERATION"]
 Arguments:
     Argument: -b
         Type: boolean
         Required: false
-        Description: Whether to set looping to ture or false.
+        Description: Whether to move them back to the primary channel.
     Argument: -a
         Type: 
         Required: false
@@ -29,25 +120,36 @@ Arguments:
         Type: string
         Required: false
         Description: Specifies a specific user to be moved.
+    Argument: -me
+        Type: boolean
+        Required: false
+        Description: Whether to also move the message sender.
 
-Name: ping
-Description: Pings the bot.
+Name: mute
+Description: Deaf-mutes people except the message author.
+Permissions: ["MODERATION"]
 Arguments:
-
-Name: about
-Description: Gives information about the bot.
-Arguments:
-
-Name: skip
-Description: Skips the song, the audio player is currently playing.
-Arguments:
+    Argument: -a
+        Type: 
+        Required: false
+        Description: Whether to deaf-mute everyone. If -u is also present, -u will act as a blacklist.
+    Argument: -u
+        Type: string
+        Required: false
+        Description: Specifies a specific user to be deaf-muted.
+    Argument: -b
+        Type: boolean
+        Required: false
+        Description: Whether to unmute them.
 
 Name: pause
 Description: Pauses, unpauses or returns the pause status of the audio player.
+Permissions: ["AUDIO"]
 Arguments:
 
 Name: volume
 Description: Sets the volume of the audio player.
+Permissions: ["AUDIO"]
 Arguments:
     Argument: -v
         Type: integer
@@ -60,24 +162,23 @@ Arguments:
 
 Name: help
 Description: Gives information about the bot and all its commands.
+Permissions: ["COMMAND"]
 Arguments:
 
-Name: loop
-Description: Activates ot deactivates the looping functionality of the audio player. If no argument is present it will return whether looping is enabled.
+Name: createNameMapping
+Description: Creates a new name mapping or overrides an existing one.
+Permissions: ["MODERATION"]
 Arguments:
-    Argument: -v
-        Type: boolean
-        Required: false
-        Description: Whether to set looping to ture or false.
-
-Name: join
-Description: Joins the voice channel the message author is in.
-Arguments:
+    Argument: -u
+        Type: String
+        Required: true
+        Description: The username of the user. Not the nickname on the server.
+    Argument: -n
+        Type: String
+        Required: true
+        Description: The name you want to reference the user by.
 
 Name: unpause
 Description: Pauses, unpauses or returns the pause status of the audio player.
-Arguments:
-
-Name: info
-Description: Gives information about the bot.
+Permissions: ["AUDIO"]
 Arguments:

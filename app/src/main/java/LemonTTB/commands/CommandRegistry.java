@@ -58,6 +58,7 @@ public class CommandRegistry {
         registerCommand(new PingCmd());
         // Moderator
         registerCommand(new MoveCmd());
+        registerCommand(new MuteCmd());
         // Vc
         registerCommand(new JoinCmd());
         registerCommand(new LeaveCmd());

@@ -3,4 +3,16 @@
 # You can find information on editing this file and all the available options here:
 # https://github.com/mProjectsCode/LemonTTB/wiki/Config-File
 #
-{"version":"v0.0.1","token":"","prefix":".","botOwner":"","statusChannel":"","voiceChannelMain":"","voiceChannelSecondary":"","defaultVolume":10}
+{
+  "version": "v0.0.1",
+  "token": "",
+  "prefix": ".",
+  "botOwner": "",
+  "statusChannel": "",
+  "voiceChannelMain": "",
+  "voiceChannelSecondary": "",
+  "nameMappings": {
+
+  },
+  "defaultVolume": 10
+}
