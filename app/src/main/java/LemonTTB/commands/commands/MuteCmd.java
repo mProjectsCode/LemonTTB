@@ -12,6 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The type Mute cmd.
+ */
 public class MuteCmd extends Command {
 
     @Override

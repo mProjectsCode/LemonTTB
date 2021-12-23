@@ -215,6 +215,11 @@ public class Config {
             this.defaultVolume = 10;
         }
 
+        /**
+         * Is config filled boolean.
+         *
+         * @return the boolean
+         */
         public boolean isConfigFilled() {
             if (Objects.equals(token, "")) {
                 LOGGER.logWarning("token empty");
@@ -243,6 +248,9 @@ public class Config {
             return true;
         }
 
+        /**
+         * Validate config.
+         */
         public void validateConfig() {
             User botOwner = App.jda.getUserById(this.botOwner);
             if (Objects.equals(botOwner, null)) {

@@ -44,10 +44,12 @@ public class PermissionHandler {
 
     /**
      * Instantiates a new Permission handler.
+     *
+     * @param giveOwnerPermission the give owner permission
      */
     public PermissionHandler(boolean giveOwnerPermission) {
         gson = new Gson();
-        if(giveOwnerPermission) {
+        if (giveOwnerPermission) {
             // on startup make sure the bot owner always has the owner permission
             if (Objects.equals(Config.options.botOwner, null) || Objects.equals(Config.options.botOwner, "")) {
                 LOGGER.logWarning("The bot owner is not set in the config. Please set it.");
@@ -141,6 +143,12 @@ public class PermissionHandler {
         resetPermissions(user);
     }
 
+    /**
+     * Permission array to string string.
+     *
+     * @param permissions the permissions
+     * @return the string
+     */
     public String permissionArrayToString(Permission[] permissions) {
         return gson.toJson(permissions);
     }

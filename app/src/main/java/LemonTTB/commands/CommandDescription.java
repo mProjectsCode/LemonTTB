@@ -20,9 +20,7 @@
 package LemonTTB.commands;
 
 import LemonTTB.App;
-import LemonTTB.permissions.PermissionHandler;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 /**
