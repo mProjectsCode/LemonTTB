@@ -48,7 +48,7 @@ public class MoveCmd extends Command {
                                 "-b",
                                 "boolean",
                                 false,
-                                "Whether to set looping to ture or false."),
+                                "Whether to move them back to the primary channel."),
                         new CommandDescription.ArgumentDescription(
                                 "-a",
                                 "",
@@ -58,7 +58,12 @@ public class MoveCmd extends Command {
                                 "-u",
                                 "string",
                                 false,
-                                "Specifies a specific user to be moved.")
+                                "Specifies a specific user to be moved."),
+                        new CommandDescription.ArgumentDescription(
+                                "-me",
+                                "boolean",
+                                false,
+                                "Whether to also move the message sender.")
                 }
         );
     }
@@ -105,6 +110,7 @@ public class MoveCmd extends Command {
         CommandObject.Argument userArgument = commandObject.getArgument("-u");
         CommandObject.Argument allArgument = commandObject.getArgument("-a");
         CommandObject.Argument backArgument = commandObject.getArgument("-b");
+        CommandObject.Argument meArgument = commandObject.getArgument("-me");
 
         if (!Objects.equals(backArgument, null)) {
             moveToChannel = Boolean.parseBoolean(backArgument.value) ? secondaryChannel : primaryChannel;
@@ -115,6 +121,12 @@ public class MoveCmd extends Command {
 
         boolean allArgumentActive = !Objects.equals(allArgument, null);
         boolean userArgumentActive = !Objects.equals(userArgument, null) && !Objects.equals(userArgument.value, null);
+        boolean meArgumentActive = false;
+        if (!Objects.equals(meArgument, null)) {
+            if (!Objects.equals(meArgument.value, null)) {
+                meArgumentActive = Boolean.parseBoolean(meArgument.value);
+            }
+        }
 
         if (allArgumentActive) {
             List<Member> members = moveFromChannel.getMembers();
@@ -122,6 +134,12 @@ public class MoveCmd extends Command {
                 // if the user is the bot don't move it
                 if (Objects.equals(members.get(i).getId(), App.jda.getSelfUser().getId())) {
                     continue;
+                }
+                // if we exclude the message author
+                if (meArgumentActive) {
+                    if (Objects.equals(members.get(i).getId(), msg.getAuthor().getId())) {
+                        continue;
+                    }
                 }
                 // if we exclude a specific user
                 if (userArgumentActive) {
@@ -138,6 +156,12 @@ public class MoveCmd extends Command {
                 // if the username matches the argument move him
                 if (Objects.equals(members.get(i).getUser().getName(), Config.options.nameMappings.get(userArgument.value))) {
                     moveFromChannel.getGuild().moveVoiceMember(members.get(i), moveToChannel).queue();
+                }
+                // if we also move the message author
+                if (meArgumentActive) {
+                    if (Objects.equals(members.get(i).getId(), msg.getAuthor().getId())) {
+                        moveFromChannel.getGuild().moveVoiceMember(members.get(i), moveToChannel).queue();
+                    }
                 }
             }
         }

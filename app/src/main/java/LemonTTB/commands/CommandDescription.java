@@ -19,6 +19,10 @@
 
 package LemonTTB.commands;
 
+import LemonTTB.App;
+import LemonTTB.permissions.PermissionHandler;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 /**
@@ -40,7 +44,7 @@ public class CommandDescription {
     }
 
     /**
-     * Parse description as embed embed builder.
+     * Parse description as embed.
      *
      * @param command the command
      * @param title   the title
@@ -52,6 +56,7 @@ public class CommandDescription {
 
         embed.setTitle(title);
         embed.setDescription(commandDescription.getDescription());
+        embed.addField("Permissions: ", App.permissionHandler.permissionArrayToString(command.getCommandPermissions()), false);
         for (int i = 0; i < commandDescription.getArgumentDescriptions().length; i++) {
             embed.addBlankField(false);
             embed.addField("Argument: ", commandDescription.getArgumentDescriptions()[i].getIdentifier(), true);
@@ -64,7 +69,7 @@ public class CommandDescription {
     }
 
     /**
-     * Parse description as string string.
+     * Parse description as string.
      *
      * @param command the command
      * @param title   the title
@@ -72,11 +77,13 @@ public class CommandDescription {
      */
     public static String parseDescriptionAsString(Command command, String title) {
         CommandDescription commandDescription = command.getCommandDescription();
+        Gson gson = new Gson();
 
         StringBuilder sb = new StringBuilder();
         sb.append("\n");
         sb.append("Name: ").append(title).append("\n");
         sb.append("Description: ").append(commandDescription.getDescription()).append("\n");
+        sb.append("Permissions: ").append(gson.toJson(command.getCommandPermissions())).append("\n");
         sb.append("Arguments:").append("\n");
         for (int i = 0; i < commandDescription.getArgumentDescriptions().length; i++) {
             sb.append("    ");

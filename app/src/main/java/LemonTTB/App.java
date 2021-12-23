@@ -135,7 +135,7 @@ public class App {
         // INIT: Users/Permissions
         userPath = new File(RESOURCE_PATH, "/users");
         userHandler = new UserHandler();
-        permissionHandler = new PermissionHandler();
+        permissionHandler = new PermissionHandler(true);
 
         // INIT: Other
         nameMappingsHandler = new NameMappingsHandler();
