@@ -63,6 +63,8 @@ public class MuteCmd extends Command {
         if (!Objects.equals(unmuteArgument, null)) {
             if (!Objects.equals(unmuteArgument.value, null)) {
                 unmuteArgumentActive = Boolean.parseBoolean(unmuteArgument.value);
+            } else {
+                unmuteArgumentActive = true;
             }
         }
 
@@ -111,11 +113,11 @@ public class MuteCmd extends Command {
                     }
                 }
                 if (unmuteArgumentActive) {
-                    voiceChannel.getGuild().deafen(members.get(i), false);
-                    voiceChannel.getGuild().mute(members.get(i), false);
+                    voiceChannel.getGuild().deafen(members.get(i), false).queue();
+                    voiceChannel.getGuild().mute(members.get(i), false).queue();
                 } else {
-                    voiceChannel.getGuild().deafen(members.get(i), true);
-                    voiceChannel.getGuild().mute(members.get(i), true);
+                    voiceChannel.getGuild().deafen(members.get(i), true).queue();
+                    voiceChannel.getGuild().mute(members.get(i), true).queue();
                 }
             }
         } else if (userArgumentActive) {
@@ -124,11 +126,11 @@ public class MuteCmd extends Command {
                 // if the username matches the argument deaf-mute him
                 if (Objects.equals(members.get(i).getUser().getName(), Config.options.nameMappings.get(userArgument.value))) {
                     if (unmuteArgumentActive) {
-                        voiceChannel.getGuild().deafen(members.get(i), false);
-                        voiceChannel.getGuild().mute(members.get(i), false);
+                        voiceChannel.getGuild().deafen(members.get(i), false).queue();
+                        voiceChannel.getGuild().mute(members.get(i), false).queue();
                     } else {
-                        voiceChannel.getGuild().deafen(members.get(i), true);
-                        voiceChannel.getGuild().mute(members.get(i), true);
+                        voiceChannel.getGuild().deafen(members.get(i), true).queue();
+                        voiceChannel.getGuild().mute(members.get(i), true).queue();
                     }
                 }
             }
