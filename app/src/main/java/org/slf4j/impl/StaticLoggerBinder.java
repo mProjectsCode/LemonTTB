@@ -19,7 +19,7 @@
 
 package org.slf4j.impl;
 
-import LemonTTB.Logger.LoggerFactory;
+import io.github.mProjectsCode.LemonTTB.Logger.LoggerFactory;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.spi.LoggerFactoryBinder;
 
