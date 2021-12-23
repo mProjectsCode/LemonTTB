@@ -8,8 +8,11 @@
  ```
 ### Currently under heavy development.
 
-At some point this is going to be a discord bot that aims to assist the GM during table top sessions.
+At some point this is going to be a discord bot that aims to assist the GM during table-top sessions.
 
+The documentation will appear at some point in the near future on my [website](https://mprojectscode.github.io).
+
+# Features
 Finished Features (still need some good polish):
 - some internal foundations like a logger and the foundation for playing audio
 - Playing local and external audio
