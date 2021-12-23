@@ -29,9 +29,3 @@ jobs:
       run: chmod +x ./gradlew
     - name: Build with Gradle
       run: ./gradlew build
-    - name: cd commands
-      run: cd /home/runner/work/LemonTTB/LemonTTB/app/src/main/java/LemonTTB/commands
-    - name: compile 
-      run: javac CommandDescriptionGenerator.java
-    - name: run 
-      run: java CommandDescriptionGenerator
