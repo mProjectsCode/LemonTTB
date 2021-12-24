@@ -19,7 +19,7 @@
 
 package org.slf4j.impl;
 
-import LemonTTB.Logger.LemonTTB_MDCAdapter;
+import io.github.mProjectsCode.LemonTTB.Logger.LemonTTB_MDCAdapter;
 import org.slf4j.spi.MDCAdapter;
 
 /**
