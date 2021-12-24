@@ -26,6 +26,7 @@ import LemonTTB.commands.CommandHandler;
 import LemonTTB.commands.commands.gui.Gui;
 import LemonTTB.nameMappings.NameMappingsHandler;
 import LemonTTB.permissions.PermissionHandler;
+import LemonTTB.springboot.Application;
 import LemonTTB.users.UserHandler;
 import com.google.common.io.Resources;
 import net.dv8tion.jda.api.JDA;
@@ -35,6 +36,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import org.springframework.boot.SpringApplication;
 
 import javax.security.auth.login.LoginException;
 import java.io.BufferedReader;
@@ -151,7 +153,8 @@ public class App {
         Config.options.validateConfig();
 
         // Gui
-        new Gui();
+        SpringApplication.run(Application.class, args);
+        //new Gui();
 
         LOGGER.logTrace("test");
         LOGGER.logDebug("test");
@@ -192,7 +195,7 @@ public class App {
         }
         Logger.setLogFilePath(logFolderPath.getPath());
         Logger.enableDebug(true);
-        Logger.enableTrace(true);
+        Logger.enableTrace(false);
         Logger.setDebugBlacklist(new String[]{".jda.", ".lava.", ".lavaplayer."});
     }
 

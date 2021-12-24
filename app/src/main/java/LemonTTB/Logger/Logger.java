@@ -215,8 +215,12 @@ public class Logger {
      * @param e the e
      */
     public void logError(Exception e) {
-        log(Level.ERROR, e.getMessage());
-        e.printStackTrace();
+        if (Objects.equals(e, null)) {
+            log(Level.ERROR, "Some Error occurred.");
+        } else {
+            log(Level.ERROR, e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -225,8 +229,12 @@ public class Logger {
      * @param t the t
      */
     public void logError(Throwable t) {
-        log(Level.ERROR, t.getMessage());
-        t.printStackTrace();
+        if (Objects.equals(t, null)) {
+            log(Level.ERROR, "Some Error occurred.");
+        } else {
+            log(Level.ERROR, t.getMessage());
+            t.printStackTrace();
+        }
     }
 
     /**
