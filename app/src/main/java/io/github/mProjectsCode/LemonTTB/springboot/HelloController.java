@@ -1,6 +1,6 @@
-package LemonTTB.springboot;
+package io.github.mProjectsCode.LemonTTB.springboot;
 
-import LemonTTB.Logger.Logger;
+import io.github.mProjectsCode.LemonTTB.Logger.Logger;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,13 +16,13 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 public class HelloController {
+    private static final Logger LOGGER = Logger.getLogger(HelloController.class);
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+
     @GetMapping("/api")
     public String index() {
         return "Hello from java";
     }
-
-    private static final Logger LOGGER = Logger.getLogger(HelloController.class);
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @PostConstruct
     public void init() {
