@@ -216,7 +216,7 @@ public class Logger {
      */
     public void logError(Exception e) {
         if (Objects.equals(e, null)) {
-            log(Level.ERROR, "Some Error occurred.");
+            log(Level.WARNING, "Received error log with null exception.");
         } else {
             log(Level.ERROR, e.getMessage());
             e.printStackTrace();
@@ -230,7 +230,7 @@ public class Logger {
      */
     public void logError(Throwable t) {
         if (Objects.equals(t, null)) {
-            log(Level.ERROR, "Some Error occurred.");
+            log(Level.WARNING, "Received error log with null throwable.");
         } else {
             log(Level.ERROR, t.getMessage());
             t.printStackTrace();
@@ -437,7 +437,7 @@ public class Logger {
         } else if (Objects.equals(logLevel, Level.WARNING)) {
             return ConsoleColors.YELLOW;
         } else if (Objects.equals(logLevel, Level.INFO)) {
-            return ConsoleColors.WHITE_BRIGHT;
+            return ConsoleColors.GREEN;
         }
         return "";
     }

@@ -19,6 +19,10 @@
 
 package io.github.mProjectsCode.LemonTTB;
 
+import com.google.gson.Gson;
+import io.github.mProjectsCode.LemonTTB.events.Event;
+import io.github.mProjectsCode.LemonTTB.events.EventHandler;
+import io.github.mProjectsCode.LemonTTB.events.EventType;
 import io.github.mProjectsCode.LemonTTB.springboot.Application;
 import com.google.common.io.Resources;
 import io.github.mProjectsCode.LemonTTB.LemonTTB_Audio.LemonTTB_AudioManager;
@@ -27,6 +31,8 @@ import io.github.mProjectsCode.LemonTTB.Logger.Logger;
 import io.github.mProjectsCode.LemonTTB.commands.CommandHandler;
 import io.github.mProjectsCode.LemonTTB.nameMappings.NameMappingsHandler;
 import io.github.mProjectsCode.LemonTTB.permissions.PermissionHandler;
+import io.github.mProjectsCode.LemonTTB.springboot.WatchController;
+import io.github.mProjectsCode.LemonTTB.springboot.events.StartUpEvent;
 import io.github.mProjectsCode.LemonTTB.users.UserHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -43,6 +49,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /**
  * The type App.
@@ -71,6 +78,7 @@ public class App {
      */
     public static final String RESOURCE_PATH = "./data";
     private static final Logger LOGGER = Logger.getLogger(App.class);
+    private static final Gson gson = new Gson();
     /**
      * The constant configPath.
      */
@@ -108,6 +116,8 @@ public class App {
      */
     public static UserHandler userHandler;
 
+    public static boolean isBotOnline = false;
+
 
     /**
      * The entry point of application.
@@ -115,6 +125,9 @@ public class App {
      * @param args the input arguments
      */
     public static void main(String[] args) {
+        System.setProperty("java.util.logging.config.file", Resources.getResource("commons-logging.properties").getPath());
+        LOGGER.logInfo(System.getProperty("java.util.logging.config.file"));
+
         // INIT: Startup
         initStartup();
 
@@ -129,37 +142,45 @@ public class App {
             App.exit("Some fields in the config are empty.");
         }
 
+        // Gui
+        SpringApplication.run(Application.class, args);
+
+        LOGGER.logTrace("static/test");
+        LOGGER.logDebug("static/test");
+        LOGGER.logInfo("static/test");
+        LOGGER.logWarning("static/test");
+        LOGGER.logError("static/test");
+    }
+
+    public static void startBot() {
         // INIT: Documentation
         documentationPath = new File(RESOURCE_PATH, "/documentation");
+        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "documentation", "OK", App.class.getName()));
 
         // INIT: Audio
         audioPath = new File(RESOURCE_PATH, "/music");
         audioManager = new LemonTTB_AudioManager();
         audioManager.createPlayer();
+        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "audio player", "OK", App.class.getName()));
 
         // INIT: Users/Permissions
         userPath = new File(RESOURCE_PATH, "/users");
         userHandler = new UserHandler();
         permissionHandler = new PermissionHandler(true);
+        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "users", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "permissions", "OK", App.class.getName()));
 
         // INIT: Other
         nameMappingsHandler = new NameMappingsHandler();
+        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "name mappings", "OK", App.class.getName()));
 
         // INIT: JDA
         buildJDA();
+        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "jda", "OK", App.class.getName()));
 
         // Validate the config file
         Config.options.validateConfig();
-
-        // Gui
-        SpringApplication.run(Application.class, args);
-        //new Gui();
-
-        LOGGER.logTrace("test");
-        LOGGER.logDebug("test");
-        LOGGER.logInfo("test");
-        LOGGER.logWarning("test");
-        LOGGER.logError("test");
+        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "config verify", "OK", App.class.getName()));
     }
 
     private static void initStartup() {
@@ -195,7 +216,7 @@ public class App {
         Logger.setLogFilePath(logFolderPath.getPath());
         Logger.enableDebug(true);
         Logger.enableTrace(false);
-        Logger.setDebugBlacklist(new String[]{".jda.", ".lava.", ".lavaplayer."});
+        Logger.setDebugBlacklist(new String[]{".jda.", ".lava.", ".lavaplayer.", "DefaultListableBeanFactory", "ConditionEvaluationReportLoggingListener"});
     }
 
     private static void buildJDA() {
@@ -216,6 +237,7 @@ public class App {
 
         try {
             jda = builder.build();
+            isBotOnline = true;
         } catch (LoginException e) {
             exit("Could not log in.", e);
         }
@@ -249,5 +271,17 @@ public class App {
         LOGGER.logError(message);
         LOGGER.logError(e);
         System.exit(0);
+    }
+
+    /**
+     *
+     */
+    public static void shutdownBot(String message) {
+        LOGGER.logInfo("Bot is shutting down with message: ");
+        LOGGER.logError(message);
+        isBotOnline = false;
+        if (!Objects.equals(jda, null)) {
+            jda.shutdown();
+        }
     }
 }

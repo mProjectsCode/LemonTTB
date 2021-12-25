@@ -3,6 +3,7 @@ package io.github.mProjectsCode.LemonTTB.springboot;
 import io.github.mProjectsCode.LemonTTB.Logger.Logger;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -15,14 +16,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-public class HelloController {
-    private static final Logger LOGGER = Logger.getLogger(HelloController.class);
+@RequestMapping("/api/time")
+public class TimeController {
+    private static final Logger LOGGER = Logger.getLogger(TimeController.class);
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-
-    @GetMapping("/api")
-    public String index() {
-        return "Hello from java";
-    }
 
     @PostConstruct
     public void init() {
@@ -36,10 +33,10 @@ public class HelloController {
         }));
     }
 
+
     @GetMapping("/time")
     @CrossOrigin
     public SseEmitter streamDateTime() {
-
         SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
 
         sseEmitter.onCompletion(() -> LOGGER.logInfo("SseEmitter is completed"));
@@ -52,7 +49,7 @@ public class HelloController {
         });
 
         executor.execute(() -> {
-            for (int i = 0; i < 15; i++) {
+            while (true) {
                 try {
                     sseEmitter.send(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss")));
                     sleep(1, sseEmitter);
@@ -61,7 +58,7 @@ public class HelloController {
                     sseEmitter.completeWithError(e);
                 }
             }
-            sseEmitter.complete();
+            // sseEmitter.complete();
         });
 
         LOGGER.logInfo("Controller exits");

@@ -2,6 +2,7 @@ package io.github.mProjectsCode.LemonTTB.gui;
 
 import javax.swing.*;
 
+@Deprecated
 public class Gui {
     public Gui() {
         JFrame frame = new JFrame("LemonTTB gui");
