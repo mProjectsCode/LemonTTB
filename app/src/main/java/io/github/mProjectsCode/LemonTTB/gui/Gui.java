@@ -2,8 +2,14 @@ package io.github.mProjectsCode.LemonTTB.gui;
 
 import javax.swing.*;
 
+/**
+ * The type Gui.
+ */
 @Deprecated
 public class Gui {
+    /**
+     * Instantiates a new Gui.
+     */
     public Gui() {
         JFrame frame = new JFrame("LemonTTB gui");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

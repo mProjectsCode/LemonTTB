@@ -19,20 +19,18 @@
 
 package io.github.mProjectsCode.LemonTTB;
 
-import com.google.gson.Gson;
-import io.github.mProjectsCode.LemonTTB.events.Event;
-import io.github.mProjectsCode.LemonTTB.events.EventHandler;
-import io.github.mProjectsCode.LemonTTB.events.EventType;
-import io.github.mProjectsCode.LemonTTB.springboot.Application;
 import com.google.common.io.Resources;
+import com.google.gson.Gson;
 import io.github.mProjectsCode.LemonTTB.LemonTTB_Audio.LemonTTB_AudioManager;
 import io.github.mProjectsCode.LemonTTB.Logger.ConsoleColors;
 import io.github.mProjectsCode.LemonTTB.Logger.Logger;
 import io.github.mProjectsCode.LemonTTB.commands.CommandHandler;
+import io.github.mProjectsCode.LemonTTB.events.Event;
+import io.github.mProjectsCode.LemonTTB.events.EventHandler;
+import io.github.mProjectsCode.LemonTTB.events.EventType;
 import io.github.mProjectsCode.LemonTTB.nameMappings.NameMappingsHandler;
 import io.github.mProjectsCode.LemonTTB.permissions.PermissionHandler;
-import io.github.mProjectsCode.LemonTTB.springboot.WatchController;
-import io.github.mProjectsCode.LemonTTB.springboot.events.StartUpEvent;
+import io.github.mProjectsCode.LemonTTB.springboot.Application;
 import io.github.mProjectsCode.LemonTTB.users.UserHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -116,6 +114,9 @@ public class App {
      */
     public static UserHandler userHandler;
 
+    /**
+     * The constant isBotOnline.
+     */
     public static boolean isBotOnline = false;
 
 
@@ -152,6 +153,9 @@ public class App {
         LOGGER.logError("static/test");
     }
 
+    /**
+     * Start bot.
+     */
     public static void startBot() {
         // INIT: Documentation
         documentationPath = new File(RESOURCE_PATH, "/documentation");
@@ -274,7 +278,9 @@ public class App {
     }
 
     /**
+     * Shutdown bot.
      *
+     * @param message the message
      */
     public static void shutdownBot(String message) {
         LOGGER.logInfo("Bot is shutting down with message: ");

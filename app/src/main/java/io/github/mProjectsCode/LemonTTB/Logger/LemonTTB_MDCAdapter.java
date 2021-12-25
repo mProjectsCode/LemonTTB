@@ -24,7 +24,7 @@ import org.slf4j.spi.MDCAdapter;
 import java.util.Map;
 
 /**
- * TODO: accually implement this stuff
+ * TODO: actually implement this stuff
  */
 public class LemonTTB_MDCAdapter implements MDCAdapter {
 

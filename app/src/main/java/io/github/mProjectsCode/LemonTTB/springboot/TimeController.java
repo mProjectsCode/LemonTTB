@@ -15,12 +15,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * The type Time controller.
+ */
 @RestController
 @RequestMapping("/api/time")
 public class TimeController {
     private static final Logger LOGGER = Logger.getLogger(TimeController.class);
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
+    /**
+     * Init.
+     */
     @PostConstruct
     public void init() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -34,6 +40,11 @@ public class TimeController {
     }
 
 
+    /**
+     * Stream date time sse emitter.
+     *
+     * @return the sse emitter
+     */
     @GetMapping("/time")
     @CrossOrigin
     public SseEmitter streamDateTime() {

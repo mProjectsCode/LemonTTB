@@ -1,19 +1,21 @@
 package io.github.mProjectsCode.LemonTTB.springboot;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.thymeleaf.templateresolver.FileTemplateResolver;
-import org.thymeleaf.templateresolver.ITemplateResolver;
 
-import java.util.Arrays;
-
+/**
+ * The type Application.
+ */
 @SpringBootApplication
 public class Application {
+    /**
+     * Command line runner command line runner.
+     *
+     * @param ctx the application context
+     * @return the command line runner
+     */
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {

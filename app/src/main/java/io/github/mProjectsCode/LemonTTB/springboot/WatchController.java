@@ -13,26 +13,39 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+/**
+ * The type Watch controller.
+ */
 @RestController
 @RequestMapping("/api/startUp")
 public class WatchController implements EventListener {
     private static final Logger LOGGER = Logger.getLogger(TimeController.class);
-    private final Gson gson = new Gson();
+    /**
+     * The Start up event queue.
+     */
     public final List<Event> startUpEventQueue = new ArrayList<>();
-
+    private final Gson gson = new Gson();
     private final ExecutorService startUpExecutor = Executors.newSingleThreadExecutor();
 
     private int eventIndex = 0;
 
+    /**
+     * Instantiates a new Watch controller.
+     */
     public WatchController() {
         EventHandler.subscribe(EventType.START_UP_EVENT, this);
     }
 
+    /**
+     * Start bot response entity.
+     *
+     * @return the response entity
+     */
     @ResponseBody
     @RequestMapping(value = "/startBot", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<String> startBot() {
@@ -40,6 +53,11 @@ public class WatchController implements EventListener {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    /**
+     * Stop bot response entity.
+     *
+     * @return the response entity
+     */
     @ResponseBody
     @RequestMapping(value = "/stopBot", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<String> stopBot() {
@@ -47,6 +65,11 @@ public class WatchController implements EventListener {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    /**
+     * Stream start up events sse emitter.
+     *
+     * @return the sse emitter
+     */
     @CrossOrigin
     @GetMapping("/events")
     public SseEmitter streamStartUpEvents() {
@@ -68,7 +91,7 @@ public class WatchController implements EventListener {
                         Event event = startUpEventQueue.get(eventIndex);
                         sseEmitter.send(event);
                         eventIndex += 1;
-                    } else  {
+                    } else {
                         Thread.sleep(100L);
                     }
                 }
@@ -87,12 +110,22 @@ public class WatchController implements EventListener {
         return sseEmitter;
     }
 
+    /**
+     * Gets all events.
+     *
+     * @return the all events
+     */
     @CrossOrigin
     @GetMapping("/allEvents")
     public List<Event> getAllEvents() {
         return startUpEventQueue;
     }
 
+    /**
+     * Is bot online boolean.
+     *
+     * @return the boolean
+     */
     @CrossOrigin
     @GetMapping("/botOnline")
     public boolean isBotOnline() {

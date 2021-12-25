@@ -1,16 +1,30 @@
 package io.github.mProjectsCode.LemonTTB.Logger;
+
 import org.apache.juli.logging.Log;
 
 
+/**
+ * The type Delegate to lemon ttb logger.
+ *
+ * TODO: This thing dose not work atm. no clue why. has something to do with "commons-logging.properties". It changes stuff but only from java.util.logging to spring boot logging.
+ */
 public class DelegateToLemonTTBLogger implements Log {
     private final LoggerAdapter logger;
 
-    // constructor required by ServiceLoader
+    /**
+     * Instantiates a new Delegate to lemon ttb logger.
+     */
+// constructor required by ServiceLoader
     public DelegateToLemonTTBLogger() {
         logger = null;
     }
 
-    public DelegateToLemonTTBLogger(String name){
+    /**
+     * Instantiates a new Delegate to lemon ttb logger.
+     *
+     * @param name the name
+     */
+    public DelegateToLemonTTBLogger(String name) {
         logger = new LoggerAdapter(name);
         logger.info("Hello from delegate logger");
     }
