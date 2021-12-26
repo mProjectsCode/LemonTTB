@@ -1,8 +1,31 @@
+/*
+ * This file is part of LemonTTB.
+ * (C) Copyright 2021
+ * Programmed by Moritz Jung
+ *
+ * LemonTTB is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LemonTTB is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.github.mProjectsCode.LemonTTB.springboot;
 
 import com.google.gson.Gson;
 import io.github.mProjectsCode.LemonTTB.Logger.Logger;
-import io.github.mProjectsCode.LemonTTB.events.*;
+import io.github.mProjectsCode.LemonTTB.events.Event;
+import io.github.mProjectsCode.LemonTTB.events.EventGroup;
+import io.github.mProjectsCode.LemonTTB.events.EventHandler;
+import io.github.mProjectsCode.LemonTTB.events.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +41,9 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * The type Event controller.
+ */
 @RestController
 @RequestMapping("/api/events")
 public class EventController implements EventListener {
@@ -34,7 +60,7 @@ public class EventController implements EventListener {
      * Instantiates a new Watch controller.
      */
     public EventController() {
-        EventHandler.subscribe(EventGroup.WEB_INTERFACE, this);
+        EventHandler.subscribe(EventGroup.BOT, this);
     }
 
 
@@ -84,6 +110,11 @@ public class EventController implements EventListener {
         return sseEmitter;
     }
 
+    /**
+     * Unsubscribe response entity.
+     *
+     * @return the response entity
+     */
     @RequestMapping("/unsubscribe")
     public ResponseEntity<String> unsubscribe() {
         if (!Objects.equals(sseEmitter, null)) {

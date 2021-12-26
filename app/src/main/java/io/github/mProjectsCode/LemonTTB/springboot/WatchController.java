@@ -1,22 +1,37 @@
+/*
+ * This file is part of LemonTTB.
+ * (C) Copyright 2021
+ * Programmed by Moritz Jung
+ *
+ * LemonTTB is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LemonTTB is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.github.mProjectsCode.LemonTTB.springboot;
 
 import com.google.gson.Gson;
 import io.github.mProjectsCode.LemonTTB.App;
 import io.github.mProjectsCode.LemonTTB.Logger.Logger;
 import io.github.mProjectsCode.LemonTTB.events.Event;
+import io.github.mProjectsCode.LemonTTB.events.EventGroup;
 import io.github.mProjectsCode.LemonTTB.events.EventHandler;
-import io.github.mProjectsCode.LemonTTB.events.EventListener;
 import io.github.mProjectsCode.LemonTTB.events.EventType;
+import io.github.mProjectsCode.LemonTTB.events.payloads.payloads.ErrorPayload;
+import io.github.mProjectsCode.LemonTTB.exceptions.StartUpException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * The type Watch controller.
@@ -42,8 +57,20 @@ public class WatchController {
     @ResponseBody
     @RequestMapping(value = "/startBot", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<String> startBot() {
-        App.startBot();
-        return ResponseEntity.status(HttpStatus.OK).build();
+        try {
+            App.startBot();
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (StartUpException e) {
+            App.shutdownBot("Bot error on startup: " + e.getMessage());
+            EventHandler.trigger(new Event(
+                    EventGroup.BOT,
+                    EventType.START_UP_EVENT,
+                    "Bot error on startup",
+                    new ErrorPayload(e),
+                    WatchController.class.getName()
+            ));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     /**

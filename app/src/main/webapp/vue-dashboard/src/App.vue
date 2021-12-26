@@ -57,7 +57,7 @@
                 const eventData = JSON.parse(event.data);
                 console.log(eventData);
 
-                this.toast.success(eventData.name + ' status ' + eventData.payload, {
+                this.toast.success(eventData.name + ' status ' + eventData.payload.response, {
                     timeout: 10000
                 });
             },

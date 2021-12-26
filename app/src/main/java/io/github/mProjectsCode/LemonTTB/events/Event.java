@@ -1,5 +1,29 @@
+/*
+ * This file is part of LemonTTB.
+ * (C) Copyright 2021
+ * Programmed by Moritz Jung
+ *
+ * LemonTTB is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * LemonTTB is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
+ *
+ */
+
 package io.github.mProjectsCode.LemonTTB.events;
 
+import io.github.mProjectsCode.LemonTTB.events.payloads.Payload;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
@@ -9,8 +33,9 @@ public class Event {
     private UUID id;
     private EventGroup eventGroup;
     private EventType eventType;
+    private final String time;
     private String name;
-    private String payload;
+    private Payload payload;
     private String originClass;
 
     /**
@@ -22,10 +47,13 @@ public class Event {
      * @param payload     the payload
      * @param originClass the origin class
      */
-    public Event(EventGroup eventGroup, EventType eventType, String name, String payload, String originClass) {
+    public Event(EventGroup eventGroup, EventType eventType, String name, Payload payload, String originClass) {
         this.id = UUID.randomUUID();
         this.eventGroup = eventGroup;
         this.eventType = eventType;
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDateTime localDateTime = LocalDateTime.now();
+        this.time = dateTimeFormatter.format(localDateTime);
         this.name = name;
         this.payload = payload;
         this.originClass = originClass;
@@ -108,7 +136,7 @@ public class Event {
      *
      * @return the payload
      */
-    public String getPayload() {
+    public Payload getPayload() {
         return payload;
     }
 
@@ -117,7 +145,7 @@ public class Event {
      *
      * @param payload the payload
      */
-    public void setPayload(String payload) {
+    public void setPayload(Payload payload) {
         this.payload = payload;
     }
 

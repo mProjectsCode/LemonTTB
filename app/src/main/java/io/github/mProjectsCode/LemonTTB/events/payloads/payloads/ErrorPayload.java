@@ -18,16 +18,33 @@
  *
  */
 
-package io.github.mProjectsCode.LemonTTB.events;
+package io.github.mProjectsCode.LemonTTB.events.payloads.payloads;
+
+import io.github.mProjectsCode.LemonTTB.events.payloads.Payload;
+import io.github.mProjectsCode.LemonTTB.events.payloads.PayloadResponse;
 
 /**
- * The interface Event listener.
+ * The type Error payload.
  */
-public interface EventListener {
+public class ErrorPayload implements Payload {
+    private final Exception data;
+
     /**
-     * On event.
+     * Instantiates a new Error payload.
      *
-     * @param event the event
+     * @param data the data
      */
-    void onEvent(Event event);
+    public ErrorPayload(Exception data) {
+        this.data = data;
+    }
+
+    @Override
+    public PayloadResponse getResponse() {
+        return PayloadResponse.ERROR;
+    }
+
+    @Override
+    public Object getData() {
+        return data;
+    }
 }

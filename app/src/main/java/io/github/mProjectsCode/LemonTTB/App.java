@@ -29,6 +29,8 @@ import io.github.mProjectsCode.LemonTTB.events.Event;
 import io.github.mProjectsCode.LemonTTB.events.EventGroup;
 import io.github.mProjectsCode.LemonTTB.events.EventHandler;
 import io.github.mProjectsCode.LemonTTB.events.EventType;
+import io.github.mProjectsCode.LemonTTB.events.payloads.payloads.SuccessPayload;
+import io.github.mProjectsCode.LemonTTB.exceptions.StartUpException;
 import io.github.mProjectsCode.LemonTTB.nameMappings.NameMappingsHandler;
 import io.github.mProjectsCode.LemonTTB.permissions.PermissionHandler;
 import io.github.mProjectsCode.LemonTTB.springboot.Application;
@@ -127,14 +129,16 @@ public class App {
      * @param args the input arguments
      */
     public static void main(String[] args) {
+        // set system properties
         System.setProperty("java.util.logging.config.file", Resources.getResource("commons-logging.properties").getPath());
         LOGGER.logInfo(System.getProperty("java.util.logging.config.file"));
 
-        // INIT: Startup
-        initStartup();
-
         // INIT: Logger
-        initLogger();
+        try {
+            initLogger();
+        } catch (StartUpException e) {
+            exit("Error while starting logger", e);
+        }
 
         // INIT: Config
         configPath = new File(RESOURCE_PATH, DEV ? "/config/botConfig.txt.dev" : "/config/botConfig.txt");
@@ -142,11 +146,21 @@ public class App {
         Config.load();
         if (!Config.options.isConfigFilled()) {
             App.exit("Some fields in the config are empty.");
+        } else {
+            try {
+                LOGGER.logInfo("Successfully loaded the config from " + configPath.getCanonicalPath());
+            } catch (IOException e) {
+                exit("", e);
+            }
         }
 
-        // Gui
+        // INIT: Spring web server
         SpringApplication.run(Application.class, args);
 
+        // INIT: Startup
+        initStartup();
+
+        // test logger
         LOGGER.logTrace("static/test");
         LOGGER.logDebug("static/test");
         LOGGER.logInfo("static/test");
@@ -156,36 +170,80 @@ public class App {
 
     /**
      * Start bot.
+     *
+     * @throws StartUpException the start up exception
      */
-    public static void startBot() {
+    public static void startBot() throws StartUpException {
         // INIT: Documentation
         documentationPath = new File(RESOURCE_PATH, "/documentation");
-        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "documentation", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.START_UP_EVENT,
+                "documentation",
+                new SuccessPayload(),
+                App.class.getName()
+        ));
 
         // INIT: Audio
         audioPath = new File(RESOURCE_PATH, "/music");
         audioManager = new LemonTTB_AudioManager();
         audioManager.createPlayer();
-        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "audio player", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.START_UP_EVENT,
+                "audio player",
+                new SuccessPayload(),
+                App.class.getName()
+        ));
 
         // INIT: Users/Permissions
         userPath = new File(RESOURCE_PATH, "/users");
         userHandler = new UserHandler();
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.START_UP_EVENT,
+                "users",
+                new SuccessPayload(),
+                App.class.getName()
+        ));
         permissionHandler = new PermissionHandler(true);
-        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "users", "OK", App.class.getName()));
-        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "permissions", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.START_UP_EVENT,
+                "permissions",
+                new SuccessPayload(),
+                App.class.getName()
+        ));
 
         // INIT: Other
         nameMappingsHandler = new NameMappingsHandler();
-        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "name mappings", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.START_UP_EVENT,
+                "name mappings",
+                new SuccessPayload(),
+                App.class.getName()
+        ));
 
         // INIT: JDA
         buildJDA();
-        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "jda", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.START_UP_EVENT,
+                "jda",
+                new SuccessPayload(),
+                App.class.getName()
+        ));
 
         // Validate the config file
         Config.options.validateConfig();
-        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "config verify", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.START_UP_EVENT,
+                "config validation",
+                new SuccessPayload(),
+                App.class.getName()
+        ));
     }
 
     private static void initStartup() {
@@ -209,14 +267,14 @@ public class App {
         System.out.println();
     }
 
-    private static void initLogger() {
+    private static void initLogger() throws StartUpException {
         System.out.println(ConsoleColors.WHITE_BRIGHT + "Initializing Logger..." + ConsoleColors.RESET);
 
         File logFolderPath = new File(RESOURCE_PATH, "/logs");
         try {
             System.out.println("Logfiles can be found here: " + logFolderPath.getCanonicalPath());
         } catch (IOException e) {
-            exit("Failed to set filepath for logger!", e);
+            throw new StartUpException("Log file path invalid.", StartUpException.Source.LOGGER);
         }
         Logger.setLogFilePath(logFolderPath.getPath());
         Logger.enableDebug(true);
@@ -224,7 +282,7 @@ public class App {
         Logger.setDebugBlacklist(new String[]{".jda.", ".lava.", ".lavaplayer.", "DefaultListableBeanFactory", "ConditionEvaluationReportLoggingListener"});
     }
 
-    private static void buildJDA() {
+    private static void buildJDA() throws StartUpException {
         JDABuilder builder = JDABuilder.createDefault(Config.options.token);
 
         builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
@@ -244,13 +302,13 @@ public class App {
             jda = builder.build();
             isBotOnline = true;
         } catch (LoginException e) {
-            exit("Could not log in.", e);
+            throw new StartUpException("Could not log in to the discord API.", StartUpException.Source.JDA);
         }
 
         try {
             jda.awaitReady();
         } catch (InterruptedException e) {
-            exit("Interruption while waiting for jda to ready.");
+            throw new StartUpException("Interruption while waiting for jda to ready.", StartUpException.Source.JDA);
         }
     }
 

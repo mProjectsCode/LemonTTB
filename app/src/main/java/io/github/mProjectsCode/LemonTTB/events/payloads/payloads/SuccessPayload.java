@@ -18,16 +18,40 @@
  *
  */
 
-package io.github.mProjectsCode.LemonTTB.events;
+package io.github.mProjectsCode.LemonTTB.events.payloads.payloads;
+
+import io.github.mProjectsCode.LemonTTB.events.payloads.Payload;
+import io.github.mProjectsCode.LemonTTB.events.payloads.PayloadResponse;
 
 /**
- * The interface Event listener.
+ * The type Success payload.
  */
-public interface EventListener {
+public class SuccessPayload implements Payload {
+    private final String data;
+
     /**
-     * On event.
+     * Instantiates a new Success payload.
      *
-     * @param event the event
+     * @param data the data
      */
-    void onEvent(Event event);
+    public SuccessPayload(String data) {
+        this.data = data;
+    }
+
+    /**
+     * Instantiates a new Success payload.
+     */
+    public SuccessPayload() {
+        this.data = "";
+    }
+
+    @Override
+    public PayloadResponse getResponse() {
+        return PayloadResponse.OK;
+    }
+
+    @Override
+    public Object getData() {
+        return data;
+    }
 }

@@ -18,16 +18,32 @@
  *
  */
 
-package io.github.mProjectsCode.LemonTTB.events;
+package io.github.mProjectsCode.LemonTTB.events.payloads;
 
 /**
- * The interface Event listener.
+ * The interface Payload.
  */
-public interface EventListener {
+public interface Payload {
     /**
-     * On event.
-     *
-     * @param event the event
+     * The constant response.
      */
-    void onEvent(Event event);
+    PayloadResponse response = null;
+    /**
+     * The constant data.
+     */
+    Object data = null;
+
+    /**
+     * Gets response.
+     *
+     * @return the response
+     */
+    PayloadResponse getResponse();
+
+    /**
+     * Gets data.
+     *
+     * @return the data
+     */
+    Object getData();
 }

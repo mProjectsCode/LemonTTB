@@ -18,16 +18,26 @@
  *
  */
 
-package io.github.mProjectsCode.LemonTTB.events;
+package io.github.mProjectsCode.LemonTTB.events.payloads;
 
 /**
- * The interface Event listener.
+ * The enum Payload response.
  */
-public interface EventListener {
+public enum PayloadResponse {
     /**
-     * On event.
-     *
-     * @param event the event
+     * Ok payload response.
      */
-    void onEvent(Event event);
+    OK,
+    /**
+     * Warning payload response.
+     */
+    WARNING,
+    /**
+     * Error payload response.
+     */
+    ERROR,
+    /**
+     * Critical payload response.
+     */
+    CRITICAL
 }

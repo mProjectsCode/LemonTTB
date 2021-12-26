@@ -22,6 +22,7 @@ package io.github.mProjectsCode.LemonTTB;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.mProjectsCode.LemonTTB.Logger.Logger;
+import io.github.mProjectsCode.LemonTTB.exceptions.StartUpException;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.User;
 
@@ -250,26 +251,28 @@ public class Config {
 
         /**
          * Validate config.
+         *
+         * @throws StartUpException the start up exception
          */
-        public void validateConfig() {
+        public void validateConfig() throws StartUpException {
             User botOwner = App.jda.getUserById(this.botOwner);
             if (Objects.equals(botOwner, null)) {
-                App.exit("Bot owner not found. Check the config file.");
+                throw new StartUpException("Bot owner not found. Check the config file.", StartUpException.Source.CONFIG);
             }
 
             GuildChannel statusChannel = App.jda.getGuildChannelById(this.statusChannel);
             if (Objects.equals(statusChannel, null)) {
-                App.exit("Status channel not found. Check the config file.");
+                throw new StartUpException("Status channel not found. Check the config file.", StartUpException.Source.CONFIG);
             }
 
             GuildChannel primaryVoiceChannel = App.jda.getGuildChannelById(this.primaryVoiceChannel);
             if (Objects.equals(primaryVoiceChannel, null)) {
-                App.exit("Primary Voice Channel not found. Check the config file.");
+                throw new StartUpException("Primary Voice Channel not found. Check the config file.", StartUpException.Source.CONFIG);
             }
 
             GuildChannel secondaryVoiceChannel = App.jda.getGuildChannelById(this.secondaryVoiceChannel);
             if (Objects.equals(secondaryVoiceChannel, null)) {
-                App.exit("Secondary Voice Channel not found. Check the config file.");
+                throw new StartUpException("Secondary Voice Channel not found. Check the config file.", StartUpException.Source.CONFIG);
             }
         }
     }
