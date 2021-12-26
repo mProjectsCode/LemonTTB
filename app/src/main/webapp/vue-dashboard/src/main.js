@@ -3,11 +3,38 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 
-import Toast from "vue-toastification";
+import Toast, {useToast} from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
+import 'bootstrap/dist/css/bootstrap.css';
 
-const options = {
+
+const toastOptions = {
     // You can set your default options here
 };
-createApp(App).use(store).use(router).use(Toast, options).mount('#app');
+
+const app = createApp(App);
+
+app.use(store);
+app.use(router);
+
+app.use(Toast, toastOptions);
+
+app.mixin({
+    data() {
+        return {
+            toast: null,
+        }
+    },
+
+    mounted() {
+        // Get toast interface
+        this.toast = useToast();
+    },
+
+    methods: {
+
+    },
+})
+
+app.mount('#app');

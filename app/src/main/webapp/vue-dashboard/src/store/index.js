@@ -16,4 +16,7 @@ export default createStore({
             state.botStatus = data;
         },
     },
+    methods: {
+
+    },
 });

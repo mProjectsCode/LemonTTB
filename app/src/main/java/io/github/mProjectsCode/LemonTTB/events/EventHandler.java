@@ -28,6 +28,17 @@ public class EventHandler {
     }
 
     /**
+     * Subscribe.
+     *
+     * @param eventGroup       the event group
+     * @param eventSubscriber the event subscriber
+     */
+    public static void subscribe(EventGroup eventGroup, EventListener eventSubscriber) {
+        eventSubscriptions.add(new EventSubscription(eventSubscriber, eventGroup));
+        LOGGER.logDebug(eventSubscriber.getClass().getName() + " subscribed to event group of type: " + eventGroup.name());
+    }
+
+    /**
      * Trigger.
      *
      * @param event the event

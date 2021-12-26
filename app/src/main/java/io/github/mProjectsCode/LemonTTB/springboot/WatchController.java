@@ -23,22 +23,15 @@ import java.util.concurrent.Executors;
  */
 @RestController
 @RequestMapping("/api/startUp")
-public class WatchController implements EventListener {
+public class WatchController {
     private static final Logger LOGGER = Logger.getLogger(TimeController.class);
-    /**
-     * The Start up event queue.
-     */
-    public final List<Event> startUpEventQueue = new ArrayList<>();
     private final Gson gson = new Gson();
-    private final ExecutorService startUpExecutor = Executors.newSingleThreadExecutor();
-
-    private int eventIndex = 0;
 
     /**
      * Instantiates a new Watch controller.
      */
     public WatchController() {
-        EventHandler.subscribe(EventType.START_UP_EVENT, this);
+
     }
 
     /**
@@ -66,62 +59,6 @@ public class WatchController implements EventListener {
     }
 
     /**
-     * Stream start up events sse emitter.
-     *
-     * @return the sse emitter
-     */
-    @CrossOrigin
-    @GetMapping("/events")
-    public SseEmitter streamStartUpEvents() {
-        SseEmitter sseEmitter = new SseEmitter(Long.MAX_VALUE);
-
-        sseEmitter.onCompletion(() -> LOGGER.logInfo("Start up SseEmitter is completed"));
-
-        sseEmitter.onTimeout(() -> LOGGER.logInfo("Start up SseEmitter is timed out"));
-
-        sseEmitter.onError((ex) -> {
-            LOGGER.logInfo("Start up SseEmitter got error:");
-            LOGGER.logError(ex);
-        });
-
-        startUpExecutor.execute(() -> {
-            try {
-                while (true) {
-                    if (eventIndex < startUpEventQueue.size()) {
-                        Event event = startUpEventQueue.get(eventIndex);
-                        sseEmitter.send(event);
-                        eventIndex += 1;
-                    } else {
-                        Thread.sleep(100L);
-                    }
-                }
-            } catch (InterruptedException e) {
-                LOGGER.logWarning("The connection on /api/statUp/events was interrupted");
-                sseEmitter.complete();
-            } catch (IOException e) {
-                LOGGER.logWarning("An io exception occurred on /api/statUp/events");
-                sseEmitter.complete();
-            } catch (Throwable t) {
-                LOGGER.logWarning("An exception occurred on /api/statUp/events");
-                sseEmitter.complete();
-            }
-        });
-
-        return sseEmitter;
-    }
-
-    /**
-     * Gets all events.
-     *
-     * @return the all events
-     */
-    @CrossOrigin
-    @GetMapping("/allEvents")
-    public List<Event> getAllEvents() {
-        return startUpEventQueue;
-    }
-
-    /**
      * Is bot online boolean.
      *
      * @return the boolean
@@ -130,10 +67,5 @@ public class WatchController implements EventListener {
     @GetMapping("/botOnline")
     public boolean isBotOnline() {
         return App.isBotOnline;
-    }
-
-    @Override
-    public void onEvent(Event event) {
-        startUpEventQueue.add(event);
     }
 }

@@ -7,6 +7,7 @@ import java.util.Objects;
  */
 public class EventSubscription {
     private final EventListener eventListener;
+    private final EventGroup eventGroup;
     private final EventType eventType;
 
     /**
@@ -17,16 +18,38 @@ public class EventSubscription {
      */
     public EventSubscription(EventListener eventSubscriber, EventType eventType) {
         this.eventListener = eventSubscriber;
+        this.eventGroup = null;
         this.eventType = eventType;
     }
 
     /**
-     * Gets event subscriber.
+     * Instantiates a new Event subscription.
      *
-     * @return the event subscriber
+     * @param eventSubscriber the event subscriber
+     * @param eventGroup      the event group
      */
-    public EventListener getEventSubscriber() {
+    public EventSubscription(EventListener eventSubscriber, EventGroup eventGroup) {
+        this.eventListener = eventSubscriber;
+        this.eventGroup = eventGroup;
+        this.eventType = null;
+    }
+
+    /**
+     * Gets event listener.
+     *
+     * @return the event listener
+     */
+    public EventListener getEventListener() {
         return eventListener;
+    }
+
+    /**
+     * Gets event group.
+     *
+     * @return the event group
+     */
+    public EventGroup getEventGroup() {
+        return eventGroup;
     }
 
     /**
@@ -44,8 +67,14 @@ public class EventSubscription {
      * @param event the event
      */
     public void sendEvent(Event event) {
-        if (Objects.equals(event.getEventType(), eventType)) {
-            eventListener.onEvent(event);
+        if (Objects.equals(eventGroup, null)) {
+            if (Objects.equals(event.getEventType(), eventType)) {
+                eventListener.onEvent(event);
+            }
+        } else {
+            if (Objects.equals(event.getEventGroup(), eventGroup)) {
+                eventListener.onEvent(event);
+            }
         }
     }
 }

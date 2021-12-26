@@ -26,6 +26,7 @@ import io.github.mProjectsCode.LemonTTB.Logger.ConsoleColors;
 import io.github.mProjectsCode.LemonTTB.Logger.Logger;
 import io.github.mProjectsCode.LemonTTB.commands.CommandHandler;
 import io.github.mProjectsCode.LemonTTB.events.Event;
+import io.github.mProjectsCode.LemonTTB.events.EventGroup;
 import io.github.mProjectsCode.LemonTTB.events.EventHandler;
 import io.github.mProjectsCode.LemonTTB.events.EventType;
 import io.github.mProjectsCode.LemonTTB.nameMappings.NameMappingsHandler;
@@ -159,32 +160,32 @@ public class App {
     public static void startBot() {
         // INIT: Documentation
         documentationPath = new File(RESOURCE_PATH, "/documentation");
-        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "documentation", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "documentation", "OK", App.class.getName()));
 
         // INIT: Audio
         audioPath = new File(RESOURCE_PATH, "/music");
         audioManager = new LemonTTB_AudioManager();
         audioManager.createPlayer();
-        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "audio player", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "audio player", "OK", App.class.getName()));
 
         // INIT: Users/Permissions
         userPath = new File(RESOURCE_PATH, "/users");
         userHandler = new UserHandler();
         permissionHandler = new PermissionHandler(true);
-        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "users", "OK", App.class.getName()));
-        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "permissions", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "users", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "permissions", "OK", App.class.getName()));
 
         // INIT: Other
         nameMappingsHandler = new NameMappingsHandler();
-        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "name mappings", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "name mappings", "OK", App.class.getName()));
 
         // INIT: JDA
         buildJDA();
-        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "jda", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "jda", "OK", App.class.getName()));
 
         // Validate the config file
         Config.options.validateConfig();
-        EventHandler.trigger(new Event(EventType.START_UP_EVENT, "config verify", "OK", App.class.getName()));
+        EventHandler.trigger(new Event(EventGroup.WEB_INTERFACE, EventType.START_UP_EVENT, "config verify", "OK", App.class.getName()));
     }
 
     private static void initStartup() {

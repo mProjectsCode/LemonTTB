@@ -7,6 +7,7 @@ import java.util.UUID;
  */
 public class Event {
     private UUID id;
+    private EventGroup eventGroup;
     private EventType eventType;
     private String name;
     private String payload;
@@ -15,13 +16,15 @@ public class Event {
     /**
      * Instantiates a new Event.
      *
+     * @param eventGroup  the event group
      * @param eventType   the event type
      * @param name        the name
      * @param payload     the payload
      * @param originClass the origin class
      */
-    public Event(EventType eventType, String name, String payload, String originClass) {
+    public Event(EventGroup eventGroup, EventType eventType, String name, String payload, String originClass) {
         this.id = UUID.randomUUID();
+        this.eventGroup = eventGroup;
         this.eventType = eventType;
         this.name = name;
         this.payload = payload;
@@ -44,6 +47,24 @@ public class Event {
      */
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    /**
+     * Gets event group.
+     *
+     * @return the event group
+     */
+    public EventGroup getEventGroup() {
+        return eventGroup;
+    }
+
+    /**
+     * Sets event group.
+     *
+     * @param eventGroup the event group
+     */
+    public void setEventGroup(EventGroup eventGroup) {
+        this.eventGroup = eventGroup;
     }
 
     /**
