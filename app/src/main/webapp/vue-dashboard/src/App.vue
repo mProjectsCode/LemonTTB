@@ -5,7 +5,10 @@
             <router-link to="/about">About</router-link>
         </div>
         <router-view/>
-        {{botStatus}}
+        <p>{{botStatus}}</p>
+        <button v-on:click="getBotStatus()">get bot status</button>
+        <button v-on:click="startBot()">start bot</button>
+        <button v-on:click="stopBot()">stop bot</button>
     </div>
 </template>
 
@@ -38,6 +41,23 @@
                 useToast().success(eventData.name + ' status ' + eventData.payload, {
                     timeout: 10000
                 });
+            },
+            async getBotStatus() {
+                fetch('http://localhost:8080/api/startUp/botOnline').then(async (data) => {
+                    const fetchData = await data.json();
+                    console.log(fetchData);
+                    if (fetchData) {
+                        this.$store.commit('setBotStatus', 'Online');
+                    } else {
+                        this.$store.commit('setBotStatus', 'Offline')
+                    }
+                });
+            },
+            async startBot() {
+                fetch('http://localhost:8080/api/startUp/startBot')
+            },
+            async stopBot() {
+                fetch('http://localhost:8080/api/startUp/stopBot')
             },
         },
     }

@@ -5,7 +5,7 @@ export default createStore({
         botStatus: 'offline',
     },
     getters: {
-        botStatus(state) {
+        getBotStatus(state) {
             return state.botStatus;
         },
     },
