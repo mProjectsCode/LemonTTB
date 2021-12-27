@@ -63,9 +63,9 @@ public class EventController implements EventListener {
         EventHandler.subscribe(EventGroup.BOT, this);
     }
 
-
     /**
-     * Stream start up events sse emitter.
+     * Stream start up events to sse emitter.
+     * It is highly recommended to call /api/events/unsubscribe first, otherwise strange things might happen.
      *
      * @return the sse emitter
      */
@@ -87,10 +87,12 @@ public class EventController implements EventListener {
             try {
                 while (true) {
                     if (eventIndex < eventQueue.size()) {
-                        Event event = eventQueue.get(eventIndex);
-                        LOGGER.logDebug("Event controller send event");
-                        sseEmitter.send(event);
-                        eventIndex += 1;
+                        while (eventIndex < eventQueue.size()) {
+                            Event event = eventQueue.get(eventIndex);
+                            LOGGER.logDebug("Event controller send event");
+                            sseEmitter.send(event);
+                            eventIndex += 1;
+                        }
                     } else {
                         Thread.sleep(100L);
                     }

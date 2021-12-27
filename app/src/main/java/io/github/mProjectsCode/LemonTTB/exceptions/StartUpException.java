@@ -20,11 +20,13 @@
 
 package io.github.mProjectsCode.LemonTTB.exceptions;
 
+import io.github.mProjectsCode.LemonTTB.App;
+
 /**
  * The type Start up exception.
  */
 public class StartUpException extends Exception {
-    private final Source source;
+    private final App.StartUpPhase source;
 
     /**
      * Instantiates a new Start up exception.
@@ -32,7 +34,7 @@ public class StartUpException extends Exception {
      * @param message the message
      * @param source  the source
      */
-    public StartUpException(String message, Source source) {
+    public StartUpException(String message, App.StartUpPhase source) {
         super(message);
         this.source = source;
     }
@@ -44,7 +46,7 @@ public class StartUpException extends Exception {
      * @param cause   the cause
      * @param source  the source
      */
-    public StartUpException(String message, Throwable cause, Source source) {
+    public StartUpException(String message, Throwable cause, App.StartUpPhase source) {
         super(message, cause);
         this.source = source;
     }
@@ -55,7 +57,7 @@ public class StartUpException extends Exception {
      * @param cause  the cause
      * @param source the source
      */
-    public StartUpException(Throwable cause, Source source) {
+    public StartUpException(Throwable cause, App.StartUpPhase source) {
         super(cause);
         this.source = source;
     }
@@ -65,37 +67,7 @@ public class StartUpException extends Exception {
      *
      * @return the source
      */
-    public Source getSource() {
+    public App.StartUpPhase getSource() {
         return source;
-    }
-
-    /**
-     * The enum Source.
-     */
-    public enum Source {
-        /**
-         * Config source.
-         */
-        CONFIG,
-        /**
-         * Logger source.
-         */
-        LOGGER,
-        /**
-         * Jda source.
-         */
-        JDA,
-        /**
-         * Users source.
-         */
-        USERS,
-        /**
-         * Permissions source.
-         */
-        PERMISSIONS,
-        /**
-         * Commands source.
-         */
-        COMMANDS
     }
 }

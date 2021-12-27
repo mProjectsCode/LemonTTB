@@ -30,10 +30,11 @@ import java.util.UUID;
  * The type Event.
  */
 public class Event {
-    private UUID id;
+    private final String time;
+    private final UUID id;
+
     private EventGroup eventGroup;
     private EventType eventType;
-    private final String time;
     private String name;
     private Payload payload;
     private String originClass;
@@ -69,12 +70,12 @@ public class Event {
     }
 
     /**
-     * Sets id.
+     * Gets time.
      *
-     * @param id the id
+     * @return the time
      */
-    public void setId(UUID id) {
-        this.id = id;
+    public String getTime() {
+        return time;
     }
 
     /**

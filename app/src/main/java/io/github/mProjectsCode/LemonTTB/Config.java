@@ -257,22 +257,22 @@ public class Config {
         public void validateConfig() throws StartUpException {
             User botOwner = App.jda.getUserById(this.botOwner);
             if (Objects.equals(botOwner, null)) {
-                throw new StartUpException("Bot owner not found. Check the config file.", StartUpException.Source.CONFIG);
+                throw new StartUpException("Bot owner not found. Check the config file.", App.StartUpPhase.CONFIG);
             }
 
             GuildChannel statusChannel = App.jda.getGuildChannelById(this.statusChannel);
             if (Objects.equals(statusChannel, null)) {
-                throw new StartUpException("Status channel not found. Check the config file.", StartUpException.Source.CONFIG);
+                throw new StartUpException("Status channel not found. Check the config file.", App.StartUpPhase.CONFIG);
             }
 
             GuildChannel primaryVoiceChannel = App.jda.getGuildChannelById(this.primaryVoiceChannel);
             if (Objects.equals(primaryVoiceChannel, null)) {
-                throw new StartUpException("Primary Voice Channel not found. Check the config file.", StartUpException.Source.CONFIG);
+                throw new StartUpException("Primary Voice Channel not found. Check the config file.", App.StartUpPhase.CONFIG);
             }
 
             GuildChannel secondaryVoiceChannel = App.jda.getGuildChannelById(this.secondaryVoiceChannel);
             if (Objects.equals(secondaryVoiceChannel, null)) {
-                throw new StartUpException("Secondary Voice Channel not found. Check the config file.", StartUpException.Source.CONFIG);
+                throw new StartUpException("Secondary Voice Channel not found. Check the config file.", App.StartUpPhase.CONFIG);
             }
         }
     }

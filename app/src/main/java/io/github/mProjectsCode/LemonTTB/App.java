@@ -179,7 +179,7 @@ public class App {
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
                 EventType.START_UP_EVENT,
-                "documentation",
+                StartUpPhase.DOCUMENTATION.name(),
                 new SuccessPayload(),
                 App.class.getName()
         ));
@@ -191,7 +191,7 @@ public class App {
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
                 EventType.START_UP_EVENT,
-                "audio player",
+                StartUpPhase.AUDIO_PLAYER.name(),
                 new SuccessPayload(),
                 App.class.getName()
         ));
@@ -202,7 +202,7 @@ public class App {
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
                 EventType.START_UP_EVENT,
-                "users",
+                StartUpPhase.USERS.name(),
                 new SuccessPayload(),
                 App.class.getName()
         ));
@@ -210,7 +210,7 @@ public class App {
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
                 EventType.START_UP_EVENT,
-                "permissions",
+                StartUpPhase.PERMISSIONS.name(),
                 new SuccessPayload(),
                 App.class.getName()
         ));
@@ -220,7 +220,7 @@ public class App {
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
                 EventType.START_UP_EVENT,
-                "name mappings",
+                StartUpPhase.NAME_MAPPINGS.name(),
                 new SuccessPayload(),
                 App.class.getName()
         ));
@@ -230,7 +230,7 @@ public class App {
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
                 EventType.START_UP_EVENT,
-                "jda",
+                StartUpPhase.JDA.name(),
                 new SuccessPayload(),
                 App.class.getName()
         ));
@@ -240,7 +240,7 @@ public class App {
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
                 EventType.START_UP_EVENT,
-                "config validation",
+                StartUpPhase.CONFIG_VALIDATION.name(),
                 new SuccessPayload(),
                 App.class.getName()
         ));
@@ -274,7 +274,7 @@ public class App {
         try {
             System.out.println("Logfiles can be found here: " + logFolderPath.getCanonicalPath());
         } catch (IOException e) {
-            throw new StartUpException("Log file path invalid.", StartUpException.Source.LOGGER);
+            throw new StartUpException("Log file path invalid.", StartUpPhase.LOGGER);
         }
         Logger.setLogFilePath(logFolderPath.getPath());
         Logger.enableDebug(true);
@@ -302,13 +302,13 @@ public class App {
             jda = builder.build();
             isBotOnline = true;
         } catch (LoginException e) {
-            throw new StartUpException("Could not log in to the discord API.", StartUpException.Source.JDA);
+            throw new StartUpException("Could not log in to the discord API.", StartUpPhase.JDA);
         }
 
         try {
             jda.awaitReady();
         } catch (InterruptedException e) {
-            throw new StartUpException("Interruption while waiting for jda to ready.", StartUpException.Source.JDA);
+            throw new StartUpException("Interruption while waiting for jda to ready.", StartUpPhase.JDA);
         }
     }
 
@@ -348,5 +348,51 @@ public class App {
         if (!Objects.equals(jda, null)) {
             jda.shutdown();
         }
+    }
+
+    /**
+     * The enum Start up phase.
+     */
+    public enum StartUpPhase {
+        /**
+         * Config source.
+         */
+        CONFIG,
+        /**
+         * Config validation start up phase.
+         */
+        CONFIG_VALIDATION,
+        /**
+         * Logger source.
+         */
+        LOGGER,
+        /**
+         * Documentation start up phase.
+         */
+        DOCUMENTATION,
+        /**
+         * Jda source.
+         */
+        JDA,
+        /**
+         * Audio player start up phase.
+         */
+        AUDIO_PLAYER,
+        /**
+         * Users source.
+         */
+        USERS,
+        /**
+         * Permissions source.
+         */
+        PERMISSIONS,
+        /**
+         * Name mappings start up phase.
+         */
+        NAME_MAPPINGS,
+        /**
+         * Commands source.
+         */
+        COMMANDS
     }
 }
