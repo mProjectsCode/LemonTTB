@@ -12,6 +12,9 @@ At some point this is going to be a discord bot that aims to assist the GM durin
 
 The documentation will appear at some point in the near future on my [website](https://mprojectscode.github.io).
 
+Starting the application will start a spring boot server on port 8080. From there the bot can be started and stoped.
+More features for the web interface are currently in development.
+
 # Features
 Finished Features (still need some good polish):
 - some internal foundations like a logger and the foundation for playing audio
@@ -19,17 +22,12 @@ Finished Features (still need some good polish):
 - A permission system
 - A name mapping feature (map ids of players to "nicknames" for faster reference in commands)
 - Moving people to a secondary "tips" voice channel
-
-Features in development:
-- Polishing stuff
-
-Scheduled for development:
 - Deaf-muteing people
 
+Features in development:
+- A web interface for easier management of the bot.
+
 Planed Features:
-- Playing local and external audio
-- Moving people to a secondary "tips" voice channel
-- Deaf-muteing certain people
 - Access to session logs via commands
 - Show pictures via link or path to local file
 
