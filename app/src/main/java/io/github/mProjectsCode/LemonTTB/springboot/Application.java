@@ -15,45 +15,31 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
+ *
  */
 
-package io.github.mProjectsCode.LemonTTB.Logger;
+package io.github.mProjectsCode.LemonTTB.springboot;
 
-import org.slf4j.spi.MDCAdapter;
-
-import java.util.Map;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 /**
- * TODO: actually implement this stuff
+ * The type Application.
  */
-public class LemonTTB_MDCAdapter implements MDCAdapter {
+@SpringBootApplication
+public class Application {
+    /**
+     * Command line runner command line runner.
+     *
+     * @param ctx the application context
+     * @return the command line runner
+     */
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+        return args -> {
 
-    @Override
-    public void put(String key, String val) {
-
+        };
     }
-
-    @Override
-    public String get(String key) {
-        return null;
-    }
-
-    @Override
-    public void remove(String key) {
-    }
-
-    @Override
-    public void clear() {
-    }
-
-    @Override
-    public Map<String, String> getCopyOfContextMap() {
-        return null;
-    }
-
-    @Override
-    public void setContextMap(Map<String, String> contextMap) {
-
-    }
-
 }

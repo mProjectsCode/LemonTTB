@@ -15,45 +15,43 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
+ *
  */
 
-package io.github.mProjectsCode.LemonTTB.Logger;
+package io.github.mProjectsCode.LemonTTB.events.payloads.payloads;
 
-import org.slf4j.spi.MDCAdapter;
-
-import java.util.Map;
+import io.github.mProjectsCode.LemonTTB.events.payloads.Payload;
+import io.github.mProjectsCode.LemonTTB.events.payloads.PayloadResponse;
 
 /**
- * TODO: actually implement this stuff
+ * The type Success payload.
  */
-public class LemonTTB_MDCAdapter implements MDCAdapter {
+public class SuccessPayload implements Payload {
+    private final String data;
 
-    @Override
-    public void put(String key, String val) {
+    /**
+     * Instantiates a new Success payload.
+     *
+     * @param data the data
+     */
+    public SuccessPayload(String data) {
+        this.data = data;
+    }
 
+    /**
+     * Instantiates a new Success payload.
+     */
+    public SuccessPayload() {
+        this.data = "";
     }
 
     @Override
-    public String get(String key) {
-        return null;
+    public PayloadResponse getResponse() {
+        return PayloadResponse.OK;
     }
 
     @Override
-    public void remove(String key) {
+    public Object getData() {
+        return data;
     }
-
-    @Override
-    public void clear() {
-    }
-
-    @Override
-    public Map<String, String> getCopyOfContextMap() {
-        return null;
-    }
-
-    @Override
-    public void setContextMap(Map<String, String> contextMap) {
-
-    }
-
 }

@@ -15,45 +15,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
+ *
  */
 
-package io.github.mProjectsCode.LemonTTB.Logger;
-
-import org.slf4j.spi.MDCAdapter;
-
-import java.util.Map;
+package io.github.mProjectsCode.LemonTTB.events;
 
 /**
- * TODO: actually implement this stuff
+ * The enum Event group.
  */
-public class LemonTTB_MDCAdapter implements MDCAdapter {
-
-    @Override
-    public void put(String key, String val) {
-
-    }
-
-    @Override
-    public String get(String key) {
-        return null;
-    }
-
-    @Override
-    public void remove(String key) {
-    }
-
-    @Override
-    public void clear() {
-    }
-
-    @Override
-    public Map<String, String> getCopyOfContextMap() {
-        return null;
-    }
-
-    @Override
-    public void setContextMap(Map<String, String> contextMap) {
-
-    }
-
+public enum EventGroup {
+    /**
+     * Bot event group.
+     */
+    BOT
 }

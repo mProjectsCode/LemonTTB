@@ -24,6 +24,26 @@ gradle-app.setting
 *-LemonTTB-user.txt
 # ignore dev configs
 *Config.txt.dev
+*/old_static/*
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
 
 ### Intellij
 .idea
