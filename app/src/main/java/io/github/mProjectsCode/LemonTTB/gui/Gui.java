@@ -15,45 +15,29 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
+ *
  */
 
-package io.github.mProjectsCode.LemonTTB.Logger;
+package io.github.mProjectsCode.LemonTTB.gui;
 
-import org.slf4j.spi.MDCAdapter;
-
-import java.util.Map;
+import javax.swing.*;
 
 /**
- * TODO: actually implement this stuff
+ * The type Gui.
  */
-public class LemonTTB_MDCAdapter implements MDCAdapter {
-
-    @Override
-    public void put(String key, String val) {
-
+@Deprecated
+public class Gui {
+    /**
+     * Instantiates a new Gui.
+     */
+    public Gui() {
+        JFrame frame = new JFrame("LemonTTB gui");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(300, 300);
+        JButton button1 = new JButton("Button 1");
+        JButton button2 = new JButton("Button 2");
+        frame.getContentPane().add(button1);
+        frame.getContentPane().add(button2);
+        frame.setVisible(true);
     }
-
-    @Override
-    public String get(String key) {
-        return null;
-    }
-
-    @Override
-    public void remove(String key) {
-    }
-
-    @Override
-    public void clear() {
-    }
-
-    @Override
-    public Map<String, String> getCopyOfContextMap() {
-        return null;
-    }
-
-    @Override
-    public void setContextMap(Map<String, String> contextMap) {
-
-    }
-
 }
