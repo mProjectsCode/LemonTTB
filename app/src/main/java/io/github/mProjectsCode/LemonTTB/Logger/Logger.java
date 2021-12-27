@@ -20,7 +20,9 @@
 package io.github.mProjectsCode.LemonTTB.Logger;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.github.mProjectsCode.LemonTTB.commands.CommandObject;
+import io.github.mProjectsCode.LemonTTB.events.Event;
 import net.dv8tion.jda.api.entities.Message;
 import org.slf4j.helpers.MessageFormatter;
 
@@ -67,6 +69,10 @@ public class Logger {
      * Instance of gson.
      */
     private final Gson gson;
+    /**
+     * Instance of gson.
+     */
+    private final Gson prettyGson;
 
     /**
      * The constructor for Logger.
@@ -93,6 +99,7 @@ public class Logger {
         longestLogLevelString = longestLogLevel.toString().length();
         this.name = name;
         this.gson = new Gson();
+        this.prettyGson = new GsonBuilder().setPrettyPrinting().create();
     }
 
     /**
@@ -353,6 +360,23 @@ public class Logger {
     }
 
     /**
+     * Log event.
+     *
+     * @param event the event
+     */
+    public void logEvent(Event event) {
+        if (debug) {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("Event emitted:");
+            sb.append("\n");
+            sb.append(prettyGson.toJson(event));
+
+            log(Level.EVENT, sb.toString());
+        }
+    }
+
+    /**
      * Print a fancy log message in the console
      *
      * @param logLevel the log level
@@ -438,6 +462,8 @@ public class Logger {
             return ConsoleColors.YELLOW;
         } else if (Objects.equals(logLevel, Level.INFO)) {
             return ConsoleColors.GREEN;
+        } else if (Objects.equals(logLevel, Level.EVENT)) {
+            return ConsoleColors.CYAN;
         }
         return "";
     }
@@ -502,6 +528,10 @@ public class Logger {
         /**
          * Represents a log for a discord command.
          */
-        COMMAND
+        COMMAND,
+        /**
+         * Represents a log for an Event.
+         */
+        EVENT
     }
 }

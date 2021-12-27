@@ -3,7 +3,8 @@
         <div id="main">
             <div class="p-5 bg-primary text-white text-center">
                 <h1>LemonTTB</h1>
-                <p>LemonTTB is a Discord Bot designed to assist the GM during tabletop sessions, that use Discord for communication.</p>
+                <p>LemonTTB is a Discord Bot designed to assist the GM during tabletop sessions, that use Discord for
+                    communication.</p>
             </div>
 
             <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -18,8 +19,8 @@
                     </ul>
                 </div>
             </nav>
-            <router-view/>
 
+            <router-view/>
 
             <footer class="mt-5 p-4 bg-dark text-white text-center" style="z-index: 11">
                 <p>LemonTTB - GPL-3.0 License</p>
@@ -28,41 +29,57 @@
     </div>
 </template>
 
-<script>
-    export default {
-        data() {
-            return {
-                source: null,
+<script lang="ts">
+import {Options, Vue} from 'vue-class-component';
+import {EventData} from './main'
 
-            }
+
+@Options({
+    data() {
+        return {
+            source: null as unknown as EventSource,
+        }
+    },
+
+    mounted() {
+
+        this.subscribeToEvents();
+    },
+
+    computed: {
+        botStatus(): boolean {
+            return this.$store.getters.getBotStatus
         },
+    },
 
-        mounted() {
-            this.subscribeToEvents();
+    methods: {
+        async getAllEvents(): Promise<void> {
+            const data = await fetch('api/events/getAll')
+            const eventDataArray: EventData[] = await data.json();
+
+            eventDataArray.forEach((eventData: EventData) => {
+                this.emitter.emit("api-event", eventData);
+            })
         },
-
-        computed: {
-            botStatus() {
-                return this.$store.getters.getBotStatus
-            },
+        async subscribeToEvents(): Promise<void> {
+            await fetch('api/events/unsubscribe');
+            await this.getAllEvents();
+            this.source = new EventSource('/api/events/subscribe');
+            this.source.onmessage = this.onEventMessage;
         },
+        async onEventMessage(event: MessageEvent): Promise<void> {
+            const eventData: EventData = JSON.parse(event.data);
+            console.log(eventData);
+            this.emitter.emit("api-event", eventData);
 
-        methods: {
-            async subscribeToEvents() {
-                await fetch('api/events/unsubscribe');
-                this.source = new EventSource('/api/events/subscribe');
-                this.source.onmessage = this.onEventMessage;
-            },
-            async onEventMessage(event) {
-                const eventData = JSON.parse(event.data);
-                console.log(eventData);
-
-                this.toast.success(eventData.name + ' status ' + eventData.payload.response, {
-                    timeout: 10000
-                });
-            },
-        },
+            this.toast.success(eventData.name + ' status ' + eventData.payload.response, {
+                timeout: 10000
+            });
+        }
     }
+})
+export default class App extends Vue {
+}
 </script>
 
 <style lang="scss">

@@ -31,5 +31,9 @@ public enum EventType {
     /**
      * Bot error event type.
      */
-    BOT_ERROR
+    BOT_ERROR,
+    /**
+     * Bot status event type.
+     */
+    BOT_STATUS,
 }

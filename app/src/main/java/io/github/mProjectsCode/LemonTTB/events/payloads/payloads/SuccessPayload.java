@@ -28,6 +28,7 @@ import io.github.mProjectsCode.LemonTTB.events.payloads.PayloadResponse;
  */
 public class SuccessPayload implements Payload {
     private final String data;
+    private final PayloadResponse response = PayloadResponse.OK;
 
     /**
      * Instantiates a new Success payload.
@@ -47,7 +48,7 @@ public class SuccessPayload implements Payload {
 
     @Override
     public PayloadResponse getResponse() {
-        return PayloadResponse.OK;
+        return response;
     }
 
     @Override

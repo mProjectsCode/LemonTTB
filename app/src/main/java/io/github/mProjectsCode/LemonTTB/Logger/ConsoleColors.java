@@ -26,13 +26,12 @@ public class ConsoleColors {
     /**
      * The constant RESET.
      */
-// Reset
     public static final String RESET = "\033[0m"; // Text Reset
 
+    // REGULAR COLORS
     /**
      * The constant BLACK.
      */
-// Regular Colors
     public static final String BLACK = "\033[0;30m"; // BLACK
     /**
      * The constant RED.
@@ -63,10 +62,10 @@ public class ConsoleColors {
      */
     public static final String WHITE = "\033[0;37m"; // WHITE
 
+    // BOLD
     /**
      * The constant BLACK_BOLD.
      */
-// Bold
     public static final String BLACK_BOLD = "\033[1;30m"; // BLACK
     /**
      * The constant RED_BOLD.
@@ -97,10 +96,10 @@ public class ConsoleColors {
      */
     public static final String WHITE_BOLD = "\033[1;37m"; // WHITE
 
+    // UNDERLINE
     /**
      * The constant BLACK_UNDERLINED.
      */
-// Underline
     public static final String BLACK_UNDERLINED = "\033[4;30m"; // BLACK
     /**
      * The constant RED_UNDERLINED.
@@ -131,10 +130,10 @@ public class ConsoleColors {
      */
     public static final String WHITE_UNDERLINED = "\033[4;37m"; // WHITE
 
+    // BACKGROUND
     /**
      * The constant BLACK_BACKGROUND.
      */
-// Background
     public static final String BLACK_BACKGROUND = "\033[40m"; // BLACK
     /**
      * The constant RED_BACKGROUND.
@@ -165,10 +164,10 @@ public class ConsoleColors {
      */
     public static final String WHITE_BACKGROUND = "\033[47m"; // WHITE
 
+    // HIGH INTENSITY
     /**
      * The constant BLACK_BRIGHT.
      */
-// High Intensity
     public static final String BLACK_BRIGHT = "\033[0;90m"; // BLACK
     /**
      * The constant RED_BRIGHT.
@@ -199,10 +198,10 @@ public class ConsoleColors {
      */
     public static final String WHITE_BRIGHT = "\033[0;97m"; // WHITE
 
+    // BOLD HIGH INTENSITY
     /**
      * The constant BLACK_BOLD_BRIGHT.
      */
-// Bold High Intensity
     public static final String BLACK_BOLD_BRIGHT = "\033[1;90m"; // BLACK
     /**
      * The constant RED_BOLD_BRIGHT.
@@ -233,10 +232,10 @@ public class ConsoleColors {
      */
     public static final String WHITE_BOLD_BRIGHT = "\033[1;97m"; // WHITE
 
+    // HIGH INTENSITY BACKGROUNDS
     /**
      * The constant BLACK_BACKGROUND_BRIGHT.
      */
-// High Intensity backgrounds
     public static final String BLACK_BACKGROUND_BRIGHT = "\033[0;100m";// BLACK
     /**
      * The constant RED_BACKGROUND_BRIGHT.

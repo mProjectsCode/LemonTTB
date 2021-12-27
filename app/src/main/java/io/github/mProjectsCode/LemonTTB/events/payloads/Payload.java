@@ -25,15 +25,6 @@ package io.github.mProjectsCode.LemonTTB.events.payloads;
  */
 public interface Payload {
     /**
-     * The constant response.
-     */
-    PayloadResponse response = null;
-    /**
-     * The constant data.
-     */
-    Object data = null;
-
-    /**
      * Gets response.
      *
      * @return the response

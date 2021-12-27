@@ -174,6 +174,14 @@ public class App {
      * @throws StartUpException the start up exception
      */
     public static void startBot() throws StartUpException {
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.BOT_STATUS,
+                "STARTING",
+                new SuccessPayload(),
+                App.class.getName()
+        ));
+
         // INIT: Documentation
         documentationPath = new File(RESOURCE_PATH, "/documentation");
         EventHandler.trigger(new Event(
@@ -215,6 +223,10 @@ public class App {
                 App.class.getName()
         ));
 
+        // if(true) {
+        //     throw new StartUpException("Log file path invalid.", StartUpPhase.LOGGER);
+        // }
+
         // INIT: Other
         nameMappingsHandler = new NameMappingsHandler();
         EventHandler.trigger(new Event(
@@ -241,6 +253,14 @@ public class App {
                 EventGroup.BOT,
                 EventType.START_UP_EVENT,
                 StartUpPhase.CONFIG_VALIDATION.name(),
+                new SuccessPayload(),
+                App.class.getName()
+        ));
+
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.BOT_STATUS,
+                "ONLINE",
                 new SuccessPayload(),
                 App.class.getName()
         ));
@@ -345,6 +365,13 @@ public class App {
         LOGGER.logInfo("Bot is shutting down with message: ");
         LOGGER.logError(message);
         isBotOnline = false;
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.BOT_STATUS,
+                "STOP",
+                new SuccessPayload(),
+                App.class.getName()
+        ));
         if (!Objects.equals(jda, null)) {
             jda.shutdown();
         }
