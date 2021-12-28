@@ -11,6 +11,9 @@
                 <button class="btn btn-secondary" type="button" v-on:click="getBotStatus(true)">
                     <span class="material-icons" style="vertical-align: middle">refresh</span>
                 </button>
+                <button class="btn" v-bind:class="[autoOnlineQuery ? 'btn-success' : 'btn-secondary']" type="button" v-on:click="switchAutoOnlineQueryMode()">
+                    <span class="material-icons" style="vertical-align: middle">autorenew</span>
+                </button>
             </h2>
             <h6 class="">
                 Information if the bot is online and buttons to start and stop it.
@@ -19,8 +22,10 @@
         <div class="card-body">
             <h4>Actions</h4>
             <p>
-                <button class="btn" v-bind:class="[botStatus === 'online' ? 'btn-secondary' : 'btn-primary']"
-                        v-on:click="startBot()">{{ botStatus === 'online' ? 'Restart Bot' : 'Start Bot' }}
+                <button class="btn"
+                        v-bind:class="[botStatus === 'online' ? 'btn-secondary' : 'btn-primary']"
+                        v-on:click="startBot()">
+                    {{ botStatus === 'online' ? 'Restart Bot' : 'Start Bot' }}
                 </button>
             </p>
             <p>
@@ -32,7 +37,9 @@
                     <div class="col-auto">
                         <span class="material-icons"
                               style="vertical-align: middle"
-                              v-bind:class="[botAudioPlayerOnline ? 'text-success' : 'text-danger']">{{ botAudioPlayerOnline ? 'check' : 'clear' }}</span>
+                              v-bind:class="[botAudioPlayerOnline ? 'text-success' : 'text-danger']">
+                            {{ botAudioPlayerOnline ? 'check' : 'clear' }}
+                        </span>
                     </div>
                     <div class="col">
                         Audio Player
@@ -40,8 +47,11 @@
                 </div>
                 <div class="row">
                     <div class="col-auto">
-                        <span class="material-icons" style="vertical-align: middle"
-                              v-bind:class="[botUserOnline ? 'text-success' : 'text-danger']">{{ botUserOnline ? 'check' : 'clear' }}</span>
+                        <span class="material-icons"
+                              style="vertical-align: middle"
+                              v-bind:class="[botUserOnline ? 'text-success' : 'text-danger']">
+                            {{ botUserOnline ? 'check' : 'clear' }}
+                        </span>
                     </div>
                     <div class="col">
                         User Manager
@@ -51,7 +61,9 @@
                     <div class="col-auto">
                         <span class="material-icons"
                               style="vertical-align: middle"
-                              v-bind:class="[botPermissionsOnline ? 'text-success' : 'text-danger']">{{ botPermissionsOnline ? 'check' : 'clear' }}</span>
+                              v-bind:class="[botPermissionsOnline ? 'text-success' : 'text-danger']">
+                            {{ botPermissionsOnline ? 'check' : 'clear' }}
+                        </span>
                     </div>
                     <div class="col">
                         Permission Manager
@@ -61,7 +73,9 @@
                     <div class="col-auto">
                         <span class="material-icons"
                               style="vertical-align: middle"
-                              v-bind:class="[botNameMappingsOnline ? 'text-success' : 'text-danger']">{{ botNameMappingsOnline ? 'check' : 'clear' }}</span>
+                              v-bind:class="[botNameMappingsOnline ? 'text-success' : 'text-danger']">
+                            {{ botNameMappingsOnline ? 'check' : 'clear' }}
+                        </span>
                     </div>
                     <div class="col">
                         Name Mappings
@@ -69,8 +83,11 @@
                 </div>
                 <div class="row">
                     <div class="col-auto">
-                        <span class="material-icons" style="vertical-align: middle"
-                              v-bind:class="[botJdaOnline ? 'text-success' : 'text-danger']">{{ botJdaOnline ? 'check' : 'clear' }}</span>
+                        <span class="material-icons"
+                              style="vertical-align: middle"
+                              v-bind:class="[botJdaOnline ? 'text-success' : 'text-danger']">
+                            {{ botJdaOnline ? 'check' : 'clear' }}
+                        </span>
                     </div>
                     <div class="col">
                         JDA
@@ -80,7 +97,9 @@
                     <div class="col-auto">
                         <span class="material-icons"
                               style="vertical-align: middle"
-                              v-bind:class="[botConfigValidationOnline ? 'text-success' : 'text-danger']">{{ botConfigValidationOnline ? 'check' : 'clear' }}</span>
+                              v-bind:class="[botConfigValidationOnline ? 'text-success' : 'text-danger']">
+                            {{ botConfigValidationOnline ? 'check' : 'clear' }}
+                        </span>
                     </div>
                     <div class="col">
                         Config Validated
@@ -111,6 +130,7 @@ import {EventData} from "@/main";
     data() {
         return {
             onlineQueryInterval: null as unknown as number,
+            autoOnlineQuery: false,
 
             botStartUpError: null as unknown as String,
 
@@ -150,9 +170,6 @@ import {EventData} from "@/main";
 
     mounted() {
         this.getBotStatus(false);
-        this.onlineQueryInterval = setInterval(() => {
-            this.getBotStatus(false);
-        }, 5000);
 
         this.emitter.on('api-event', (data: EventData) => {
             console.log('received api event in BotStatus.vue');
@@ -228,6 +245,23 @@ import {EventData} from "@/main";
         async stopBot(): Promise<void> {
             await fetch('/api/startUp/stopBot')
         },
+        async switchAutoOnlineQueryMode() {
+            this.autoOnlineQuery = !this.autoOnlineQuery;
+
+            if (this.autoOnlineQuery) {
+                await this.startAutoOnlineQuery();
+            } else {
+                await this.stopAutoOnlineQuery();
+            }
+        },
+        async startAutoOnlineQuery() {
+            this.onlineQueryInterval = setInterval(() => {
+                this.getBotStatus(false);
+            }, 5000);
+        },
+        async stopAutoOnlineQuery() {
+            clearInterval(this.onlineQueryInterval)
+        }
     },
 })
 export default class BotStatus extends Vue {

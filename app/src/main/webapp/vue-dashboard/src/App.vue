@@ -42,7 +42,6 @@ import {EventData} from './main'
     },
 
     mounted() {
-
         this.subscribeToEvents();
     },
 

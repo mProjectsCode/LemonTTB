@@ -142,22 +142,23 @@ public class LemonTTB_AudioManager {
      * exception when the path is not pointing to a file or is invalid.
      *
      * @param trackPath the path to the track
+     * @param source    the source
      */
-    public void loadAndPlayTrack(final String trackPath) {
+    public void loadAndPlayTrack(final String trackPath, AudioTrackSource source) {
         // load track
         audioPlayerManager.loadItemOrdered(this, trackPath, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 // when the track successfully loaded queue it
                 LOGGER.logInfo("Adding to queue " + track.getInfo().identifier);
-                queueToTrackScheduler(track);
+                queueToTrackScheduler(track, source);
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
                 for (AudioTrack track : playlist.getTracks()) {
                     // queue every track in the playlist
-                    queueToTrackScheduler(track);
+                    queueToTrackScheduler(track, source);
                 }
             }
 
@@ -180,11 +181,11 @@ public class LemonTTB_AudioManager {
     /**
      * Add a audioTrack to the queue of the audioTrackScheduler.
      *
-     * @param audioTrack the audio track to queue
+     * @param track the audio track to queue
      */
-    private void queueToTrackScheduler(AudioTrack audioTrack) {
+    private void queueToTrackScheduler(AudioTrack track, AudioTrackSource source) {
         // play a loaded audio track
-        audioTrackScheduler.queue(audioTrack);
+        audioTrackScheduler.queue(new LemonTTB_AudioTrack(track, new TrackData(track, source)));
     }
 
     /**
@@ -206,8 +207,24 @@ public class LemonTTB_AudioManager {
      *
      * @return the audio track [ ]
      */
-    public AudioTrack[] getTracksInQueue() {
-        return audioTrackScheduler.getQueue().toArray(new AudioTrack[0]);
+    public LemonTTB_AudioTrack[] getTracksInQueue() {
+        return audioTrackScheduler.getQueue().toArray(new LemonTTB_AudioTrack[0]);
+    }
+
+    /**
+     * Get tracks in queue as track data track data [ ].
+     *
+     * @return the track data [ ]
+     */
+    public TrackData[] getTracksInQueueAsTrackData() {
+        LemonTTB_AudioTrack[] queue = getTracksInQueue();
+        TrackData[] trackData = new TrackData[queue.length];
+
+        for (int i = 0; i < queue.length; i++) {
+            trackData[i] = queue[i].getTrackData();
+        }
+
+        return trackData;
     }
 
     /**
@@ -271,6 +288,15 @@ public class LemonTTB_AudioManager {
      */
     public void setPaused(boolean paused) {
         audioPlayer.setPaused(paused);
+    }
+
+    /**
+     * Gets current track.
+     *
+     * @return the current track
+     */
+    public LemonTTB_AudioTrack getCurrentTrack() {
+        return audioTrackScheduler.getCurrentTrack();
     }
 
     /**

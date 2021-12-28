@@ -21,6 +21,7 @@ package io.github.mProjectsCode.LemonTTB.commands.commands.audio;
 
 import io.github.mProjectsCode.LemonTTB.App;
 import io.github.mProjectsCode.LemonTTB.IOHelper;
+import io.github.mProjectsCode.LemonTTB.LemonTTB_Audio.AudioTrackSource;
 import io.github.mProjectsCode.LemonTTB.commands.Command;
 import io.github.mProjectsCode.LemonTTB.commands.CommandDescription;
 import io.github.mProjectsCode.LemonTTB.commands.CommandObject;
@@ -71,7 +72,7 @@ public class PlayCmd extends Command {
                 if (paths.length > 0) {
                     Command.LOGGER.logCommand(commandObject,
                             "Result for search: " + argument.value + " is: " + paths[0].getPath());
-                    App.audioManager.loadAndPlayTrack(paths[0].getPath());
+                    App.audioManager.loadAndPlayTrack(paths[0].getPath(), AudioTrackSource.LOCAL);
                 }
             }
         }
@@ -79,7 +80,7 @@ public class PlayCmd extends Command {
         argument = commandObject.getArgument("-y");
         if (!Objects.equals(argument, null)) {
             if (!Objects.equals(argument.value, null)) {
-                App.audioManager.loadAndPlayTrack(argument.value);
+                App.audioManager.loadAndPlayTrack(argument.value, AudioTrackSource.YOUTUBE);
             }
         }
 

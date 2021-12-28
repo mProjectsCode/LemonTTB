@@ -47,8 +47,8 @@ public class SuccessPayload implements Payload {
     }
 
     @Override
-    public PayloadResponse getResponse() {
-        return response;
+    public String getResponse() {
+        return response.name();
     }
 
     @Override

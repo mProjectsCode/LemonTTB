@@ -36,4 +36,8 @@ public enum EventType {
      * Bot status event type.
      */
     BOT_STATUS,
+    /**
+     * Audio player event type.
+     */
+    AUDIO_PLAYER,
 }

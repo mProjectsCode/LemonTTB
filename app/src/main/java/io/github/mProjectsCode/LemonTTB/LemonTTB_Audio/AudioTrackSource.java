@@ -18,34 +18,18 @@
  *
  */
 
-package io.github.mProjectsCode.LemonTTB.events.payloads.payloads;
-
-import io.github.mProjectsCode.LemonTTB.events.payloads.Payload;
-import io.github.mProjectsCode.LemonTTB.events.payloads.PayloadResponse;
+package io.github.mProjectsCode.LemonTTB.LemonTTB_Audio;
 
 /**
- * The type Error payload.
+ * The enum Audio track source.
  */
-public class ErrorPayload implements Payload {
-    private final String data;
-    private final PayloadResponse response = PayloadResponse.ERROR;
-
+public enum AudioTrackSource {
     /**
-     * Instantiates a new Error payload.
-     *
-     * @param data the data
+     * Local audio track source.
      */
-    public ErrorPayload(Exception data) {
-        this.data = data.getMessage();
-    }
-
-    @Override
-    public String getResponse() {
-        return response.name();
-    }
-
-    @Override
-    public Object getData() {
-        return data;
-    }
+    LOCAL,
+    /**
+     * YouTube audio track source.
+     */
+    YOUTUBE
 }

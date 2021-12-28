@@ -29,7 +29,7 @@ public interface Payload {
      *
      * @return the response
      */
-    PayloadResponse getResponse();
+    String getResponse();
 
     /**
      * Gets data.

@@ -27,6 +27,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import io.github.mProjectsCode.LemonTTB.App;
 import io.github.mProjectsCode.LemonTTB.Logger.Logger;
 
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -37,8 +38,9 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
     private static final Logger LOGGER = Logger.getLogger(LemonTTB_AudioTrackScheduler.class);
 
     private final AudioPlayer audioPlayer;
-    private final BlockingQueue<AudioTrack> queue;
+    private final BlockingQueue<LemonTTB_AudioTrack> queue;
 
+    private LemonTTB_AudioTrack currentTrack;
     private boolean looping;
 
     /**
@@ -49,6 +51,17 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
     public LemonTTB_AudioTrackScheduler(AudioPlayer audioPlayer) {
         this.audioPlayer = audioPlayer;
         this.queue = new LinkedBlockingQueue<>();
+        this.currentTrack = null;
+        this.looping = false;
+    }
+
+    /**
+     * Gets current track.
+     *
+     * @return the current track
+     */
+    public LemonTTB_AudioTrack getCurrentTrack() {
+        return currentTrack;
     }
 
     /**
@@ -74,7 +87,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
      *
      * @return the queue
      */
-    public BlockingQueue<AudioTrack> getQueue() {
+    public BlockingQueue<LemonTTB_AudioTrack> getQueue() {
         return queue;
     }
 
@@ -83,35 +96,50 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
      *
      * @param track The track to play or add to queue.
      */
-    public void queue(AudioTrack track) {
+    public void queue(LemonTTB_AudioTrack track) {
         // Calling startTrack with the noInterrupt set to true will start the track only
         // if nothing is currently playing. If something is playing, it returns false
         // and does nothing. In that case the player was already playing so this track
         // goes to the queue instead.
-        if (!audioPlayer.startTrack(track, true)) {
+        LOGGER.logDebug("Queued new track: " + track.getTrackData().getName());
+        if (audioPlayer.startTrack(track.audioTrack, true)) {
+            currentTrack = track;
+            LOGGER.logDebug("Started track directly");
+        } else {
             queue.offer(track);
+            LOGGER.logDebug("Put track in queue");
         }
     }
 
     /**
-     * Start the next track, stopping the current one if it is playing.
+     * Add the next track to queue or play right away if nothing is in the queue.
+     *
+     * @param track            The track to play or add to queue.
+     * @param audioTrackSource the audio track source
      */
-    public void nextTrack() {
-        // Start the next track, regardless of if something is already playing or not.
-        // In case queue was empty, we are giving null to startTrack, which is a valid
-        // argument and will simply stop the player.
-        // If the scheduler is looping start the current track again instead.
-        if (looping) {
-            App.audioManager.loadAndPlayTrack(audioPlayer.getPlayingTrack().getIdentifier());
-        }
-        audioPlayer.startTrack(queue.poll(), false);
+    public void queue(AudioTrack track, AudioTrackSource audioTrackSource) {
+        queue(new LemonTTB_AudioTrack(track, new TrackData(track, audioTrackSource)));
     }
 
     /**
      * Clear queue.
      */
     public void clearQueue() {
+        LOGGER.logDebug("Cleared queue");
         queue.clear();
+    }
+
+    /**
+     * Start the next track, stopping the current one if it is playing.
+     */
+    public void nextTrack() {
+        // Start the next track.
+        // If the scheduler is looping start the current track again instead.
+        if (looping) {
+            LOGGER.logDebug("Adding current track back to queue: " + currentTrack.getTrackData().getName());
+            App.audioManager.loadAndPlayTrack(currentTrack.getAudioTrack().getIdentifier(), currentTrack.getTrackData().getAudioTrackSource());
+        }
+        forceNextTrack();
     }
 
     /**
@@ -119,15 +147,27 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
      *
      * @param finishedTrack the finished track
      */
-    public void nextTrack(AudioTrack finishedTrack) {
-        // Start the next track, regardless of if something is already playing or not.
-        // In case queue was empty, we are giving null to startTrack, which is a valid
-        // argument and will simply stop the player.
+    public void nextTrack(LemonTTB_AudioTrack finishedTrack) {
+        // Start the next track.
         // If the scheduler is looping start the current track again instead.
         if (looping) {
-            App.audioManager.loadAndPlayTrack(finishedTrack.getIdentifier());
+            LOGGER.logDebug("Adding finished track back to queue: " + finishedTrack.getTrackData().getName());
+            App.audioManager.loadAndPlayTrack(finishedTrack.getAudioTrack().getIdentifier(), finishedTrack.getTrackData().getAudioTrackSource());
         }
-        audioPlayer.startTrack(queue.poll(), false);
+        forceNextTrack();
+    }
+
+    /**
+     * Force next track.
+     */
+    public void forceNextTrack() {
+        LOGGER.logDebug("Forcing next track");
+        LemonTTB_AudioTrack track = queue.poll();
+        if (!Objects.equals(track, null)) {
+            LOGGER.logDebug("Forcing next track -> Started track: " + track.getTrackData().getName());
+            currentTrack = track;
+            audioPlayer.startTrack(track.audioTrack, false);
+        }
     }
 
     /**
@@ -137,7 +177,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
      */
     @Override
     public void onPlayerPause(AudioPlayer player) {
-        LOGGER.logDebug("Paused audio player on track: " + (queue.peek() != null ? queue.peek().getIdentifier() : ""));
+        LOGGER.logDebug("Paused audio player on track: " + (queue.peek() != null ? queue.peek().getTrackData().getName() : ""));
     }
 
     /**
@@ -147,7 +187,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
      */
     @Override
     public void onPlayerResume(AudioPlayer player) {
-        LOGGER.logDebug("Resumed audio player on track: " + (queue.peek() != null ? queue.peek().getIdentifier() : ""));
+        LOGGER.logDebug("Resumed audio player on track: " + (queue.peek() != null ? queue.peek().getTrackData().getName() : ""));
     }
 
     /**
@@ -182,7 +222,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
         LOGGER.logDebug("Audio player track ended: " + track.getInfo().identifier);
 
         if (endReason.mayStartNext) {
-            nextTrack(track);
+            nextTrack();
         }
     }
 
@@ -202,7 +242,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
     @Override
     public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
         LOGGER.logDebug("Audio player track stuck: " + track.getInfo().identifier);
-        nextTrack(track);
+        forceNextTrack();
     }
 
 }

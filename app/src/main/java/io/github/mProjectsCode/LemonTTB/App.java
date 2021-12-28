@@ -299,7 +299,7 @@ public class App {
         Logger.setLogFilePath(logFolderPath.getPath());
         Logger.enableDebug(true);
         Logger.enableTrace(false);
-        Logger.setDebugBlacklist(new String[]{".jda.", ".lava.", ".lavaplayer.", "DefaultListableBeanFactory", "ConditionEvaluationReportLoggingListener"});
+        Logger.setDebugBlacklist(new String[]{".jda.", ".lava.", ".lavaplayer.", "DefaultListableBeanFactory", "ConditionEvaluationReportLoggingListener", ".apache.http."});
     }
 
     private static void buildJDA() throws StartUpException {
