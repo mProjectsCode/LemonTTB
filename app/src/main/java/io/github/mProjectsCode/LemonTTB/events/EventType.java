@@ -27,7 +27,7 @@ public enum EventType {
     /**
      * Start up event event type.
      */
-    START_UP_EVENT,
+    BOT_START_UP,
     /**
      * Bot error event type.
      */

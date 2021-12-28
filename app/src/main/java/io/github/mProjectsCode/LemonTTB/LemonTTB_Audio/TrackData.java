@@ -28,8 +28,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 public class TrackData {
     private final String name;
     private final int length;
-    private final int position;
     private final AudioTrackSource audioTrackSource;
+    private int position;
 
     /**
      * Instantiates a new Track data.
@@ -40,7 +40,7 @@ public class TrackData {
     public TrackData(AudioTrack audioTrack, AudioTrackSource audioTrackSource) {
         this.name = LemonTTB_AudioManager.getTitleFromAudioTrack(audioTrack);
         this.length = ((int) audioTrack.getDuration()) / 1000;
-        this.position = ((int) audioTrack.getPosition()) / 1000;
+        this.position = 0;
         this.audioTrackSource = audioTrackSource;
     }
 
@@ -69,6 +69,15 @@ public class TrackData {
      */
     public int getPosition() {
         return position;
+    }
+
+    /**
+     * Sets position.
+     *
+     * @param position the position
+     */
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     /**

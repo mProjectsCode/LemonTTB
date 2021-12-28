@@ -98,13 +98,13 @@ public class EventController implements EventListener {
                     }
                 }
             } catch (InterruptedException e) {
-                LOGGER.logWarning("The connection on /api/statUp/events was interrupted");
+                LOGGER.logWarning("The connection on /api/events/subscribe was interrupted");
                 sseEmitter.complete();
             } catch (IOException e) {
-                LOGGER.logWarning("An io exception occurred on /api/statUp/events");
+                LOGGER.logWarning("An io exception occurred on /api/events/subscribe");
                 sseEmitter.complete();
             } catch (Throwable t) {
-                LOGGER.logWarning("An exception occurred on /api/statUp/events");
+                LOGGER.logWarning("An exception occurred on /api/events/subscribe");
                 sseEmitter.complete();
             }
         });

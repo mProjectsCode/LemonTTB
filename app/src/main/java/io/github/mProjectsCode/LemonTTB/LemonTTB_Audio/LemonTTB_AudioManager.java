@@ -29,10 +29,16 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.mProjectsCode.LemonTTB.Config;
 import io.github.mProjectsCode.LemonTTB.Logger.Logger;
+import io.github.mProjectsCode.LemonTTB.events.Event;
+import io.github.mProjectsCode.LemonTTB.events.EventGroup;
+import io.github.mProjectsCode.LemonTTB.events.EventHandler;
+import io.github.mProjectsCode.LemonTTB.events.EventType;
+import io.github.mProjectsCode.LemonTTB.events.payloads.payloads.AudioPlayerPayload;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.managers.AudioManager;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.Objects;
@@ -47,10 +53,32 @@ public class LemonTTB_AudioManager {
      * The constant audioPlayerManager.
      */
     public static AudioPlayerManager audioPlayerManager;
+    @NotNull
+    private final AudioPlayer audioPlayer;
+    @NotNull
+    private final LemonTTB_AudioTrackScheduler audioTrackScheduler;
     private GuildChannel channel;
     private AudioManager audioManager;
-    private AudioPlayer audioPlayer;
-    private LemonTTB_AudioTrackScheduler audioTrackScheduler;
+
+    /**
+     * Instantiates a new Lemon ttb audio manager.
+     */
+    public LemonTTB_AudioManager() {
+        // create a new audioPlayerManager
+        audioPlayerManager = new DefaultAudioPlayerManager();
+        // register the audioPlayerManager as a local source
+        AudioSourceManagers.registerLocalSource(audioPlayerManager);
+        AudioSourceManagers.registerRemoteSources(audioPlayerManager);
+        // create a new audioPlayer
+        audioPlayer = audioPlayerManager.createPlayer();
+        // create instance of our track scheduler
+        audioTrackScheduler = new LemonTTB_AudioTrackScheduler(audioPlayer);
+        // add our track scheduler to the audioPlayer
+        audioPlayer.addListener(audioTrackScheduler);
+
+        audioPlayer.setVolume(Config.options.defaultVolume);
+        LOGGER.logDebug("Set volume to the config default of " + Config.options.defaultVolume);
+    }
 
     /**
      * Gets title from audio track.
@@ -77,13 +105,6 @@ public class LemonTTB_AudioManager {
      * @param guild   the guild of the channel
      */
     public void connect(GuildChannel channel, Guild guild) {
-        // if the audioPlayer has not been initialized, log an error and do nothing
-        if (Objects.equals(audioPlayer, null)) {
-            LOGGER.logError("Can not join a voice channel, while audioPlayer is null."
-                    + " Try calling \"createPlayer()\" once before connecting to a voice channel.");
-            return;
-        }
-
         // get the audio manager from the guild
         audioManager = guild.getAudioManager();
         // set the sending handler to our sending handler
@@ -94,6 +115,14 @@ public class LemonTTB_AudioManager {
         audioManager.setSelfDeafened(true);
 
         this.channel = channel;
+
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.AUDIO_PLAYER,
+                "Joined voice channel",
+                new AudioPlayerPayload(AudioPlayerPayload.AudioPlayerPayloadResponse.CHANNEL_JOIN),
+                LemonTTB_AudioTrackScheduler.class.getName()
+        ));
     }
 
     /**
@@ -104,6 +133,20 @@ public class LemonTTB_AudioManager {
         audioManager.closeAudioConnection();
         // unset the audioManager
         audioManager = null;
+
+        audioTrackScheduler.setLooping(false);
+        audioTrackScheduler.clearQueue();
+        audioTrackScheduler.forceNextTrack();
+
+        this.channel = null;
+
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.AUDIO_PLAYER,
+                "Left voice channel",
+                new AudioPlayerPayload(AudioPlayerPayload.AudioPlayerPayloadResponse.CHANNEL_LEAVE),
+                LemonTTB_AudioTrackScheduler.class.getName()
+        ));
     }
 
     /**
@@ -114,27 +157,6 @@ public class LemonTTB_AudioManager {
      */
     public GuildChannel getChannel() {
         return channel;
-    }
-
-    /**
-     * Creates an audioPlayer. Needs to be called, before it can connect to a voice
-     * channel
-     */
-    public void createPlayer() {
-        // create a new audioPlayerManager
-        audioPlayerManager = new DefaultAudioPlayerManager();
-        // register the audioPlayerManager as a local source
-        AudioSourceManagers.registerLocalSource(audioPlayerManager);
-        AudioSourceManagers.registerRemoteSources(audioPlayerManager);
-        // create a new audioPlayer
-        audioPlayer = audioPlayerManager.createPlayer();
-        // create instance of our track scheduler
-        audioTrackScheduler = new LemonTTB_AudioTrackScheduler(audioPlayer);
-        // add our track scheduler to the audioPlayer
-        audioPlayer.addListener(audioTrackScheduler);
-
-        audioPlayer.setVolume(Config.options.defaultVolume);
-        LOGGER.logDebug("Set volume to the config default of " + Config.options.defaultVolume);
     }
 
     /**
@@ -232,6 +254,7 @@ public class LemonTTB_AudioManager {
      *
      * @return the audio player
      */
+    @NotNull
     public AudioPlayer getAudioPlayer() {
         return audioPlayer;
     }

@@ -186,7 +186,7 @@ public class App {
         documentationPath = new File(RESOURCE_PATH, "/documentation");
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.DOCUMENTATION.name(),
                 new SuccessPayload(),
                 App.class.getName()
@@ -195,10 +195,9 @@ public class App {
         // INIT: Audio
         audioPath = new File(RESOURCE_PATH, "/music");
         audioManager = new LemonTTB_AudioManager();
-        audioManager.createPlayer();
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.AUDIO_PLAYER.name(),
                 new SuccessPayload(),
                 App.class.getName()
@@ -209,7 +208,7 @@ public class App {
         userHandler = new UserHandler();
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.USERS.name(),
                 new SuccessPayload(),
                 App.class.getName()
@@ -217,7 +216,7 @@ public class App {
         permissionHandler = new PermissionHandler(true);
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.PERMISSIONS.name(),
                 new SuccessPayload(),
                 App.class.getName()
@@ -231,7 +230,7 @@ public class App {
         nameMappingsHandler = new NameMappingsHandler();
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.NAME_MAPPINGS.name(),
                 new SuccessPayload(),
                 App.class.getName()
@@ -241,7 +240,7 @@ public class App {
         buildJDA();
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.JDA.name(),
                 new SuccessPayload(),
                 App.class.getName()
@@ -251,7 +250,7 @@ public class App {
         Config.options.validateConfig();
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.CONFIG_VALIDATION.name(),
                 new SuccessPayload(),
                 App.class.getName()

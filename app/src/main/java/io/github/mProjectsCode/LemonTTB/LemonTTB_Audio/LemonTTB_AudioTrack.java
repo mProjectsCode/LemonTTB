@@ -21,6 +21,7 @@
 package io.github.mProjectsCode.LemonTTB.LemonTTB_Audio;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The type Lemon ttb audio track.
@@ -29,10 +30,12 @@ public class LemonTTB_AudioTrack {
     /**
      * The Audio track.
      */
+    @NotNull
     public final AudioTrack audioTrack;
     /**
      * The Track data.
      */
+    @NotNull
     public final TrackData trackData;
 
     /**
@@ -41,7 +44,7 @@ public class LemonTTB_AudioTrack {
      * @param audioTrack the audio track
      * @param trackData  the track data
      */
-    public LemonTTB_AudioTrack(AudioTrack audioTrack, TrackData trackData) {
+    public LemonTTB_AudioTrack(@NotNull AudioTrack audioTrack, @NotNull TrackData trackData) {
         this.audioTrack = audioTrack;
         this.trackData = trackData;
     }
@@ -51,6 +54,7 @@ public class LemonTTB_AudioTrack {
      *
      * @return the audio track
      */
+    @NotNull
     public AudioTrack getAudioTrack() {
         return audioTrack;
     }
@@ -60,7 +64,15 @@ public class LemonTTB_AudioTrack {
      *
      * @return the track data
      */
+    @NotNull
     public TrackData getTrackData() {
         return trackData;
+    }
+
+    /**
+     * Update position.
+     */
+    public void updatePosition() {
+        trackData.setPosition(((int) audioTrack.getPosition()) / 1000);
     }
 }

@@ -21,8 +21,12 @@
 package io.github.mProjectsCode.LemonTTB.events.payloads.payloads;
 
 import io.github.mProjectsCode.LemonTTB.App;
+import io.github.mProjectsCode.LemonTTB.LemonTTB_Audio.LemonTTB_AudioTrack;
 import io.github.mProjectsCode.LemonTTB.LemonTTB_Audio.TrackData;
 import io.github.mProjectsCode.LemonTTB.events.payloads.Payload;
+import net.dv8tion.jda.api.entities.GuildChannel;
+
+import java.util.Objects;
 
 /**
  * The type Audio player payload.
@@ -64,21 +68,17 @@ public class AudioPlayerPayload implements Payload {
          */
         STARTED_TRACK,
         /**
-         * Skipped track audio player payload response.
-         */
-        SKIPPED_TRACK,
-        /**
          * Finished track audio player payload response.
          */
         FINISHED_TRACK,
         /**
          * Paused player audio player payload response.
          */
-        PAUSED_PLAYER,
+        SWITCHED_PAUSE_PLAYER,
         /**
-         * Unpaused player audio player payload response.
+         * Switched loop player audio player payload response.
          */
-        UNPAUSED_PLAYER,
+        SWITCHED_LOOP_PLAYER,
         /**
          * Track error audio player payload response.
          */
@@ -92,6 +92,14 @@ public class AudioPlayerPayload implements Payload {
          */
         EMPTIED_QUEUE,
         /**
+         * Channel leave audio player payload response.
+         */
+        CHANNEL_LEAVE,
+        /**
+         * Channel join audio player payload response.
+         */
+        CHANNEL_JOIN,
+        /**
          * Status request audio player payload response.
          */
         STATUS_REQUEST
@@ -104,7 +112,7 @@ public class AudioPlayerPayload implements Payload {
         /**
          * The Current tack.
          */
-        public final TrackData currentTack;
+        public final TrackData currentTrack;
         /**
          * The Queue.
          */
@@ -131,11 +139,23 @@ public class AudioPlayerPayload implements Payload {
          */
         public AudioPlayerPayloadData() {
             this.queue = App.audioManager.getTracksInQueueAsTrackData();
-            this.currentTack = App.audioManager.getCurrentTrack().getTrackData();
+            LemonTTB_AudioTrack audioTrack = App.audioManager.getCurrentTrack();
+            if (!Objects.equals(audioTrack, null)) {
+                audioTrack.updatePosition();
+                this.currentTrack = audioTrack.getTrackData();
+            } else {
+                this.currentTrack = null;
+            }
             this.looping = App.audioManager.isLooping();
             this.paused = App.audioManager.isPaused();
-            this.guildName = App.audioManager.getChannel().getGuild().getName();
-            this.channelName = App.audioManager.getChannel().getName();
+            GuildChannel channel = App.audioManager.getChannel();
+            if (!Objects.equals(channel, null)) {
+                this.guildName = channel.getGuild().getName();
+                this.channelName = channel.getName();
+            } else {
+                this.guildName = "";
+                this.channelName = "";
+            }
         }
 
         /**
@@ -143,8 +163,8 @@ public class AudioPlayerPayload implements Payload {
          *
          * @return the current tack
          */
-        public TrackData getCurrentTack() {
-            return currentTack;
+        public TrackData getCurrentTrack() {
+            return currentTrack;
         }
 
         /**

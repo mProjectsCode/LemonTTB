@@ -1,3 +1,23 @@
+<!--
+  - This file is part of LemonTTB.
+  - (C) Copyright 2021
+  - Programmed by Moritz Jung
+  -
+  - LemonTTB is free software: you can redistribute it and/or modify
+  - it under the terms of the GNU General Public License as published by
+  - the Free Software Foundation, either version 3 of the License, or
+  - (at your option) any later version.
+  -
+  - LemonTTB is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  - GNU General Public License for more details.
+  -
+  - You should have received a copy of the GNU General Public License
+  - along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
+  -
+  -->
+
 <template>
     <div class="card shadow">
         <div class="card-header">
@@ -11,7 +31,8 @@
                 <button class="btn btn-secondary" type="button" v-on:click="getBotStatus(true)">
                     <span class="material-icons" style="vertical-align: middle">refresh</span>
                 </button>
-                <button class="btn" v-bind:class="[autoOnlineQuery ? 'btn-success' : 'btn-secondary']" type="button" v-on:click="switchAutoOnlineQueryMode()">
+                <button class="btn" type="button"
+                        v-bind:class="[data.autoOnlineQuery ? 'btn-success' : 'btn-secondary']" v-on:click="switchAutoOnlineQueryMode()">
                     <span class="material-icons" style="vertical-align: middle">autorenew</span>
                 </button>
             </h2>
@@ -37,8 +58,8 @@
                     <div class="col-auto">
                         <span class="material-icons"
                               style="vertical-align: middle"
-                              v-bind:class="[botAudioPlayerOnline ? 'text-success' : 'text-danger']">
-                            {{ botAudioPlayerOnline ? 'check' : 'clear' }}
+                              v-bind:class="[data.botAudioPlayerOnline ? 'text-success' : 'text-danger']">
+                            {{ data.botAudioPlayerOnline ? 'check' : 'clear' }}
                         </span>
                     </div>
                     <div class="col">
@@ -49,8 +70,8 @@
                     <div class="col-auto">
                         <span class="material-icons"
                               style="vertical-align: middle"
-                              v-bind:class="[botUserOnline ? 'text-success' : 'text-danger']">
-                            {{ botUserOnline ? 'check' : 'clear' }}
+                              v-bind:class="[data.botUserOnline ? 'text-success' : 'text-danger']">
+                            {{ data.botUserOnline ? 'check' : 'clear' }}
                         </span>
                     </div>
                     <div class="col">
@@ -61,8 +82,8 @@
                     <div class="col-auto">
                         <span class="material-icons"
                               style="vertical-align: middle"
-                              v-bind:class="[botPermissionsOnline ? 'text-success' : 'text-danger']">
-                            {{ botPermissionsOnline ? 'check' : 'clear' }}
+                              v-bind:class="[data.botPermissionsOnline ? 'text-success' : 'text-danger']">
+                            {{ data.botPermissionsOnline ? 'check' : 'clear' }}
                         </span>
                     </div>
                     <div class="col">
@@ -73,8 +94,8 @@
                     <div class="col-auto">
                         <span class="material-icons"
                               style="vertical-align: middle"
-                              v-bind:class="[botNameMappingsOnline ? 'text-success' : 'text-danger']">
-                            {{ botNameMappingsOnline ? 'check' : 'clear' }}
+                              v-bind:class="[data.botNameMappingsOnline ? 'text-success' : 'text-danger']">
+                            {{ data.botNameMappingsOnline ? 'check' : 'clear' }}
                         </span>
                     </div>
                     <div class="col">
@@ -85,8 +106,8 @@
                     <div class="col-auto">
                         <span class="material-icons"
                               style="vertical-align: middle"
-                              v-bind:class="[botJdaOnline ? 'text-success' : 'text-danger']">
-                            {{ botJdaOnline ? 'check' : 'clear' }}
+                              v-bind:class="[data.botJdaOnline ? 'text-success' : 'text-danger']">
+                            {{ data.botJdaOnline ? 'check' : 'clear' }}
                         </span>
                     </div>
                     <div class="col">
@@ -97,8 +118,8 @@
                     <div class="col-auto">
                         <span class="material-icons"
                               style="vertical-align: middle"
-                              v-bind:class="[botConfigValidationOnline ? 'text-success' : 'text-danger']">
-                            {{ botConfigValidationOnline ? 'check' : 'clear' }}
+                              v-bind:class="[data.botConfigValidationOnline ? 'text-success' : 'text-danger']">
+                            {{ data.botConfigValidationOnline ? 'check' : 'clear' }}
                         </span>
                     </div>
                     <div class="col">
@@ -107,11 +128,11 @@
                 </div>
             </div>
 
-            <div v-show="botStartUpError != null">
+            <div v-show="data.botStartUpError != undefined">
                 <br>
                 <h6>Bot start up errors:</h6>
                 <p class="text-danger">
-                    {{ botStartUpError }}
+                    {{ data.botStartUpError }}
                 </p>
             </div>
         </div>
@@ -122,17 +143,31 @@
 import {Options, Vue} from "vue-class-component";
 import {EventData} from "@/main";
 
+interface Data {
+    onlineQueryInterval?: number;
+    autoOnlineQuery: boolean;
+
+    botStartUpError?: string;
+
+    botAudioPlayerOnline: boolean;
+    botUserOnline: boolean;
+    botPermissionsOnline: boolean;
+    botNameMappingsOnline: boolean;
+    botJdaOnline: boolean;
+    botConfigValidationOnline: boolean;
+}
+
 @Options({
     name: 'BotStatus',
 
     props: {},
 
     data() {
-        return {
-            onlineQueryInterval: null as unknown as number,
+        const data: Data = {
+            onlineQueryInterval: undefined,
             autoOnlineQuery: false,
 
-            botStartUpError: null as unknown as String,
+            botStartUpError: undefined,
 
             botAudioPlayerOnline: false,
             botUserOnline: false,
@@ -140,6 +175,9 @@ import {EventData} from "@/main";
             botNameMappingsOnline: false,
             botJdaOnline: false,
             botConfigValidationOnline: false,
+        };
+        return {
+            data
         };
     },
 
@@ -160,7 +198,7 @@ import {EventData} from "@/main";
         },
         botStatusBadgeContent() {
             const botStatus = this.$store.getters.getBotStatus;
-            if (this.botStartUpError) {
+            if (this.data.botStartUpError) {
                 return 'Error';
             } else {
                 return botStatus.charAt(0).toUpperCase() + botStatus.slice(1);
@@ -172,47 +210,49 @@ import {EventData} from "@/main";
         this.getBotStatus(false);
 
         this.emitter.on('api-event', (data: EventData) => {
-            console.log('received api event in BotStatus.vue');
-            if (data.eventType == 'START_UP_EVENT') {
+            if (data.eventType == 'BOT_START_UP') {
+                console.log('received api event in BotStatus.vue');
                 switch (data.name) {
                     case 'AUDIO_PLAYER':
-                        this.botAudioPlayerOnline = true;
+                        this.data.botAudioPlayerOnline = true;
                         break;
                     case 'USERS':
-                        this.botUserOnline = true;
+                        this.data.botUserOnline = true;
                         break;
                     case 'PERMISSIONS':
-                        this.botPermissionsOnline = true;
+                        this.data.botPermissionsOnline = true;
                         break;
                     case 'NAME_MAPPINGS':
-                        this.botNameMappingsOnline = true;
+                        this.data.botNameMappingsOnline = true;
                         break;
                     case 'JDA':
-                        this.botJdaOnline = true;
+                        this.data.botJdaOnline = true;
                         break;
                     case 'CONFIG_VALIDATION':
-                        this.botConfigValidationOnline = true;
+                        this.data.botConfigValidationOnline = true;
                         break;
                 }
             } else if (data.eventType == 'BOT_STATUS') {
+                console.log('received api event in BotStatus.vue');
                 if (data.name == 'STOP') {
                     this.$store.commit('setBotStatus', 'offline')
                 } else if (data.name == 'STARTING') {
                     this.$store.commit('setBotStatus', 'starting')
 
-                    this.botStartUpError = null;
+                    this.data.botStartUpError = null;
 
-                    this.botAudioPlayerOnline = false;
-                    this.botUserOnline = false;
-                    this.botPermissionsOnline = false;
-                    this.botNameMappingsOnline = false;
-                    this.botJdaOnline = false;
-                    this.botConfigValidationOnline = false;
+                    this.data.botAudioPlayerOnline = false;
+                    this.data.botUserOnline = false;
+                    this.data.botPermissionsOnline = false;
+                    this.data.botNameMappingsOnline = false;
+                    this.data.botJdaOnline = false;
+                    this.data.botConfigValidationOnline = false;
                 } else if (data.name == 'ONLINE') {
-                    this.$store.commit('setBotStatus', 'online')
+                    this.getBotStatus(false);
                 }
             } else if (data.eventType == 'BOT_ERROR') {
-                this.botStartUpError = data.payload.data;
+                console.log('received api event in BotStatus.vue');
+                this.data.botStartUpError = data.payload.data;
             }
         })
     },
@@ -224,6 +264,20 @@ import {EventData} from "@/main";
                 console.log(fetchData);
                 if (fetchData) {
                     this.$store.commit('setBotStatus', 'online');
+
+                    const fetchOnStartUp: string[] = this.$store.getters.getFetchOnStartUp;
+                    fetchOnStartUp.forEach((f: string) => {
+                        fetch(f);
+                    })
+                    this.$store.commit('clearFetchOnStartUp');
+
+                    this.data.botAudioPlayerOnline = true;
+                    this.data.botUserOnline = true;
+                    this.data.botPermissionsOnline = true;
+                    this.data.botNameMappingsOnline = true;
+                    this.data.botJdaOnline = true;
+                    this.data.botConfigValidationOnline = true;
+
                     if (showToast) {
                         this.toast.success('Bot is online', {
                             timeout: 3000
@@ -246,21 +300,21 @@ import {EventData} from "@/main";
             await fetch('/api/startUp/stopBot')
         },
         async switchAutoOnlineQueryMode() {
-            this.autoOnlineQuery = !this.autoOnlineQuery;
+            this.data.autoOnlineQuery = !this.data.autoOnlineQuery;
 
-            if (this.autoOnlineQuery) {
+            if (this.data.autoOnlineQuery) {
                 await this.startAutoOnlineQuery();
             } else {
                 await this.stopAutoOnlineQuery();
             }
         },
         async startAutoOnlineQuery() {
-            this.onlineQueryInterval = setInterval(() => {
+            this.data.onlineQueryInterval = setInterval(() => {
                 this.getBotStatus(false);
             }, 5000);
         },
         async stopAutoOnlineQuery() {
-            clearInterval(this.onlineQueryInterval)
+            clearInterval(this.onlineQueryInterval);
         }
     },
 })
