@@ -26,9 +26,8 @@
                     Audio Player Status
                 </span>
                 <span style="flex: 1">
-                    <span class="badge" v-bind:class="[audioPlayerStatusBadgeClass]">{{
-                            audioPlayerStatusBadgeContent
-                        }}</span>
+                    <span class="badge" v-bind:class="[audioPlayerStatusBadgeClass]">
+                        {{ audioPlayerStatusBadgeContent }}</span>
                 </span>
             </h2>
             <h6 class="">
@@ -36,26 +35,40 @@
             </h6>
         </div>
         <div class="card-body">
+            <div v-if="audioPlayerStatus !== 'disconnected'">
+                <b>Connected to </b>
+                {{ data.audioPlayerState?.channelName }}
+                <b> in </b>
+                {{ data.audioPlayerState?.guildName }}
+                <br>
+                <br>
+            </div>
+
             <div v-if="audioPlayerStatus === 'playing' || audioPlayerStatus === 'paused'">
                 <b>Playing</b>
                 {{ data.audioPlayerState?.currentTrack?.name }}
 
-                <div class="progress" style="margin-top: 10px; margin-bottom: 15px">
-                    <div aria-valuemax="100" aria-valuemin="0" class="progress-bar"
-                         role="progressbar" v-bind:aria-valuenow="[getProgress]" v-bind:style="['width: ' + getProgress + '%;']"></div>
+                <div class="progress bg-dark" style="margin-top: 10px; margin-bottom: 15px;">
+                    <div aria-valuemax="100"
+                         aria-valuemin="0"
+                         class="progress-bar"
+                         role="progressbar"
+                         v-bind:aria-valuenow="[getProgress]"
+                         v-bind:style="['width: ' + getProgress + '%;']"></div>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px">
                     <button class="btn btn-primary" type="button" v-on:click="switchPause()">
-                        <span class="material-icons" style="vertical-align: middle">{{
-                                data.audioPlayerState?.paused ? 'play_arrow' : 'pause'
-                            }}</span>
+                        <span class="material-icons" style="vertical-align: middle">
+                            {{ data.audioPlayerState?.paused ? 'play_arrow' : 'pause' }}
+                        </span>
                     </button>
                     <button class="btn btn-secondary" type="button" v-on:click="skip()">
                         <span class="material-icons" style="vertical-align: middle">skip_next</span>
                     </button>
                     <button class="btn"
                             type="button"
-                            v-bind:class="[data.audioPlayerState?.looping ? 'btn-success' : 'btn-secondary']" v-on:click="switchLooping()">
+                            v-bind:class="[data.audioPlayerState?.looping ? 'btn-success' : 'btn-secondary']"
+                            v-on:click="switchLooping()">
                         <span class="material-icons" style="vertical-align: middle">all_inclusive</span>
                     </button>
                     <span style="flex: 1"></span>
@@ -64,14 +77,28 @@
                     </span>
                 </div>
                 <br>
-                <b>Queue</b>
-                <div style="margin-bottom: 3px"></div>
-                <div v-for="queueEntry in data.audioPlayerState?.queue" class="row" style="margin-top: 2px">
-                    <div class="col">
-                        {{ queueEntry.name }}
+                <div style="display: flex; gap: 10px">
+                    <div style="flex: 1">
+                        <b>Queue</b>
                     </div>
-                    <div class="col-auto">
-                        {{ new Date(queueEntry.length * 1000).toISOString().substr(14, 5) }}
+                    <div>
+                        <button class="btn btn-danger btn-sm" style="vertical-align: middle; padding: 0px 6px 0px 6px;" type="button" v-on:click="clearQueue">
+                            <span class="material-icons" style="vertical-align: middle">clear_all</span>
+                        </button>
+                    </div>
+                </div>
+                <div style="margin-bottom: 8px"></div>
+                <div v-for="(queueEntry, index) in data.audioPlayerState?.queue" style="margin-top: 2px; display: flex; gap: 10px">
+                    <div style="flex: 1">
+                        <div style="vertical-align: middle">{{ queueEntry.name }}</div>
+                    </div>
+                    <div>
+                        <div style="vertical-align: middle">{{ new Date(queueEntry.length * 1000).toISOString().substr(14, 5) }}</div>
+                    </div>
+                    <div>
+                        <button class="btn btn-danger btn-sm" style="vertical-align: middle; padding: 0 6px 0 6px;" type="button" v-on:click="removeFromQueue(index)">
+                            <span class="material-icons" style="vertical-align: middle">clear</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -121,13 +148,13 @@ interface Data {
             const status = this.$store.getters.getAudioPlayerStatus;
             switch (status) {
                 case 'playing':
-                    return 'bg-success';
+                    return 'badge-success';
                 case 'paused':
-                    return 'bg-warning';
+                    return 'badge-secondary';
                 case 'connected':
-                    return 'bg-warning';
+                    return 'badge-secondary';
                 default:
-                    return 'bg-danger';
+                    return 'badge-danger';
             }
         },
         audioPlayerStatusBadgeContent() {
@@ -205,16 +232,32 @@ interface Data {
 
     methods: {
         async getStatus() {
-            this.$store.commit('addToFetchOnStartUp', 'api/audioPlayer/getStatus');
+            if (this.$store.getters.getBotStatus === 'online') {
+                await fetch('api/audioPlayer/getStatus');
+            } else {
+                this.$store.commit('addToFetchOnStartUp', 'api/audioPlayer/getStatus');
+            }
         },
         async switchPause() {
-            await fetch('api/audioPlayer/switchPause')
+            await fetch('api/audioPlayer/switchPause');
         },
         async switchLooping() {
-            await fetch('api/audioPlayer/switchLooping')
+            await fetch('api/audioPlayer/switchLooping');
         },
         async skip() {
-            await fetch('api/audioPlayer/skip')
+            await fetch('api/audioPlayer/skip');
+        },
+        async clearQueue() {
+            await fetch('api/audioPlayer/clearQueue');
+        },
+        async removeFromQueue(i: number) {
+            await fetch('api/audioPlayer/removeFromQueue/' + i);
+        },
+        async joinVC() {
+            // TODO: implement this
+        },
+        async leaveVC() {
+            // TODO: implement this
         }
     },
 })

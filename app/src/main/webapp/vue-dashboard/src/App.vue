@@ -27,7 +27,7 @@
                     communication.</p>
             </div>
 
-            <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
                 <div class="container-fluid">
                     <ul class="navbar-nav">
                         <li class="nav-item">
@@ -42,7 +42,7 @@
 
             <router-view/>
 
-            <footer class="mt-5 p-4 bg-dark text-white text-center" style="z-index: 11">
+            <footer class="mt-5 p-4 text-center bg-dark" style="z-index: 11">
                 <p>LemonTTB - GPL-3.0 License</p>
             </footer>
         </div>

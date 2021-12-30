@@ -20,8 +20,11 @@
 package io.github.mProjectsCode.LemonTTB.nameMappings;
 
 import io.github.mProjectsCode.LemonTTB.Config;
+import io.github.mProjectsCode.LemonTTB.users.User;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * The type Name mappings handler.
@@ -76,5 +79,25 @@ public class NameMappingsHandler {
             }
         }
         return null;
+    }
+
+    /**
+     * Gets mappings by users.
+     *
+     * @param users the users
+     * @return the mappings by users
+     */
+    public Map<String, String> getMappingsByUsers(List<User> users) {
+        return getMappingsByIds(users.stream().map(User::getId).collect(Collectors.toList()));
+    }
+
+    /**
+     * Gets mappings by ids.
+     *
+     * @param ids the ids
+     * @return the mappings by ids
+     */
+    public Map<String, String> getMappingsByIds(List<String> ids) {
+        return Config.options.nameMappings.entrySet().stream().filter(e -> ids.contains(e.getKey())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

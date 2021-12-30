@@ -234,6 +234,15 @@ public class LemonTTB_AudioManager {
     }
 
     /**
+     * Remove from queue.
+     *
+     * @param i the
+     */
+    public void removeFromQueue(int i) {
+        audioTrackScheduler.removeFromQueue(i);
+    }
+
+    /**
      * Get tracks in queue as track data track data [ ].
      *
      * @return the track data [ ]

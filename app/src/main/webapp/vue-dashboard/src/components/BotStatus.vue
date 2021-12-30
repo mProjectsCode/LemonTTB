@@ -189,11 +189,11 @@ interface Data {
             const botStatus = this.$store.getters.getBotStatus;
             switch (botStatus) {
                 case 'online':
-                    return 'bg-success';
+                    return 'badge-success';
                 case 'starting':
-                    return 'bg-warning';
+                    return 'badge-secondary';
                 default:
-                    return 'bg-danger';
+                    return 'badge-danger';
             }
         },
         botStatusBadgeContent() {
@@ -235,9 +235,9 @@ interface Data {
             } else if (data.eventType == 'BOT_STATUS') {
                 console.log('received api event in BotStatus.vue');
                 if (data.name == 'STOP') {
-                    this.$store.commit('setBotStatus', 'offline')
+                    this.getBotStatus(false);
                 } else if (data.name == 'STARTING') {
-                    this.$store.commit('setBotStatus', 'starting')
+                    this.$store.commit('setBotStatus', 'starting');
 
                     this.data.botStartUpError = null;
 
@@ -248,7 +248,13 @@ interface Data {
                     this.data.botJdaOnline = false;
                     this.data.botConfigValidationOnline = false;
                 } else if (data.name == 'ONLINE') {
-                    this.getBotStatus(false);
+                    this.$store.commit('setBotStatus', 'online');
+
+                    const fetchOnStartUp: string[] = this.$store.getters.getFetchOnStartUp;
+                    fetchOnStartUp.forEach((f: string) => {
+                        fetch(f);
+                    })
+                    this.$store.commit('clearFetchOnStartUp');
                 }
             } else if (data.eventType == 'BOT_ERROR') {
                 console.log('received api event in BotStatus.vue');
@@ -265,12 +271,6 @@ interface Data {
                 if (fetchData) {
                     this.$store.commit('setBotStatus', 'online');
 
-                    const fetchOnStartUp: string[] = this.$store.getters.getFetchOnStartUp;
-                    fetchOnStartUp.forEach((f: string) => {
-                        fetch(f);
-                    })
-                    this.$store.commit('clearFetchOnStartUp');
-
                     this.data.botAudioPlayerOnline = true;
                     this.data.botUserOnline = true;
                     this.data.botPermissionsOnline = true;
@@ -285,6 +285,15 @@ interface Data {
                     }
                 } else {
                     this.$store.commit('setBotStatus', 'offline');
+                    this.$store.commit('setAudioPlayerStatus', 'disconnected');
+
+                    this.data.botAudioPlayerOnline = false;
+                    this.data.botUserOnline = false;
+                    this.data.botPermissionsOnline = false;
+                    this.data.botNameMappingsOnline = false;
+                    this.data.botJdaOnline = false;
+                    this.data.botConfigValidationOnline = false;
+
                     if (showToast) {
                         this.toast.error('Bot is offline', {
                             timeout: 3000

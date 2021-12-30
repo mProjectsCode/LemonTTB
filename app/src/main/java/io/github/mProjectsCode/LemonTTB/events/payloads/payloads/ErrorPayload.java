@@ -45,7 +45,7 @@ public class ErrorPayload implements Payload {
     }
 
     @Override
-    public Object getData() {
+    public String getData() {
         return data;
     }
 }

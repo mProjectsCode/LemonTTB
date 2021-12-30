@@ -29,10 +29,7 @@ import io.github.mProjectsCode.LemonTTB.events.EventType;
 import io.github.mProjectsCode.LemonTTB.events.payloads.payloads.AudioPlayerPayload;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * The type Audio player controller.
@@ -94,6 +91,31 @@ public class AudioPlayerController {
     @RequestMapping(value = "/skip", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<String> skip() {
         App.audioManager.skipTrack();
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    /**
+     * Remove from queue response entity.
+     *
+     * @param index the index
+     * @return the response entity
+     */
+    @ResponseBody
+    @RequestMapping(value = "/removeFromQueue/{index}", method = {RequestMethod.GET, RequestMethod.POST})
+    public ResponseEntity<String> removeFromQueue(@PathVariable Integer index) {
+        App.audioManager.removeFromQueue(index);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    /**
+     * Clear queue response entity.
+     *
+     * @return the response entity
+     */
+    @ResponseBody
+    @RequestMapping(value = "/clearQueue", method = {RequestMethod.GET, RequestMethod.POST})
+    public ResponseEntity<String> clearQueue() {
+        App.audioManager.clearQueue();
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

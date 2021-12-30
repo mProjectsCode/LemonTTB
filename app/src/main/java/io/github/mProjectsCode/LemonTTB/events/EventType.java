@@ -40,4 +40,8 @@ public enum EventType {
      * Audio player event type.
      */
     AUDIO_PLAYER,
+    /**
+     * Voice channel event type.
+     */
+    VOICE_CHANNEL,
 }

@@ -24,7 +24,6 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
-import io.github.mProjectsCode.LemonTTB.App;
 import io.github.mProjectsCode.LemonTTB.Logger.Logger;
 import io.github.mProjectsCode.LemonTTB.events.Event;
 import io.github.mProjectsCode.LemonTTB.events.EventGroup;
@@ -32,9 +31,8 @@ import io.github.mProjectsCode.LemonTTB.events.EventHandler;
 import io.github.mProjectsCode.LemonTTB.events.EventType;
 import io.github.mProjectsCode.LemonTTB.events.payloads.payloads.AudioPlayerPayload;
 
+import java.util.LinkedList;
 import java.util.Objects;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * The type Lemon ttb audio track scheduler.
@@ -43,7 +41,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
     private static final Logger LOGGER = Logger.getLogger(LemonTTB_AudioTrackScheduler.class);
 
     private final AudioPlayer audioPlayer;
-    private final BlockingQueue<LemonTTB_AudioTrack> queue;
+    private final LinkedList<LemonTTB_AudioTrack> queue;
 
     private LemonTTB_AudioTrack currentTrack;
     private boolean looping;
@@ -55,7 +53,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
      */
     public LemonTTB_AudioTrackScheduler(AudioPlayer audioPlayer) {
         this.audioPlayer = audioPlayer;
-        this.queue = new LinkedBlockingQueue<>();
+        this.queue = new LinkedList<>();
         this.currentTrack = null;
         this.looping = false;
     }
@@ -100,7 +98,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
      *
      * @return the queue
      */
-    public BlockingQueue<LemonTTB_AudioTrack> getQueue() {
+    public LinkedList<LemonTTB_AudioTrack> getQueue() {
         return queue;
     }
 
@@ -163,6 +161,23 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
     }
 
     /**
+     * Remove from queue.
+     *
+     * @param i the
+     */
+    public void removeFromQueue(int i) {
+        queue.remove(i);
+
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.AUDIO_PLAYER,
+                "Removed " + i + " from queue",
+                new AudioPlayerPayload(AudioPlayerPayload.AudioPlayerPayloadResponse.REMOVED_FROM_QUEUE),
+                LemonTTB_AudioTrackScheduler.class.getName()
+        ));
+    }
+
+    /**
      * Start the next track, stopping the current one if it is playing.
      */
     public void nextTrack() {
@@ -170,7 +185,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
         // If the scheduler is looping start the current track again instead.
         if (looping) {
             LOGGER.logDebug("Adding current track back to queue: " + currentTrack.getTrackData().getName());
-            App.audioManager.loadAndPlayTrack(currentTrack.getAudioTrack().getIdentifier(), currentTrack.getTrackData().getAudioTrackSource());
+            queue(currentTrack.makePlayableClone());
         }
         forceNextTrack();
     }
@@ -185,9 +200,8 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
         // If the scheduler is looping start the current track again instead.
         if (looping) {
             LOGGER.logDebug("Adding finished track back to queue: " + finishedTrack.getTrackData().getName());
-            App.audioManager.loadAndPlayTrack(finishedTrack.getAudioTrack().getIdentifier(), finishedTrack.getTrackData().getAudioTrackSource());
+            queue(currentTrack.makePlayableClone());
         }
-        forceNextTrack();
     }
 
     /**
@@ -196,12 +210,13 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
     public void forceNextTrack() {
         LOGGER.logDebug("Forcing next track");
 
-        LemonTTB_AudioTrack track = queue.poll();
-        if (!Objects.equals(track, null)) {
-            LOGGER.logDebug("Forcing next track -> Started track: " + track.getTrackData().getName());
-            currentTrack = track;
-            audioPlayer.startTrack(track.audioTrack, false);
+        LemonTTB_AudioTrack newTrack = queue.poll();
+        if (!Objects.equals(newTrack, null)) {
+            LOGGER.logDebug("Forcing next track -> Started track: " + newTrack.getTrackData().getName());
+            currentTrack = newTrack;
+            audioPlayer.startTrack(newTrack.audioTrack, false);
         } else {
+            LOGGER.logDebug("Stopping the player");
             audioPlayer.stopTrack();
         }
     }
@@ -286,7 +301,11 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
         ));
 
         if (endReason.mayStartNext) {
-            nextTrack();
+            try {
+                nextTrack(currentTrack);
+            } catch (IllegalStateException e) {
+                LOGGER.logError(e);
+            }
         }
     }
 
@@ -297,6 +316,7 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
     @Override
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
         LOGGER.logDebug("Audio player track exception: " + currentTrack.getTrackData().getName());
+        LOGGER.logError(exception);
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
                 EventType.AUDIO_PLAYER,

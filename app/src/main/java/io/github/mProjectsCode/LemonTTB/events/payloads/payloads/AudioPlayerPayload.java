@@ -92,6 +92,10 @@ public class AudioPlayerPayload implements Payload {
          */
         EMPTIED_QUEUE,
         /**
+         * Removed from queue audio player payload response.
+         */
+        REMOVED_FROM_QUEUE,
+        /**
          * Channel leave audio player payload response.
          */
         CHANNEL_LEAVE,

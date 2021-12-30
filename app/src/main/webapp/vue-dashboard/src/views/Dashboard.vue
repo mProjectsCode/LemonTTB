@@ -21,21 +21,33 @@
 <template>
     <div class="container mt-5">
         <BotStatus/>
-        <br>
-        <audio-player-status/>
+        <div v-if="botStatus === 'online'">
+            <br>
+            <AudioPlayerStatus/>
+            <br>
+            <Moderation/>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import {Options, Vue} from 'vue-class-component';
 import BotStatus from "@/components/BotStatus.vue";
-import AudioPlayerStatus from "@/components/AudioPlayerStatus.vue"; // @ is an alias to /src
+import AudioPlayerStatus from "@/components/AudioPlayerStatus.vue";
+import Moderation from "@/components/Moderation.vue"; // @ is an alias to /src
 
 @Options({
     components: {
+        Moderation,
         AudioPlayerStatus,
         BotStatus,
     },
+
+    computed: {
+        botStatus() {
+            return this.$store.getters.getBotStatus
+        },
+    }
 })
 export default class Dashboard extends Vue {
 }

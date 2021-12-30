@@ -26,7 +26,7 @@ import store from './store';
 import Toast, {useToast} from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
-import 'bootstrap/dist/css/bootstrap.css';
+import '@forevolve/bootstrap-dark/dist/css/bootstrap-dark.css';
 import mitt from "mitt";
 
 
@@ -90,4 +90,25 @@ export interface TrackData {
     length: number;
     position: number;
     audioTrackSource: string;
+}
+
+export interface VoiceChannelPayloadData {
+    guildName: string;
+    primaryChannelName: string;
+    secondaryChannelName: string;
+    primaryChannelUsers: VoiceChannelPayloadDataUser[];
+    secondaryChannelUsers: VoiceChannelPayloadDataUser[];
+}
+
+export interface VoiceChannelPayloadDataUser {
+    user: User;
+    name: string;
+    muted: boolean;
+    deafened: boolean;
+}
+
+export interface User {
+    defaultPermissions: string[];
+    permissions: string[];
+    id: string;
 }

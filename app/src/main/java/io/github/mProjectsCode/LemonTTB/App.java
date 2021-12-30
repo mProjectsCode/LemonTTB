@@ -31,6 +31,7 @@ import io.github.mProjectsCode.LemonTTB.events.EventHandler;
 import io.github.mProjectsCode.LemonTTB.events.EventType;
 import io.github.mProjectsCode.LemonTTB.events.payloads.payloads.SuccessPayload;
 import io.github.mProjectsCode.LemonTTB.exceptions.StartUpException;
+import io.github.mProjectsCode.LemonTTB.moderation.VoiceChannelHandler;
 import io.github.mProjectsCode.LemonTTB.nameMappings.NameMappingsHandler;
 import io.github.mProjectsCode.LemonTTB.permissions.PermissionHandler;
 import io.github.mProjectsCode.LemonTTB.springboot.Application;
@@ -315,7 +316,7 @@ public class App {
         // Set activity (like "playing Something")
         builder.setActivity(Activity.watching(Config.options.prefix + "help"));
 
-        builder.addEventListeners(new CommandHandler());
+        builder.addEventListeners(new CommandHandler(), new VoiceChannelHandler());
 
         try {
             jda = builder.build();

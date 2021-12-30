@@ -75,4 +75,14 @@ public class LemonTTB_AudioTrack {
     public void updatePosition() {
         trackData.setPosition(((int) audioTrack.getPosition()) / 1000);
     }
+
+    /**
+     * Make playable clone lemon ttb audio track.
+     *
+     * @return the lemon ttb audio track
+     */
+    public LemonTTB_AudioTrack makePlayableClone() {
+        AudioTrack track = audioTrack;
+        return new LemonTTB_AudioTrack(track, new TrackData(track, trackData.getAudioTrackSource()));
+    }
 }
