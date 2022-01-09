@@ -83,6 +83,6 @@ public class LemonTTB_AudioTrack {
      */
     public LemonTTB_AudioTrack makePlayableClone() {
         AudioTrack track = audioTrack;
-        return new LemonTTB_AudioTrack(track, new TrackData(track, trackData.getAudioTrackSource()));
+        return new LemonTTB_AudioTrack(track.makeClone(), new TrackData(track, trackData.getAudioTrackSource()));
     }
 }

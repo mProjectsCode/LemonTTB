@@ -21,6 +21,7 @@ package io.github.mProjectsCode.LemonTTB;
 
 import com.google.common.io.Resources;
 import com.google.gson.Gson;
+import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import io.github.mProjectsCode.LemonTTB.LemonTTB_Audio.LemonTTB_AudioManager;
 import io.github.mProjectsCode.LemonTTB.Logger.ConsoleColors;
 import io.github.mProjectsCode.LemonTTB.Logger.Logger;
@@ -46,10 +47,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.springframework.boot.SpringApplication;
 
 import javax.security.auth.login.LoginException;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
@@ -267,8 +265,9 @@ public class App {
     }
 
     private static void initStartup() {
-        File logo = new File(Resources.getResource("Logo.txt").getPath());
-        try (BufferedReader br = new BufferedReader(new FileReader(logo, StandardCharsets.UTF_8))) {
+        InputStream logo = App.class.getClassLoader().getResourceAsStream("Logo.txt");
+        assert logo != null;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(logo))) {
             String line;
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
@@ -313,6 +312,7 @@ public class App {
         builder.setBulkDeleteSplittingEnabled(false);
         // Disable compression (not recommended)
         builder.setCompression(Compression.NONE);
+        builder.setAudioSendFactory(new NativeAudioSendFactory());
         // Set activity (like "playing Something")
         builder.setActivity(Activity.watching(Config.options.prefix + "help"));
 

@@ -25,6 +25,7 @@ import io.github.mProjectsCode.LemonTTB.Logger.Logger;
 import net.dv8tion.jda.api.audio.AudioSendHandler;
 
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 /**
  * The type Lemon ttb audio send handler.
