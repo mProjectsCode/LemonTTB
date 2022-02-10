@@ -52,7 +52,11 @@ public class LemonTTB_AudioSendHandler implements AudioSendHandler {
     @Override
     public boolean canProvide() {
         // returns true if audio was provided
-        return audioPlayer.provide(frame);
+        boolean canProvide = audioPlayer.provide(frame);
+        if (!canProvide) {
+            LOGGER.logDebug("lp cant provide audio");
+        }
+        return canProvide;
     }
 
     @Override
