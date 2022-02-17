@@ -198,9 +198,14 @@ public class LemonTTB_AudioTrackScheduler extends AudioEventAdapter {
     public void nextTrack(LemonTTB_AudioTrack finishedTrack) {
         // Start the next track.
         // If the scheduler is looping start the current track again instead.
+
+        if (!queue.isEmpty()) {
+            forceNextTrack();
+        }
+
         if (looping) {
             LOGGER.logDebug("Adding finished track back to queue: " + finishedTrack.getTrackData().getName());
-            queue(currentTrack.makePlayableClone());
+            queue(finishedTrack.makePlayableClone());
         }
     }
 

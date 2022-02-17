@@ -86,5 +86,6 @@ public class AddPermissionCmd extends Command {
             return;
         }
         App.permissionHandler.addPermissions(idArgument.value, permission);
+        msg.reply("Successfully added the permission.").queue();
     }
 }

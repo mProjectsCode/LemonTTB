@@ -89,9 +89,11 @@ public class PlayCmd extends Command {
 
         if (success) {
             Command.LOGGER.logCommand(commandObject, true, "");
+            msg.reply("Successfully queued the song.").queue();
         } else {
             Command.LOGGER.logWarning("AudioPath for command " + commandObject.id + " is null");
             Command.LOGGER.logCommand(commandObject, success, "No file found");
+            msg.reply("Failed to queue the song.").queue();
         }
     }
 
