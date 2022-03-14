@@ -24,10 +24,14 @@ import com.google.gson.GsonBuilder;
 import io.github.mProjectsCode.LemonTTB.App;
 import io.github.mProjectsCode.LemonTTB.IOHelper;
 import io.github.mProjectsCode.LemonTTB.Logger.Logger;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The type User handler.
@@ -107,5 +111,25 @@ public class UserHandler {
      */
     public File getFileFromID(@NotNull String id) {
         return new File(App.userPath, getFileNameFromID(id));
+    }
+
+    /**
+     * Gets users from voice channel.
+     *
+     * @param channel the channel
+     * @return the users from voice channel
+     */
+    public List<User> getUsersFromVoiceChannel(VoiceChannel channel) {
+        return getUsersFromVoiceChannel(channel.getMembers());
+    }
+
+    /**
+     * Gets users from voice channel.
+     *
+     * @param members the members
+     * @return the users from voice channel
+     */
+    public List<User> getUsersFromVoiceChannel(List<Member> members) {
+        return members.stream().map(m -> getUserFromID(m.getId())).collect(Collectors.toList());
     }
 }

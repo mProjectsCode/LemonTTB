@@ -27,9 +27,21 @@ public enum EventType {
     /**
      * Start up event event type.
      */
-    START_UP_EVENT,
+    BOT_START_UP,
     /**
      * Bot error event type.
      */
-    BOT_ERROR
+    BOT_ERROR,
+    /**
+     * Bot status event type.
+     */
+    BOT_STATUS,
+    /**
+     * Audio player event type.
+     */
+    AUDIO_PLAYER,
+    /**
+     * Voice channel event type.
+     */
+    VOICE_CHANNEL,
 }

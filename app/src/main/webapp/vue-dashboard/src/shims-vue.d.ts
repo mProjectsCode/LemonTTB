@@ -18,23 +18,9 @@
  *
  */
 
-package io.github.mProjectsCode.LemonTTB.events.payloads;
-
-/**
- * The interface Payload.
- */
-public interface Payload {
-    /**
-     * Gets response.
-     *
-     * @return the response
-     */
-    String getResponse();
-
-    /**
-     * Gets data.
-     *
-     * @return the data
-     */
-    Object getData();
+/* eslint-disable */
+declare module '*.vue' {
+    import type {DefineComponent} from 'vue'
+    const component: DefineComponent<{}, {}, any>
+    export default component
 }

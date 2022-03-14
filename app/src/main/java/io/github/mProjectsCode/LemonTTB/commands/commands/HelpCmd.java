@@ -69,11 +69,7 @@ public class HelpCmd extends Command {
 
         msg.getChannel().sendMessageEmbeds(embed.build()).queue();
 
-        embed = CommandDescription.parseDescriptionAsEmbed(new HelpCmd(), "Help Command");
-        msg.getChannel().sendMessageEmbeds(embed.build()).queue();
-
-        embed = CommandDescription.parseDescriptionAsEmbed(new MoveCmd(), "Move Command");
-        msg.getChannel().sendMessageEmbeds(embed.build()).queue();
+        msg.getChannel().sendMessage("A list of command can be found here https://github.com/mProjectsCode/LemonTTB/blob/master/app/data/documentation/CommandDocumentation.txt").queue();
 
         Command.LOGGER.logCommand(commandObject, true, "");
 

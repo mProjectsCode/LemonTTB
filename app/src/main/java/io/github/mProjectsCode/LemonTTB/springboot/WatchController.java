@@ -61,14 +61,14 @@ public class WatchController {
             App.startBot();
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (StartUpException e) {
-            App.shutdownBot("Bot error on startup: " + e.getMessage());
             EventHandler.trigger(new Event(
                     EventGroup.BOT,
-                    EventType.START_UP_EVENT,
+                    EventType.BOT_ERROR,
                     "Bot error on startup",
                     new ErrorPayload(e),
                     WatchController.class.getName()
             ));
+            App.shutdownBot("Bot error on startup: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

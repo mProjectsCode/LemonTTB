@@ -27,7 +27,8 @@ import io.github.mProjectsCode.LemonTTB.events.payloads.PayloadResponse;
  * The type Error payload.
  */
 public class ErrorPayload implements Payload {
-    private final Exception data;
+    private final String data;
+    private final PayloadResponse response = PayloadResponse.ERROR;
 
     /**
      * Instantiates a new Error payload.
@@ -35,16 +36,16 @@ public class ErrorPayload implements Payload {
      * @param data the data
      */
     public ErrorPayload(Exception data) {
-        this.data = data;
+        this.data = data.getMessage();
     }
 
     @Override
-    public PayloadResponse getResponse() {
-        return PayloadResponse.ERROR;
+    public String getResponse() {
+        return response.name();
     }
 
     @Override
-    public Object getData() {
+    public String getData() {
         return data;
     }
 }

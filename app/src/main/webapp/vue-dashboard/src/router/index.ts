@@ -18,23 +18,28 @@
  *
  */
 
-package io.github.mProjectsCode.LemonTTB.events.payloads;
+import {createRouter, createWebHistory} from 'vue-router'
+import Dashboard from "@/views/Dashboard.vue";
 
-/**
- * The interface Payload.
- */
-public interface Payload {
-    /**
-     * Gets response.
-     *
-     * @return the response
-     */
-    String getResponse();
+const routes = [
+    {
+        path: '/',
+        name: 'Dashboard',
+        component: Dashboard
+    },
+    {
+        path: '/about',
+        name: 'About',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    }
+]
 
-    /**
-     * Gets data.
-     *
-     * @return the data
-     */
-    Object getData();
-}
+const router = createRouter({
+    history: createWebHistory(process.env.BASE_URL),
+    routes
+})
+
+export default router

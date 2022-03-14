@@ -18,23 +18,18 @@
  *
  */
 
-package io.github.mProjectsCode.LemonTTB.events.payloads;
+package io.github.mProjectsCode.LemonTTB.LemonTTB_Audio;
 
 /**
- * The interface Payload.
+ * The enum Audio track source.
  */
-public interface Payload {
+public enum AudioTrackSource {
     /**
-     * Gets response.
-     *
-     * @return the response
+     * Local audio track source.
      */
-    String getResponse();
-
+    LOCAL,
     /**
-     * Gets data.
-     *
-     * @return the data
+     * YouTube audio track source.
      */
-    Object getData();
+    YOUTUBE
 }

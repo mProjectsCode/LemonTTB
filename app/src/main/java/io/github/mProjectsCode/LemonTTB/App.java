@@ -21,6 +21,7 @@ package io.github.mProjectsCode.LemonTTB;
 
 import com.google.common.io.Resources;
 import com.google.gson.Gson;
+import com.sedmelluq.discord.lavaplayer.jdaudp.NativeAudioSendFactory;
 import io.github.mProjectsCode.LemonTTB.LemonTTB_Audio.LemonTTB_AudioManager;
 import io.github.mProjectsCode.LemonTTB.Logger.ConsoleColors;
 import io.github.mProjectsCode.LemonTTB.Logger.Logger;
@@ -31,6 +32,7 @@ import io.github.mProjectsCode.LemonTTB.events.EventHandler;
 import io.github.mProjectsCode.LemonTTB.events.EventType;
 import io.github.mProjectsCode.LemonTTB.events.payloads.payloads.SuccessPayload;
 import io.github.mProjectsCode.LemonTTB.exceptions.StartUpException;
+import io.github.mProjectsCode.LemonTTB.moderation.VoiceChannelHandler;
 import io.github.mProjectsCode.LemonTTB.nameMappings.NameMappingsHandler;
 import io.github.mProjectsCode.LemonTTB.permissions.PermissionHandler;
 import io.github.mProjectsCode.LemonTTB.springboot.Application;
@@ -45,10 +47,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.springframework.boot.SpringApplication;
 
 import javax.security.auth.login.LoginException;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
@@ -174,11 +173,19 @@ public class App {
      * @throws StartUpException the start up exception
      */
     public static void startBot() throws StartUpException {
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.BOT_STATUS,
+                "STARTING",
+                new SuccessPayload(),
+                App.class.getName()
+        ));
+
         // INIT: Documentation
         documentationPath = new File(RESOURCE_PATH, "/documentation");
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.DOCUMENTATION.name(),
                 new SuccessPayload(),
                 App.class.getName()
@@ -187,10 +194,9 @@ public class App {
         // INIT: Audio
         audioPath = new File(RESOURCE_PATH, "/music");
         audioManager = new LemonTTB_AudioManager();
-        audioManager.createPlayer();
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.AUDIO_PLAYER.name(),
                 new SuccessPayload(),
                 App.class.getName()
@@ -201,7 +207,7 @@ public class App {
         userHandler = new UserHandler();
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.USERS.name(),
                 new SuccessPayload(),
                 App.class.getName()
@@ -209,17 +215,21 @@ public class App {
         permissionHandler = new PermissionHandler(true);
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.PERMISSIONS.name(),
                 new SuccessPayload(),
                 App.class.getName()
         ));
 
+        // if(true) {
+        //     throw new StartUpException("Log file path invalid.", StartUpPhase.LOGGER);
+        // }
+
         // INIT: Other
         nameMappingsHandler = new NameMappingsHandler();
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.NAME_MAPPINGS.name(),
                 new SuccessPayload(),
                 App.class.getName()
@@ -229,7 +239,7 @@ public class App {
         buildJDA();
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.JDA.name(),
                 new SuccessPayload(),
                 App.class.getName()
@@ -239,16 +249,25 @@ public class App {
         Config.options.validateConfig();
         EventHandler.trigger(new Event(
                 EventGroup.BOT,
-                EventType.START_UP_EVENT,
+                EventType.BOT_START_UP,
                 StartUpPhase.CONFIG_VALIDATION.name(),
+                new SuccessPayload(),
+                App.class.getName()
+        ));
+
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.BOT_STATUS,
+                "ONLINE",
                 new SuccessPayload(),
                 App.class.getName()
         ));
     }
 
     private static void initStartup() {
-        File logo = new File(Resources.getResource("Logo.txt").getPath());
-        try (BufferedReader br = new BufferedReader(new FileReader(logo, StandardCharsets.UTF_8))) {
+        InputStream logo = App.class.getClassLoader().getResourceAsStream("Logo.txt");
+        assert logo != null;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(logo))) {
             String line;
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
@@ -279,7 +298,7 @@ public class App {
         Logger.setLogFilePath(logFolderPath.getPath());
         Logger.enableDebug(true);
         Logger.enableTrace(false);
-        Logger.setDebugBlacklist(new String[]{".jda.", ".lava.", ".lavaplayer.", "DefaultListableBeanFactory", "ConditionEvaluationReportLoggingListener"});
+        Logger.setDebugBlacklist(new String[]{".jda.", ".lava.", ".lavaplayer.", "DefaultListableBeanFactory", "ConditionEvaluationReportLoggingListener", ".apache.http."});
     }
 
     private static void buildJDA() throws StartUpException {
@@ -293,10 +312,11 @@ public class App {
         builder.setBulkDeleteSplittingEnabled(false);
         // Disable compression (not recommended)
         builder.setCompression(Compression.NONE);
+        builder.setAudioSendFactory(new NativeAudioSendFactory());
         // Set activity (like "playing Something")
         builder.setActivity(Activity.watching(Config.options.prefix + "help"));
 
-        builder.addEventListeners(new CommandHandler());
+        builder.addEventListeners(new CommandHandler(), new VoiceChannelHandler());
 
         try {
             jda = builder.build();
@@ -345,6 +365,13 @@ public class App {
         LOGGER.logInfo("Bot is shutting down with message: ");
         LOGGER.logError(message);
         isBotOnline = false;
+        EventHandler.trigger(new Event(
+                EventGroup.BOT,
+                EventType.BOT_STATUS,
+                "STOP",
+                new SuccessPayload(),
+                App.class.getName()
+        ));
         if (!Objects.equals(jda, null)) {
             jda.shutdown();
         }

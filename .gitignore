@@ -24,7 +24,7 @@ gradle-app.setting
 *-LemonTTB-user.txt
 # ignore dev configs
 *Config.txt.dev
-*/old_static/*
+old_static/
 
 ### STS ###
 .apt_generated

@@ -64,6 +64,7 @@ public class EventHandler {
      * @param event the event
      */
     public static void trigger(Event event) {
+        LOGGER.logEvent(event);
         for (EventSubscription eventSubscription : eventSubscriptions) {
             eventSubscription.sendEvent(event);
         }

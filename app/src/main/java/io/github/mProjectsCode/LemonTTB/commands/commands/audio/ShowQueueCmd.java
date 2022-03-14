@@ -19,9 +19,9 @@
 
 package io.github.mProjectsCode.LemonTTB.commands.commands.audio;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import io.github.mProjectsCode.LemonTTB.App;
 import io.github.mProjectsCode.LemonTTB.LemonTTB_Audio.LemonTTB_AudioManager;
+import io.github.mProjectsCode.LemonTTB.LemonTTB_Audio.LemonTTB_AudioTrack;
 import io.github.mProjectsCode.LemonTTB.commands.Command;
 import io.github.mProjectsCode.LemonTTB.commands.CommandDescription;
 import io.github.mProjectsCode.LemonTTB.commands.CommandObject;
@@ -59,12 +59,12 @@ public class ShowQueueCmd extends Command {
 
     @Override
     public void run(CommandObject commandObject, Message msg) {
-        AudioTrack[] audioTracks = App.audioManager.getTracksInQueue();
+        LemonTTB_AudioTrack[] audioTracks = App.audioManager.getTracksInQueue();
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < audioTracks.length; i++) {
             sb.append(i).append(": ");
-            sb.append(LemonTTB_AudioManager.getTitleFromAudioTrack(audioTracks[i])).append("\n");
+            sb.append(audioTracks[i].getTrackData().getName()).append("\n");
         }
 
         EmbedBuilder embed = new EmbedBuilder();

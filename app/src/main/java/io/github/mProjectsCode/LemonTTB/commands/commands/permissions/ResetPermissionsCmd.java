@@ -69,5 +69,6 @@ public class ResetPermissionsCmd extends Command {
         }
 
         App.permissionHandler.resetPermissions(idArgument.value);
+        msg.reply("Successfully reset the permissions.").queue();
     }
 }
