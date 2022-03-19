@@ -1,7 +1,7 @@
 <!--
   - This file is part of LemonTTB.
-  - (C) Copyright 2021
-  - Programmed by Moritz Jung
+  - (C) Copyright 2021-2022
+  - Developed by Moritz Jung
   -
   - LemonTTB is free software: you can redistribute it and/or modify
   - it under the terms of the GNU General Public License as published by
@@ -41,7 +41,8 @@
                 </div>
             </div>
             <div style="margin-bottom: 8px"></div>
-            <div v-for="(entry, index) in data.voiceChannelState?.primaryChannelUsers" style="margin-top: 2px; display: flex; gap: 10px">
+            <div v-for="(entry, index) in data.voiceChannelState?.primaryChannelUsers"
+                 style="margin-top: 2px; display: flex; gap: 10px">
                 <div>
                     <div style="vertical-align: middle">{{ entry.user.id }}</div>
                 </div>
@@ -51,9 +52,9 @@
                 <div>
                     <button
                             class="btn btn-sm"
-                            v-bind:class="[entry.deafened ? 'btn-danger' : 'btn-secondary']"
                             style="vertical-align: middle; padding: 0 6px 0 6px;"
                             type="button"
+                            v-bind:class="[entry.deafened ? 'btn-danger' : 'btn-secondary']"
                             v-on:click="switchDeafMute(entry.user.id)">
                         <span class="material-icons" style="vertical-align: middle">headset_off</span>
                     </button>
@@ -67,7 +68,8 @@
                 </div>
             </div>
             <div style="margin-bottom: 8px"></div>
-            <div v-for="(entry, index) in data.voiceChannelState?.secondaryChannelUsers" style="margin-top: 2px; display: flex; gap: 10px">
+            <div v-for="(entry, index) in data.voiceChannelState?.secondaryChannelUsers"
+                 style="margin-top: 2px; display: flex; gap: 10px">
                 <div>
                     <div style="vertical-align: middle">{{ entry.user.id }}</div>
                 </div>
@@ -77,9 +79,9 @@
                 <div>
                     <button
                             class="btn btn-sm"
-                            v-bind:class="[entry.deafened ? 'btn-danger' : 'btn-secondary']"
                             style="vertical-align: middle; padding: 0 6px 0 6px;"
                             type="button"
+                            v-bind:class="[entry.deafened ? 'btn-danger' : 'btn-secondary']"
                             v-on:click="switchDeafMute(entry.user.id)">
                         <span class="material-icons" style="vertical-align: middle">headset_off</span>
                     </button>

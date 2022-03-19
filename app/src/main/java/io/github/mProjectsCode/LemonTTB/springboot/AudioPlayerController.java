@@ -1,7 +1,7 @@
 /*
  * This file is part of LemonTTB.
- * (C) Copyright 2021
- * Programmed by Moritz Jung
+ * (C) Copyright 2021-2022
+ * Developed by Moritz Jung
  *
  * LemonTTB is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,15 +21,27 @@
 package io.github.mProjectsCode.LemonTTB.springboot;
 
 import io.github.mProjectsCode.LemonTTB.App;
+import io.github.mProjectsCode.LemonTTB.Config;
+import io.github.mProjectsCode.LemonTTB.IOHelper;
+import io.github.mProjectsCode.LemonTTB.LemonTTB_Audio.AudioTrackSource;
 import io.github.mProjectsCode.LemonTTB.Logger.Logger;
+import io.github.mProjectsCode.LemonTTB.commands.Command;
 import io.github.mProjectsCode.LemonTTB.events.Event;
 import io.github.mProjectsCode.LemonTTB.events.EventGroup;
 import io.github.mProjectsCode.LemonTTB.events.EventHandler;
 import io.github.mProjectsCode.LemonTTB.events.EventType;
 import io.github.mProjectsCode.LemonTTB.events.payloads.payloads.AudioPlayerPayload;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.entities.Member;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * The type Audio player controller.
@@ -116,6 +128,56 @@ public class AudioPlayerController {
     @RequestMapping(value = "/clearQueue", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<String> clearQueue() {
         App.audioManager.clearQueue();
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/queue", method = {RequestMethod.GET, RequestMethod.POST})
+    public ResponseEntity<String> queue(@RequestParam Boolean local, @RequestParam String link) {
+        if (local) {
+            File[] paths = IOHelper.findPathsByFileName(link, App.audioPath);
+            for (int i = 0; i < paths.length; i++) {
+                AudioPlayerController.LOGGER.logTrace("Result " + i + " for search: " + link + " is: " + paths[i].getPath());
+            }
+            if (paths.length > 0) {
+                AudioPlayerController.LOGGER.logDebug("Result for search: " + link + " is: " + paths[0].getPath());
+                App.audioManager.loadAndPlayTrack(paths[0].getPath(), AudioTrackSource.LOCAL);
+            }
+        }
+        else {
+            App.audioManager.loadAndPlayTrack(link, AudioTrackSource.YOUTUBE);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/join", method = {RequestMethod.GET, RequestMethod.POST})
+    public ResponseEntity<String> join() {
+        List<Guild> guilds = App.jda.getGuilds();
+
+        for (int i = 0; i < guilds.size(); i++) {
+            // LOGGER.logDebug(guilds.get(i).getName());
+            List<GuildChannel> channels = guilds.get(i).getChannels();
+            guilds.get(i).loadMembers();
+
+            for (int j = 0; j < channels.size(); j++) {
+
+                if (Objects.equals(channels.get(j).getType(), ChannelType.VOICE)) {
+                    // LOGGER.logDebug(channels.get(j).getName());
+                    List<Member> members = channels.get(j).getMembers();
+                    // LOGGER.logDebug(Integer.toString(members.size()));
+
+                    for (int k = 0; k < members.size(); k++) {
+                        // LOGGER.logDebug(members.get(k).getUser().getName());
+
+                        if (Objects.equals(members.get(k).getId(), Config.options.botOwner)) {
+                            App.audioManager.connect(channels.get(j), guilds.get(i));
+                        }
+                    }
+                }
+            }
+        }
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

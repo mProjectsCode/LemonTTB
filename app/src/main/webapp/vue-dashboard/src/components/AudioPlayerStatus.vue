@@ -1,7 +1,7 @@
 <!--
   - This file is part of LemonTTB.
-  - (C) Copyright 2021
-  - Programmed by Moritz Jung
+  - (C) Copyright 2021-2022
+  - Developed by Moritz Jung
   -
   - LemonTTB is free software: you can redistribute it and/or modify
   - it under the terms of the GNU General Public License as published by
@@ -36,12 +36,26 @@
         </div>
         <div class="card-body">
             <div v-if="audioPlayerStatus !== 'disconnected'">
-                <b>Connected to </b>
-                {{ data.audioPlayerState?.channelName }}
-                <b> in </b>
-                {{ data.audioPlayerState?.guildName }}
+                <p>
+                    <b>Connected to </b>
+                    {{ data.audioPlayerState?.channelName }}
+                    <b> in </b>
+                    {{ data.audioPlayerState?.guildName }}
+                </p>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for songs..." v-model="data.searchString">
+                    <div class="input-group-append">
+                        <button class="btn btn-success" type="button" v-on:click="queue()">Search</button>
+                    </div>
+                </div>
                 <br>
-                <br>
+            </div>
+            <div v-else>
+                <button class="btn btn-success"
+                        type="button"
+                        v-on:click="joinVC()">
+                    Connect to voice
+                </button>
             </div>
 
             <div v-if="audioPlayerStatus === 'playing' || audioPlayerStatus === 'paused'">
@@ -82,21 +96,26 @@
                         <b>Queue</b>
                     </div>
                     <div>
-                        <button class="btn btn-danger btn-sm" style="vertical-align: middle; padding: 0px 6px 0px 6px;" type="button" v-on:click="clearQueue">
+                        <button class="btn btn-danger btn-sm" style="vertical-align: middle; padding: 0px 6px 0px 6px;"
+                                type="button" v-on:click="clearQueue">
                             <span class="material-icons" style="vertical-align: middle">clear_all</span>
                         </button>
                     </div>
                 </div>
                 <div style="margin-bottom: 8px"></div>
-                <div v-for="(queueEntry, index) in data.audioPlayerState?.queue" style="margin-top: 2px; display: flex; gap: 10px">
+                <div v-for="(queueEntry, index) in data.audioPlayerState?.queue"
+                     style="margin-top: 2px; display: flex; gap: 10px">
                     <div style="flex: 1">
                         <div style="vertical-align: middle">{{ queueEntry.name }}</div>
                     </div>
                     <div>
-                        <div style="vertical-align: middle">{{ new Date(queueEntry.length * 1000).toISOString().substr(14, 5) }}</div>
+                        <div style="vertical-align: middle">
+                            {{ new Date(queueEntry.length * 1000).toISOString().substr(14, 5) }}
+                        </div>
                     </div>
                     <div>
-                        <button class="btn btn-danger btn-sm" style="vertical-align: middle; padding: 0 6px 0 6px;" type="button" v-on:click="removeFromQueue(index)">
+                        <button class="btn btn-danger btn-sm" style="vertical-align: middle; padding: 0 6px 0 6px;"
+                                type="button" v-on:click="removeFromQueue(index)">
                             <span class="material-icons" style="vertical-align: middle">clear</span>
                         </button>
                     </div>
@@ -120,6 +139,8 @@ interface Data {
     audioPlayerProgressInterval?: number;
     audioPlayerProgress: number;
     audioPlayerPlaying: boolean;
+
+    searchString: string;
 }
 
 @Options({
@@ -134,6 +155,7 @@ interface Data {
             audioPlayerProgressInterval: undefined,
             audioPlayerProgress: 0,
             audioPlayerPlaying: false,
+            searchString: '',
         };
         return {
             data
@@ -253,8 +275,13 @@ interface Data {
         async removeFromQueue(i: number) {
             await fetch('api/audioPlayer/removeFromQueue/' + i);
         },
+        async queue() {
+            const local = !this.data.searchString.includes('youtube')
+            await fetch(`api/audioPlayer/queue?local=${encodeURIComponent(local)}&link=${encodeURIComponent(this.data.searchString)}`);
+            this.data.searchString = '';
+        },
         async joinVC() {
-            // TODO: implement this
+            await fetch('api/audioPlayer/join');
         },
         async leaveVC() {
             // TODO: implement this
