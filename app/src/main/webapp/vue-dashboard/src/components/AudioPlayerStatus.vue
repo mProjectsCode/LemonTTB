@@ -36,12 +36,26 @@
         </div>
         <div class="card-body">
             <div v-if="audioPlayerStatus !== 'disconnected'">
-                <b>Connected to </b>
-                {{ data.audioPlayerState?.channelName }}
-                <b> in </b>
-                {{ data.audioPlayerState?.guildName }}
+                <p>
+                    <b>Connected to </b>
+                    {{ data.audioPlayerState?.channelName }}
+                    <b> in </b>
+                    {{ data.audioPlayerState?.guildName }}
+                </p>
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for songs..." v-model="data.searchString">
+                    <div class="input-group-append">
+                        <button class="btn btn-success" type="button" v-on:click="queue()">Search</button>
+                    </div>
+                </div>
                 <br>
-                <br>
+            </div>
+            <div v-else>
+                <button class="btn btn-success"
+                        type="button"
+                        v-on:click="joinVC()">
+                    Connect to voice
+                </button>
             </div>
 
             <div v-if="audioPlayerStatus === 'playing' || audioPlayerStatus === 'paused'">
@@ -125,6 +139,8 @@ interface Data {
     audioPlayerProgressInterval?: number;
     audioPlayerProgress: number;
     audioPlayerPlaying: boolean;
+
+    searchString: string;
 }
 
 @Options({
@@ -139,6 +155,7 @@ interface Data {
             audioPlayerProgressInterval: undefined,
             audioPlayerProgress: 0,
             audioPlayerPlaying: false,
+            searchString: '',
         };
         return {
             data
@@ -258,8 +275,13 @@ interface Data {
         async removeFromQueue(i: number) {
             await fetch('api/audioPlayer/removeFromQueue/' + i);
         },
+        async queue() {
+            const local = !this.data.searchString.includes('youtube')
+            await fetch(`api/audioPlayer/queue?local=${encodeURIComponent(local)}&link=${encodeURIComponent(this.data.searchString)}`);
+            this.data.searchString = '';
+        },
         async joinVC() {
-            // TODO: implement this
+            await fetch('api/audioPlayer/join');
         },
         async leaveVC() {
             // TODO: implement this
