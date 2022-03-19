@@ -1,7 +1,7 @@
 <!--
   - This file is part of LemonTTB.
-  - (C) Copyright 2021
-  - Programmed by Moritz Jung
+  - (C) Copyright 2021-2022
+  - Developed by Moritz Jung
   -
   - LemonTTB is free software: you can redistribute it and/or modify
   - it under the terms of the GNU General Public License as published by
@@ -82,21 +82,26 @@
                         <b>Queue</b>
                     </div>
                     <div>
-                        <button class="btn btn-danger btn-sm" style="vertical-align: middle; padding: 0px 6px 0px 6px;" type="button" v-on:click="clearQueue">
+                        <button class="btn btn-danger btn-sm" style="vertical-align: middle; padding: 0px 6px 0px 6px;"
+                                type="button" v-on:click="clearQueue">
                             <span class="material-icons" style="vertical-align: middle">clear_all</span>
                         </button>
                     </div>
                 </div>
                 <div style="margin-bottom: 8px"></div>
-                <div v-for="(queueEntry, index) in data.audioPlayerState?.queue" style="margin-top: 2px; display: flex; gap: 10px">
+                <div v-for="(queueEntry, index) in data.audioPlayerState?.queue"
+                     style="margin-top: 2px; display: flex; gap: 10px">
                     <div style="flex: 1">
                         <div style="vertical-align: middle">{{ queueEntry.name }}</div>
                     </div>
                     <div>
-                        <div style="vertical-align: middle">{{ new Date(queueEntry.length * 1000).toISOString().substr(14, 5) }}</div>
+                        <div style="vertical-align: middle">
+                            {{ new Date(queueEntry.length * 1000).toISOString().substr(14, 5) }}
+                        </div>
                     </div>
                     <div>
-                        <button class="btn btn-danger btn-sm" style="vertical-align: middle; padding: 0 6px 0 6px;" type="button" v-on:click="removeFromQueue(index)">
+                        <button class="btn btn-danger btn-sm" style="vertical-align: middle; padding: 0 6px 0 6px;"
+                                type="button" v-on:click="removeFromQueue(index)">
                             <span class="material-icons" style="vertical-align: middle">clear</span>
                         </button>
                     </div>

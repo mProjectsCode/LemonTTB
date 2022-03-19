@@ -1,7 +1,7 @@
 /*
  * This file is part of LemonTTB.
- * (C) Copyright 2021
- * Programmed by Moritz Jung
+ * (C) Copyright 2021-2022
+ * Developed by Moritz Jung
  *
  * LemonTTB is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,6 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with LemonTTB.  If not, see <https://www.gnu.org/licenses/>.
+ *
  */
 
 package io.github.mProjectsCode.LemonTTB.commands.commands.nameMappings;
